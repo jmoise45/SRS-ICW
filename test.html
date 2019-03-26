@@ -1,0 +1,26 @@
+<!<!DOCTYPE html>
+<html>
+<head>
+  <title>Testing</title>
+</head>
+<body>
+  <div style="width:50%;color:lightblue;background-color:green;text-align:center;">
+    Welcome.
+    <form style="margin-top:10px;"><input onclick="addText()" type="button" name="Add" value="Add"></form>
+    <p id="canvas">
+    </p>
+    <form style="margin-top:10px;">
+      <textarea name="name" id="text" rows="16" cols="80" style="margin-bottom:10px;"></textarea>
+    </form>
+  </div>
+  <script>
+    function addText() {
+      let text = document.getElementById("text");
+      alert(text.value);
+      let canvas = document.getElementById("canvas");
+      let analyze = text.value.split(" ");
+      canvas.innerHTML = canvas.innerHTML + "<p>" + text.value + "</p>";
+    }
+  </script>
+</body>
+</html>
