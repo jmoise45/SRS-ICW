@@ -20,11 +20,13 @@
       let editbtn = document.getElementById("editbtn");
       let text = document.getElementById("text");
       let form = document.getElementById("canvas-form");
+      let canbtn = document.getElementById("canbtn");
       alert(text.value);
       let canvas = document.getElementById("canvas");
       let analyze = text.value.split(" ");
       canvas.innerHTML = text.value;
       addbtn.style.display = "none";
+      canbtn.style.display = "none";
       editbtn.style.display = "inline-block";
       form.style.display = "none";
     }
