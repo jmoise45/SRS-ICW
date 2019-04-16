@@ -15,6 +15,12 @@
     </form>
   </div>
   <script>
+    window.onload = function() {
+      let c = document.getElementById("canvas");
+      if(localStorage.getItem('canvas')!=null) {
+          c.innerHTML = localStorage.getItem('canvas');
+      }
+    }
     function addText() {
       let addbtn = document.getElementById("addbtn");
       let editbtn = document.getElementById("editbtn");
@@ -52,6 +58,10 @@
       editbtn.style.display = "inline-block";
       form.style.display = "none";
       canbtn.style.display = "none";
+    }
+    window.onbeforeunload = function() {
+      let canvas = document.getElementById("canvas");
+      localStorage.setItem('canvas',canvas.innerHTML);
     }
   </script>
 </body>
