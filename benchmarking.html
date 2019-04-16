@@ -1,0 +1,359 @@
+<H3>1.6. Performance Benchmarking </H3>
+
+<P><A HREF="PatHen-Readings.html#ExSec1.6Go4W**lea
+"><B>Reading Assignments and Exercises</B></A> 
+
+<P ALIGN=JUSTIFY>As we discussed in Section 1.5, a <I>benchmark</I> is
+a program that is used to measure a computer system's performance in a
+more-or-less standardized way.  We aspire to standard benchmarks
+because of the need for realism and reproducibility in performance
+testing.  In the ideal situation, one can test a processor using a
+representative sample of real workload.  In practice, one first
+characterizes the working set of programs statistically (e.g., number
+of operations of each type), then computes the time each program requires,
+based on the sum of the product CPI<SUB>i</SUB> &#183 IC<SUB>i</SUB>
+over all instruction types.  
+
+<P ALIGN=JUSTIFY>We next overview different types of benchmarks and
+how they have been, or are, used in practice.
+
+<H4>1.6.1. Linpack Benchmark</H4>
+
+<P ALIGN=JUSTIFY>The Linpack benchmark is an old, well-established measure
+of CPU and ALU performance that measures the time required to solve a dense
+system of linear equations.  In FORTRAN, the Linpack kernal resembles the
+following loop:
+
+<PRE>     DO 10 I = 1,N
+       DY(i) = DY(i) + DA * DX(i) 
+ 10  CONTINUE
+</PRE>
+
+<P ALIGN=JUSTIFY>Here, the "D" that precedes each variable denotes a
+double-precision operand.  As a result, the Linpack benchmark
+challenges the ALU and control unit primarily.  However, I/O is also
+challenged, due to the large data requirement associated with the
+vectors DX and DY.
+
+<P ALIGN=JUSTIFY>Linpack has the following measures (also called
+<I>metrics</I>):
+
+<P><UL><LI>R<SUB>peak</SUB> - peak system performance, in Gflops 
+
+<P>    <LI>N<SUB>max</SUB> - matrix size that yields the highest
+       R<SUB>peak</SUB>
+
+<P>    <LI>N<SUB>1/2</SUB> - matrix size that yields the 0.5 &#183
+       R<SUB>peak</SUB>
+
+<P>    <LI>R<SUB>max</SUB> - Gflops achieved for the matrix of size
+       N<SUB>max</SUB>
+</UL>
+
+<P ALIGN=JUSTIFY>You can read more about the Linpack benchmark at
+<A HREF="http://www.top500.org/">http://www.top500.org/</A>.
+
+<H4>1.6.2. Intel's iCOMP Index 3.0</H4>
+
+<P ALIGN=JUSTIFY>The iCOMP index is a geometric mean of relative
+performance measures (recall from Section 1.5 how geometric means work
+well with ratio-based metrics [also called <I>ratiometric
+quantities</I>]).  The benchmark contains a mix of instructions that
+are assumed to characterize existing and emerging software.  The iCOMP
+benchmark seems to be more relevant as the use of 3D graphics,
+multimedia, and Internet access increases.
+
+<P ALIGN=JUSTIFY>iCOMP 3.0 has the following composition, with weighting
+indicated in percent:
+
+<P><UL><LI>#1,2: <I>Multimedia and Internet application</I> (25%)
+
+<P>    <LI>#3: <I>Two integer productivity applications</I> (20% each)
+
+<P>    <LI>#4: <I>3D geometry and lighting calculations</I> (20%)
+
+<P>    <LI>#5: <I>Java application</I> (10%)
+
+<P>    <LI>#6: <I>Floating point: engineering, finance, and game applications</I> (5%)
+</UL>
+
+<P ALIGN=JUSTIFY>The preceding six benchmark results are combined as
+follows.  Let the ratio BM<SUB>i</SUB>/Base_BM<SUB>i</SUB> denote the
+i-th benchmark performance, where BM denotes the benchmark run on a
+test processor, and Base_BM denotes the benchmark run on a <I>baseline
+processor</I>, in this case a Pentium II clocked at 350 MHz.  The iCOMP
+benchmark is computed as:
+
+<P ALIGN=CENTER><IMG SRC="Images/iCOMPbm1.gif">
+</P>
+
+<P ALIGN=JUSTIFY>where P<SUB>i</SUB> denotes a weighted exponent that
+incorporates the 1/6 power (root) that comprises the outer operation
+of the geometric mean.  Thus, the iCOMP index is a weighted geometric
+mean of application-specific performance ratios.
+
+<H4>1.6.3. SPEC2000 Benchmarks</H4>
+
+<P ALIGN=JUSTIFY>The System Performance Evaluation Corporation (SPEC)
+benchmarks are upgraded every 2-3 years, to account for the
+characteristics of software as program designs evolve.  For example,
+longer run time, larger problems, and greater diversity of
+applications characterize newer software.  The SPEC2000 benchmark has
+both baseline and optimized measures, comprised of the geometric mean
+of normalized execution times.  The reference machine for SPEC2000 is
+a Sun Ultra5_10 (300 MHz SPARC architecture with 256MB of memory).
+
+<P ALIGN=JUSTIFY>The current SPEC2000 suite is comprised of the
+following 12 integer and 14 floating point (FP) programs, which measure
+response time and throughput:
+
+<P><OL><LI><CODE>164.gzip</CODE> (C, integer) - Compression
+
+<P>    <LI><CODE>175.vpr</CODE> (C, integer) - FPGA circuit placement and routing
+
+<P>    <LI><CODE>176.gcc</CODE> (C, integer) - C programming language compiler
+
+<P>    <LI><CODE>181.mcf</CODE> (C, integer) - Combinatorial optimization
+
+<P>    <LI><CODE>186.crafty</CODE> (C, integer) - Chess game
+
+<P>    <LI><CODE>197.parser</CODE> (C, integer) - Word/language processing
+
+<P>    <LI><CODE>252.eon</CODE> (C++, integer) - Computer visualization
+
+<P>    <LI><CODE>253.perlbmk</CODE> (C, integer) - PERL programming language
+
+<P>    <LI><CODE>254.gap</CODE> (C, integer ) - Group theory, interpreter
+
+<P>    <LI><CODE>255.vortex</CODE> (C, integer) - Object-oriented database
+
+<P>    <LI><CODE>256.bzip2</CODE> (C, integer ) - Another compression program
+
+<P>    <LI><CODE>300.twolf</CODE> (C, integer ) - Place and route simulator
+
+<P>    <LI><CODE>168.wupwise</CODE> (Fortran-77, FP) - Physics/quantum chromodynamics
+
+<P>    <LI><CODE>171.swim</CODE> (Fortran-77, FP) - Shallow water circulation modelling
+
+<P>    <LI><CODE>172.mgrid</CODE> (Fortran-77, FP) - Multigrid solver: 3D potential field
+
+<P>    <LI><CODE>173.applu</CODE> (Fortran-77, FP) - Parabolic/elliptical PDEs
+
+<P>    <LI><CODE>177.mesa</CODE> (C, FP) - 3D graphics library
+
+<P>    <LI><CODE>178.galgel</CODE> (Fortran-90, FP) - Computational fluid dynamics
+
+<P>    <LI><CODE>179.art</CODE> (C, FP) - Image recognition/neural networks
+
+<P>    <LI><CODE>183.equake</CODE> (C, FP) - Seismic wave propagation simulation
+
+<P>    <LI><CODE>187.facerec</CODE> (Fortran-90, FP) - Image processing: Face recognition
+
+<P>    <LI><CODE>188.ammp</CODE> (C, FP) - Computational chemistry
+
+<P>    <LI><CODE>189.lucas</CODE> (Fortran-90, FP) - Number theory/Primality testing
+
+<P>    <LI><CODE>191.mfa3d</CODE> (Fortran-90, FP) - Finite-element crash simulation
+
+<P>    <LI><CODE>200.sixtrack</CODE> (Fortran-77, FP) - High energy nuclear physics accelerator design
+
+<P>    <LI><CODE>301.apsi</CODE> (Fortran-77, FP) - Meteorology: Pollutant distribution
+
+</OL>
+
+<P ALIGN=JUSTIFY>SPEC2000 metrics derived from the integer benchmarks
+(#1-12, above) include:
+
+<P><UL> 
+
+<P> <LI><CODE>SPECint2000</CODE>: The geometric mean of 12 normalized
+        ratios when each benchmark is compiled in highly optimized
+        mode (also called <I>aggressive optimization</I>)
+
+<P> <LI><CODE>SPECint_base2000</CODE>: The geometric mean of 12 normalized
+        ratios when compiled with normal optimization (also called <I>
+	conservative optimization</I>)
+
+<P> <LI><CODE>SPECint_rate2000</CODE>: The geometric mean of 12
+        normalized <I>throughput</I> ratios when compiled with
+        aggressive optimization
+
+<P> <LI><CODE>SPECint_rate_base2000</CODE>: The geometric mean of 12
+        normalized <I>throughput</I> ratios when compiled with
+        conservative optimization
+</UL>
+
+<P>There is also a similar set of floating point metrics.
+
+<P ALIGN=JUSTIFY>The results of the SPEC2000 integer benchmarks are
+shown in Figure 1.32, where the circle denotes the geometric mean, and
+the spokes of the wheel whose rim is the circle denote individual
+benchmarks keyed positionally to the diagram in the upper left-hand
+corner.  Note that the Mips processor with IRIX operating system performs
+significantly worse than the mean on <CODE>181.mcf</CODE>
+(combinatorial optimization), and the three processors all perform
+worse than the mean on <CODE>255.vortex</CODE> (object-oriented
+database) and <CODE>252.eon</CODE> (computer visualization).  Since
+databases and visualization involve significant I/O, and visualization
+involves significant amounts of graphics, it would be reasonable to
+suggest that these areas need improvement in each of the three
+processors tested.
+
+<P ALIGN=CENTER><IMG SRC="Images/SPEC2000intBench1.gif"><BR><BR>
+<B>Figure 1.32.</B> Test results for the SPEC2000 integer benchmarks
+run on three processors, with key in the upper left hand corner,
+after [Maf01].
+
+<P ALIGN=JUSTIFY>The floating-point benchmarks shown in Figure 1.33
+reveal similar discrepancies.  For example, all processor perform
+relatively poorly on the <CODE>179.art</CODE> (neural net) benchmark,
+which involves significant amounts of multiplication and division by
+small magnitudes.  It is interesting to note that, in both the integer
+and floating point benchmark suites, the Intel Pentium III processor
+appears to have the most uniform performance (largest number of
+benchmark results closest to the mean).  Since Intel is a contributor
+to the SPEC benchmark suite, it is not surprising that their
+processors could be designed to perform well on these established
+benchmarks.
+
+<P ALIGN=CENTER><IMG SRC="Images/SPEC2000fpBench1.gif"><BR><BR> <B>Figure
+1.33.</B> Test results for the SPEC2000 floating point benchmarks run
+on three processors, with key in the upper left hand corner, after
+[Maf01].
+
+<P ALIGN=JUSTIFY>When the geometric means (of the SPEC95 integer
+and floating-point benchmarks) are respectively graphed as a function
+of clock rate, we have the results shown in Figures 1.34 and 1.35. Note 
+that (a) SPEC95 is similar to SPEC2000, and (b) the performance of the
+Pentium Pro exceeds that of the Pentium due to microarchitecture
+improvements.
+
+<P ALIGN=CENTER><IMG SRC="Images/Figure1/Figure1.34-SPECint95graph.gif"><BR><BR> <B>Figure
+1.34.</B> Graph of SPEC95 integer benchmark performance as a function of
+processor clock rate in MHz, 
+adapted from [Maf01].
+</P>
+
+<P ALIGN=JUSTIFY>It can also be seen that the improvement in performance
+carries through to the floating point computations, as shown in Figure
+1.35.  However, the slope of the floating point benchmark curve for 
+the Pentium is not as great as that for the integer benchmark.  This
+could imply (depending on the statistical significance of the measurements)
+that the Pentium processor does not yield improvements as readily for
+floating point computations as it does for integer computations.
+
+<P ALIGN=CENTER><IMG SRC="Images/Figure1/Figure1.35-SPECfp95graph.gif"><BR><BR>
+<B>Figure 1.35.</B> Graph of SPEC95 floating point benchmark
+performance as a function of processor clock rate in MHz, adapted from
+[Maf01].
+</P>
+
+<H4>1.6.4. MIPS Benchmark</H4>
+
+<P ALIGN=JUSTIFY>The speed of a processor in millions of instructions
+per second (MIPS) can be estimated as:
+
+<P ALIGN=CENTER>MIPS = IC / (10<SUP>6</SUP> &#183 t<SUB>cpu</SUB>) ,
+</P>
+
+<P ALIGN=JUSTIFY>where t<SUB>cpu</SUB> denotes CPU time.  Unfortunately,
+due to different behavior characteristics of various processors (e.g.,
+as shown in Figures 1.32 and 1.33) 1 MIPS on a given processor may not
+mean the same thing as 1 MIPS on another processor.  In particular,
+MIPS is based heavily on instruction count (IC).  This is like determining
+the winner of an auto race by who used fewer RPMs, or the winner of a
+marathon by who took fewer steps when running.  
+  
+<P ALIGN=JUSTIFY>In practice, MIPS is especially misleading because
+floating point computations are done differently on different systems.
+For example, some computers do FP operations in software, while others
+use dedicated hardware units on- or off-chip.  Also, the MIPS benchmark
+does not factor in the instruction mix, and thus compromises realistic
+characterization of workload.
+
+<P ALIGN=JUSTIFY>The only situation where MIPS might be a useful benchmark
+is when the majority of variables have been fixed - for example, when
+comparing two processors from the same vendor that support the same
+ISA using the same compiler or the same benchmark suite.  Apart from
+that, MIPS should be avoided as a measure of processor performance.
+
+<H4>1.6.5. Fallacies and Pitfalls</H4>
+
+<P ALIGN=JUSTIFY>When applying benchmarks to processors, one should
+avoid making the following mistakes:
+
+<P><OL><LI><P ALIGN=JUSTIFY><I>Ignoring Amdahl's Law</I> occurs when
+           one tries to recursively optimize a processor, and puts
+	   much effort into the optimization process, only to achieve
+	   diminishing returns.  Instead, one should optimize the
+	   common case first, then determine via a mathematical model
+	   such as Amdahl's Law whether or not further optimization
+	   is cost-effective.
+
+<P>    <LI><P ALIGN=JUSTIFY><I>Using MIPS as a performance metric</I> 
+           is a common mistake, especially when one is in a hurry to
+	   portray a processor's performance in a favorable way.  
+	   Instead, standard or well-established suites of benchmarks
+	   (such as the SPEC or iCOMP suite) should be applied to the
+	   processor, to highlight performance deficits in several
+	   categories.
+
+<P>    <LI><P ALIGN=JUSTIFY><I>Using the Arithmetic Mean of normalized
+           CPU times</I> is erroneous mathematically because the
+	   normalized CPU times are ratiometric quantities.  As such,
+	   they cannot be combined into an ensemble statistic using
+	   the Arithmetic Mean.  Instead, the Geometric Mean must be
+	   employed to combine ratiometric quantities.
+
+<P>    <LI><P ALIGN=JUSTIFY><I>Using "hardware-independent" measures</I>
+           such as code size defeats the purpose of hardware performance
+	   testing, namely, to highlight the specific advantages and
+	   deficits of a given processor.  If the benchmark is 
+	   hardware-independent, then it cannot produce information that
+	   is specific to a given architecture or processor.  Instead,
+	   a suite of benchmarks such as SPEC or iCOMP should be used to
+	   identify hardware-specific performance deficits.
+
+<P>    <LI><P ALIGN=JUSTIFY><I>Assuming that synthetic benchmarks predict
+           real performance</I> is a major but common error.  Recall from
+	   our discussion in Section 1.5, that synthetic benchmarks are
+	   programs devised by algorithm or hardware designers to measure
+	   specific types of performance on highly focused types of 
+	   operation mixes.  Because these benchmarks often bear little
+	   or no resemblance to real programs, they are of little use
+	   in characterizing a processor's performance in practical
+	   applications.  Instead, a suite of benchmarks that is comprised
+	   of practical programs, such as SPEC or iCOMP, should be used.
+
+<P>    <LI><P ALIGN=JUSTIFY><I>Assuming that the geometric mean of CPU
+           time ratios is proportional to the total execution time</I>
+           is erroneous for two reasons.  First, the arithmetic mean,
+           which is based on a sum, is proportional to <I>total</I>
+           time.  The geometric mean is based on a product and is thus
+           not proportional to an accumulated (summed) total measure.
+           Second, the CPU time is only part of the total execution
+           time.  Other factors that influence total time are I/O
+           activity, wait time in a multiprocessor system, and network
+           overhead in a parallel or distributed computing system.
+</OL>
+
+<P ALIGN=JUSTIFY>In summary, performance measures are specific to a
+given program or suite of programs.  CPU time is the only adequate
+measure of CPU performance - other metrics, such as I/O time or total
+time factor in effects that are not properly associated with the CPU
+(although they may be associated with a computer <I>system</I>).  For
+a given ISA, performance increases result from (a) increases in clock
+rate, (b) improvements in processor architecture that reduce CPI, and
+(c) compiler enhancements that reduce IC (and, possibly, CPI) for a
+given type of instruction.  The ideal benchmark is the workload that
+you plan to run on a given processor: all other assumptions about
+benchmarks can lead to unrealistic performance figures.  
+
+</BLOCKQUOTE>
+<P><HR><BLOCKQUOTE>
+<P ALIGN=JUSTIFY>
+This concludes our overview of introductory material, computer
+abstractions, and hardware/software technology.  We next
+discuss instruction set architecture, specific machines, and
+number representations.
+</BLOCKQUOTE>

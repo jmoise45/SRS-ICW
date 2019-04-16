@@ -1,0 +1,424 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta content="en-us" http-equiv="Content-Language" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<title>Performance Calculation for M</title><script type="text/javascript" src="Script/jquery.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="Styles/shadowbox.css">
+		<script type="text/javascript" src="Script/shadowbox.js"></script>
+		<link rel="stylesheet" type="text/css" href="Styles/styles.css">
+		<script type="text/javascript" src="Script/custom_script.js"></script>
+
+		<script type="text/javascript">
+			Shadowbox.init();
+
+		</script>
+
+	</head>
+	<body>
+
+		<a name="Sec1.2"></a>
+		</p><h3>1.2. Overview of Computer Abstractions</h3>
+
+		<p align="JUSTIFY">
+			As shown in Figure 1.1, computer systems span many
+			levels of detail, which in computer science we call <i>levels of
+			abstraction</i>.  This hierarchy is reviewed in <a href="http://www.cise.ufl.edu/~mssz/CompOrg/AppxB-CompOrg.html">Appendix
+			B</a>.
+
+		</p>
+		<p align="CENTER"><img src="Images/Figure1/Figure1.1-LevelsOfAbstractn.gif">
+			<br>
+			<b>Figure 1.1.</b> Levels of abstraction in computer systems,
+			adapted from [Maf01]
+		</p>
+
+		<p align="JUSTIFY">
+			In this course, we are concerned with the
+			following components:
+
+		</p>
+		<ul>
+			<p></p>
+			<li>
+				<p align="JUSTIFY">
+					<i>Operating System</i> - Provides a
+					convenient interface between (a) the user and his/her application software,
+					and (b) the hardware (sometimes called the <i>bare machine</i>).
+
+				</p><p></p>
+			</li>
+			<li>
+				<p align="JUSTIFY">
+					<i>Assembler</i> - Translates <i>assembly
+					language</i>, a primitive type of programming language, into <i>machine code</i>, which is a stream of ones and zeroes.
+
+				</p><p></p>
+			</li>
+			<li>
+				<p align="JUSTIFY">
+					<i>Instruction Set Architecture</i>(ISA) -
+					Interfaces the software (listed above) to the hardware (listed
+					below), and provides support for programming.
+
+				</p><p></p>
+			</li>
+			<li>
+				<p align="JUSTIFY">
+					<i>Processor, Memory, and I/O System</i> -
+					These components support the execution of machine code instructions
+					expressed in terms of the ISA.
+
+				</p><p></p>
+			</li>
+			<li>
+				<p align="JUSTIFY">
+					<i>Datapath and Control</i> - Provide a
+					convenient abstraction for connecting the processor, memory, and
+					I/O system and controlling their function efficiently.
+				</p>
+			</li>
+		</ul>
+
+		<p align="JUSTIFY">
+			If you have taken Dr. Mafla's version of this
+			course, you will be acquainted with the following <i>five components
+			of a computer</i>:
+
+		</p>
+		<ol>
+			<p></p>
+			<li>
+				<i>Input</i> - Provides data and program information
+
+				<p></p>
+			</li>
+			<li>
+				<i>Datapath</i> - Mediates I/O
+
+				<p></p>
+			</li>
+			<li>
+				<i>Control</i> - Implements control of calculation and
+				communication or I/O processes
+
+				<p></p>
+			</li>
+			<li>
+				<i>Memory</i> - Storage and retrieval of programs or data
+
+				<p></p>
+			</li>
+			<li>
+				<i>Output</i> - Result of running program on processor
+				using input
+			</li>
+		</ol>
+
+		<p align="JUSTIFY">
+			Abstractions help us express intangible concepts in
+			visible representations that can be manipulated.  For example, a
+			data structure is an abstraction that organizes concepts or numbers
+			in a comprehensible, organized representation that can be manipulated
+			by a computer program.  Figure 1.2 illustrates another view of a
+			computer system, which is comprised of different levels of language
+			and means of translating these languages into lower-level languages.  Finally,
+			the microprogram is loaded onto the hardware.
+
+		</p><h4>1.2.1. Different Abstract Views</h4>
+
+		<p align="CENTER"><img src="Images/Figure1/Figure1.2-CompOrg.gif">
+			<br>
+			<br>
+			<b>Figure 1.2.</b> Another view of levels of abstraction in computer systems,
+			adapted from [Maf01].
+		</p>
+
+		<p align="JUSTIFY">
+			The salient concepts for Figure 1.2 are listed as follows:
+		</p><p>
+
+		</p>
+		<ul>
+			<p></p>
+			<li>
+				<p align="JUSTIFY">
+					<i>Level 5 - Problem Oriented Language </i> - Provides a convenient interface and applications engine
+					that helps the user produce results specific to a given
+					application area.  For example, Microsoft Word is used for
+					document creation or editing, Excel for accounting spreadsheets,
+					etc.  The language at this level is usually a sequence of
+					keystrokes or a high-level scripting language.  In software
+					design, the language is a high-level programming language such as
+					C, C++, or Java.
+
+				</p><p></p>
+			</li>
+			<li>
+				<p align="JUSTIFY">
+					<i>Level 4 - Assembly Language </i> -
+					Assembly is a very detailed language that helps the systems
+					programmer or software designer move information around in a
+					computer architecture in a highly specific way.  For example, many
+					compilers (programs that translate programming language into an
+					assembly-like language) are written in assembly language.  The
+					advantage to assembly language is <i>speed</i> and <i>power</i> in
+					accessing various features of the hardware.
+
+				</p><p></p>
+			</li>
+			<li>
+				<p align="JUSTIFY">
+					<i>Level 3 - Operating System Machine </i> -
+					Provides a convenient interface between assembly language and
+					the abstraction of the hardware architecture's instruction set.
+					Operating systems generally contain many libraries that help
+					a software developer or programmer connect to lower-level system
+					functions (e.g., I/O, memory allocation, etc.) in an organized way.
+
+				</p><p></p>
+			</li>
+			<li>
+				<p align="JUSTIFY">
+					<i>Level 2 - Instruction Set Architecture
+					(ISA)</i> - One of the most important parts of a computer is the
+					interface between the lowest-level software and the hardware.  The
+					ISA includes anything programmers use to make a binary machine
+					language program work correctly, including instructions, I/O, etc.
+					The ISA facilitates design of functionality independent of the
+					hardware.
+
+				</p><p></p>
+			</li>
+			<li>
+				<p align="JUSTIFY">
+					<i>Level 1 - Microarchitectural Level </i>
+					- Microinstructions are low-level control instructions that define
+					the set of datapath control signals which apply to a given state
+					of a computing machine.  The microinstructions, together with
+					their sequencing, comprise the microarchitecture, whose purpose is
+					to rigorously and consistently express the control of logic
+					circuits that comprise the computer hardware.  Designing this
+					control in terms of a program that implements machine instructions
+					in terms of simpler microinstructions is called
+					<i>microprogramming</i>.
+
+				</p><p></p>
+			</li>
+			<li>
+				<p align="JUSTIFY">
+					<i>Level 0 - Digital Logic </i> - The
+					circuitry that makes a digital computer run is called
+					<i>logic</i>.  All processes of a digital computer are expressed
+					in terms of functions of ones and zeros, for example, <i>and</i>, <i>or</i>, and <i>not</i> functions.  We will review these logic
+					functions in Section 1.4.
+				</p>
+			</li>
+		</ul>
+
+		<p align="JUSTIFY">
+			A more general view of the abstractions shown in
+			Figure 1.2 is given in Figure 1.3.  Note the recursive levels of
+			translation, from an actual machine (digital logic level in Figure 1.2)
+			to various virtual machines (higher levels of abstraction).
+
+		</p>
+		<p align="CENTER"><img src="Images/Figure1/Figure1.3-MultiLvlMach.gif">
+			<br>
+			<br>
+			<b>Figure 1.3.</b> Generalized view of levels of abstraction in
+			computer systems, adapted from [Maf01].
+		</p>
+
+		<p align="JUSTIFY">
+			This leads to the following implementational view,
+			where the scope of this course is circled in red.
+
+		</p>
+		<p align="CENTER"><img src="Images/Figure1/Figure1.4-RepresentnLevels.gif">
+			<br>
+			<br>
+			<b>Figure 1.4.</b> Another view of levels of abstraction in computer systems,
+			adapted from [Maf01].
+		</p>
+
+		<h4>1.2.2. RISC versus CISC</h4>
+
+		<p align="JUSTIFY">
+			When computers were first developed, they had very
+			small instruction sets, because the algorithms and hardware for
+			complicated tasks had not yet been developed.  As computer design
+			continued into the 1960s, high-level languages (e.g., FORTRAN, Cobol,
+			Lisp) evolved.  Hardware designers formed the idea that it might be
+			useful to develop different computers for each type of language -
+			a FORTRAN machine, a COBOL machine, etc.  When this approach was tried,
+			it resulted in very complicated instruction sets.  Parallel to this
+			development was the IBM philosophy of upward compatibility, which they
+			also tried to implement in hardware.  This produced a huge collection
+			of instructions to support all their old computer programs (called
+			<i>legacy code</i>).  The result of this was called Complex Instruction
+			Set Computing (CISC), whose philosophy is summarized as follows:
+
+		</p>
+		<ul>
+			<p></p>
+			<li>
+				Bigger is better!
+
+				<p></p>
+			</li>
+			<li>
+				Make the hardware as "smart" (and, hence, as complex) as possible.
+
+				<p></p>
+			</li>
+			<li>
+				If you have a great sprawling architecture, that's ok.  The
+				hardware fabricators will figure out what to do with your
+				design.
+
+				<p></p>
+			</li>
+			<li>
+				Don't worry about whether or not the system design is
+				neatly partitioned into layers.  (One great sea of logic gates
+				would be ok until we figure out something else that works.)
+
+				<p></p>
+			</li>
+			<li>
+				When one little part fails, the whole system dies and
+				we will never find out why.  That's ok - just build another
+				CPU chip from the ground up.  Maybe that one will work better.
+			</li>
+		</ul>
+
+		<p align="JUSTIFY">
+			CISC has many problems.  Some of the bigger problems
+			include <i>lack of maintainability</i>, <i>lack of verifiability</i>,
+			and <i>brittleness</i>.  In practice, humans don't know how to verify
+			or maintain really complicated designs.  And, we don't yet have
+			software that can perform all the verification and maintenance tasks
+			for us.  As a result, as CISC machines got more and more complex, they
+			failed considerably more frequently.  This yielded brittle
+			(non-robust) performance in practical computing problems.  As the
+			world became more dependent on computers, the CISC design philosophy
+			gradually became unacceptable.
+
+		</p>
+		<p align="JUSTIFY">
+			In response to this problem, computer designers
+			returned back to the primitive roots of computer science, and
+			developed the Reduced Instruction Set Computing (RISC) philosophy.
+			The main concept in RISC is that of a very simple Instruction Set
+			Architecture.  There is a compact microinstruction set, into which
+			every high-level command or instruction is translated by the compiler.
+			RISC computers tend to run faster, are smaller, and have fewer
+			problems because they have a simple instruction set.  The RISC
+			philosophy includes the following concepts:
+
+		</p>
+		<ul>
+			<p></p>
+			<li>
+				Small is beautiful.
+
+				<p></p>
+			</li>
+			<li>
+				Keep the hardware simple and stupid (KISS design philosophy).
+
+				<p></p>
+			</li>
+			<li>
+				Hardware and software designers should work together to
+				make the architecture simple and modular.
+
+				<p></p>
+			</li>
+			<li>
+				Neatly partition the system design into layers, as shown in
+				Figures 1.2 and 1.3.  Then, take the vast majority of the
+				functionality that CISC implements in hardware, and put it
+				into software (using compiler transformations) instead.
+
+				<p></p>
+			</li>
+			<li>
+				Make the hardware and compiler robust, so the entire system
+				can perform reliably.
+			</li>
+		</ul>
+
+		<p align="JUSTIFY">
+			By keeping the hardware small and modular, the design
+			and fabrication, maintenance, and debugging costs are reduced.  This
+			makes sense from an economic perspective.  It is also easier to make
+			new generations of RISC computer chips, and to produce them more
+			quickly.  This implies potentially greater profits by shortening both
+			the development and product life cycles.
+
+		</p>
+		<p align="JUSTIFY">
+			Modularity and simplicity in hardware and software
+			help designers and engineers achieve greater robustness, because the
+			system can be maintained and understood more easily.  With simple
+			hardware and software, the functionality of the design can be verified
+			more extensively using software-based testing and
+			proof-of-correctness.  Finally, it makes sense to put the CISC
+			complexity into the compiler software, because the software can be
+			modified and corrected much more easily, inexpensively, and quickly
+			than hardware can be changed or updated.  Again, this makes good
+			economic sense, because development and re-work costs are
+			significantly reduced.
+
+		</p><h4>1.2.3. Concept Summary</h4>
+
+		<p align="JUSTIFY">
+			Thus far, we have seen that computer hardware
+			(software) evolved in the following stepwise fashion:
+
+		</p>
+		<ul>
+			<p></p>
+			<li>
+				<p align="JUSTIFY">
+					<b>Step 1.</b> - Bare logic circuits
+					(plugboard based programming)
+
+				</p><p></p>
+			</li>
+			<li>
+				<p align="JUSTIFY">
+					<b>Step 2.</b> - Microarchitectural control
+					(machine language programming)
+
+				</p><p></p>
+			</li>
+			<li>
+				<p align="JUSTIFY">
+					<b>Step 3.</b> - Operating system (batch -&gt;
+					multiprogramming -&gt; time-sharing -&gt; parallelism)
+
+				</p><p></p>
+			</li>
+			<li>
+				<p align="JUSTIFY">
+					<b>Step 4.</b> - Complex architectures (compilers for high-level languages, e.g., FORTRAN, COBOL -&gt; Pascal -&gt; C -&gt; C++ -&gt; Java)
+
+				</p><p></p>
+			</li>
+			<li>
+				<p align="JUSTIFY">
+					<b>Step 5.</b> - Hardware/Software interface development (ISA -&gt; CISC -&gt; RISC)
+				</p>
+			</li>
+		</ul>
+
+		We next overview example computer technologies and architectures.
+
+	</body>
+</html>
+

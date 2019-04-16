@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+	<title></title>
+	
+	<style type="text/css">
+		.legendLabel {
+			font-family: 'Times New Roman';
+			font-size: 14px;
+			font-style: italic;
+		}
+		.x-label {
+			text-align: center;
+			font-size: 14px;
+			font-style: italic;
+		}
+		.y-label {
+			font-size: 14px;
+			font-style: italic;
+		}
+		.rel {
+			position: relative;
+		}
+		#plot1button {
+			position:relative;
+			right:0;
+		}
+		#eq1div {
+			position: absolute;
+			width: 107px;
+			bottom: -4px;
+			right: 3px;
+			text-align: center;
+			font-weight:bold;
+			font-size:16px;
+			font-family: 'Verdana';
+		}
+		#eq2div {
+			position: absolute;
+			width: 107px;
+			bottom: 21px;
+			right: 103px;
+			text-align: center;
+			font-weight: bold;
+			font-size: 10px;
+			font-family: 'Verdana';
+		}
+		#eq2div2 {
+			position: absolute;
+			width: 67px;
+			bottom: 12px;
+			left: 143px;
+			text-align: center;
+			font-weight: bold;
+			font-size: 14px;
+			font-family: 'Verdana';
+		}
+		#plot1table {
+			border-bottom: 2px black solid;
+			padding-bottom: 20px;
+		}
+		#plot2table {
+			padding-top: 20px;
+		}
+		#plot1table .title, #plot2table .title {
+			width: 100%;
+			text-align: center;
+			padding-bottom: 35px;
+			font-weight: bold;
+			font-size: 20px;
+		}
+		
+	</style>
+	
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="../Script/jquery.flot.js"></script>
+	<script type="text/javascript">
+	
+		function ComputeY(fe, foi) {
+			var result = 1 - fe;
+			result = result + (fe/foi);
+			result = 1/result;
+			return result;
+		}
+		
+		function InitPlot(d) {
+			$.plot($("#plot1"), [{ label: "Speedup",  data: d}], 
+				{
+				series: {
+					lines: { show: true }
+				},
+				xaxis: {
+					label: "Fraction Enhanced"
+					//ticks: [0, 0.1,0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+				},
+				grid: {
+					backgroundColor: { colors: ["#fff", "#eee"] }
+				}
+			});
+			$.plot($("#plot2"), [{ label: "Speedup",  data: d}], 
+				{
+				series: {
+					lines: { show: true }
+				},
+				xaxis: {
+					label: "Fraction Enhanced"
+					//ticks: [0, 0.1,0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+				},
+				grid: {
+					backgroundColor: { colors: ["#fff", "#eee"] }
+				}
+			});
+		}
+	
+		$(document).ready(function() {
+			InitPlot([ [] ]);
+			
+			
+			$("#FactorOfImprovement").keyup(function() {
+				var i = parseFloat($("#FactorOfImprovement").val());
+				if (i) {
+					$("#eq1value").html(i);
+				}
+				else {
+					$("#eq1value").html("-");
+				}
+				return false;
+			});
+			
+			$("#FractionEnhanced").keyup(function() {
+				var i = parseFloat($("#FractionEnhanced").val());
+				if (i) {
+					$("#eq2value").html(i);
+					$("#eq2value2").html(i);
+				}
+				else {
+					$("#eq2value").html("-");
+					$("#eq2value2").html("-");
+				}
+				return false;
+			});
+			
+			$("#plot1button").click(function() {
+				var d1 = [];
+				var foi = parseFloat($("#FactorOfImprovement").val());
+				
+				if (foi < 0) {
+					alert("Value cannot be negative!");
+					return false;
+				}
+				
+				for (var i = 0; i <= 1; i += 0.01) {
+					d1.push([i, ComputeY(i, foi)]); 
+				}
+				
+				$.plot($("#plot1"), [{ label: "Speedup",  data: d1}], 
+				{
+					series: {
+						lines: { show: true }
+					},
+					xaxis: {
+						label: "Fraction Enhanced",
+						ticks: [0, 0.1,0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+					},
+					grid: {
+						backgroundColor: { colors: ["#fff", "#eee"] }
+					}
+				});
+				
+				return false;
+			});
+			
+			$("#plot2button").click(function() {
+				var d1 = [];
+				var fe = $("#FractionEnhanced").val();
+				
+				if (fe < 0 || fe > 1) {
+					alert("Value must be between 0 and 1!");
+					return false;
+				}
+				
+				for (var i = 0; i <= 15; i += 0.1) {
+					d1.push([i, ComputeY(fe, i)]); 
+				}
+				
+				$.plot($("#plot2"), [{ label: "Speedup",  data: d1}], 
+				{
+					series: {
+						lines: { show: true }
+					},
+					grid: {
+						backgroundColor: { colors: ["#fff", "#eee"] }
+					}
+				});
+				
+				return false;
+			});
+			
+		});
+	</script>
+	
+</head>
+<body>
+	<form>
+		<table id="plot1table">
+			<tr>
+				<td>
+					<table>
+						<tr>
+							<div class="title"><span>Speedup vs. Fraction Enhanced</span></div>
+						</tr>
+						<tr>
+							<td>
+								<span>Factor Of Imrovement:</span>
+								<br />
+								<input type="text" id="FactorOfImprovement">	
+								<button id="plot1button">Plot</button>
+								<br /><br />
+							</td>
+							<td>
+							</td>
+						</tr>
+						<tr>					
+							<td class="rel">
+							</td>
+						</tr>
+						<tr>
+							<td class="rel">
+								<img id="eq1" src="eq1.gif" /><br />
+								<div id="eq1div"><span id="eq1value">-</span></div>
+							<td>
+						</tr>
+					</table>
+				</td>
+				<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+				<td>
+					<table>
+						<tr>
+							<td>
+								<span class="y-label">Speedup</span>
+							</td>
+							<td>
+								<div id="plot1" style="width:400px;height:250px;"></div>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td class="x-label">
+								<span>Fraction Enhanced</span>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<table id="plot2table">
+			<tr>
+				<td>
+					<table>
+						<tr>
+							<div class="title"><span>Speedup vs. Factor of Improvement</span></div>
+						</tr>
+						<tr>						
+							<td>
+								<span>Fraction Enhanced:</span>
+								<br />
+								<input type="text" id="FractionEnhanced">	
+								<button id="plot2button">Plot</button>
+								<br /><br />
+							</td>
+							<td>
+							</td>
+						</tr>
+						<tr>					
+							<td class="rel">
+							</td>
+						</tr>
+						<tr>
+							<td class="rel" style="width:466px">
+								<img id="eq2" src="eq2.gif" /><br />
+								<div id="eq2div"><span id="eq2value">-</span></div>
+								<div id="eq2div2"><span id="eq2value2">-</span></div>
+							<td>
+						</tr>
+					</table>
+				</td>
+				<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+				<td>
+					<table>
+						<tr>
+							<td>
+								<span class="y-label">Speedup</span>
+							</td>
+							<td>
+								<div id="plot2" style="width:400px;height:250px;"></div>
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td class="x-label">
+								<span>Factor of Improvement</span>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

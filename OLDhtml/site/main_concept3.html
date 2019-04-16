@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>Untitled 1</title>
+<link href="main3.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.auto-style1 {
+	color: #000000;
+}
+.auto-style3 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: large;
+}
+.auto-style4 {
+	font-family: Arial, Helvetica, sans-serif;
+	text-align: center;
+	font-size: large;
+}
+.auto-style5 {
+	text-align: center;
+}
+.auto-style6 {
+	font-size: large;
+}
+.auto-style7 {
+	font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+</head>
+
+<body>
+
+<div id="outer-container">
+    <div id="header">
+	 <br />
+     <ul id="list-nav">
+	 <li class="auto-style5"><a href="#"><strong><span class="auto-style6">I</span></strong><span class="auto-style3"><strong>CW WorkBench</strong></span></a></li>
+	 <li class="auto-style4"><a href="#"><strong>Supervisor</strong></a></li>
+	 <li class="auto-style4"><a href="#"><strong>Students</strong></a></li>
+	 <li class="auto-style4"><a href="#"><strong>Mentor</strong></a></li>
+	 </ul>		
+    </div>
+    <div style="clear: both">
+    </div>
+
+    <div id="left-nav" style="width: 206px">
+        <h1>{ Left Side Navigation }<span class="auto-style1">System Analysis</span></h1>
+		<ul>
+			<li><a href="#">Reliability</a></li>
+			<li><a href="#">Robustness</a></li>
+			<li><a href="#">Complexity</a></li>
+			<li><a href="#">Performance</a><ul>
+				<li><a href="#">Hardware</a></li>
+				<li><a href="#">Single Unit</a></li>
+				<li><strong><a href="#">Comparative</a></strong></li>
+			</ul>
+			</li>
+			<li><a href="#">Components</a><ul>
+				<li><a href="#">Memory</a></li>
+				<li><a href="#">Bus</a></li>
+				<li><a href="#">Network</a></li>
+			</ul>
+			</li>
+		</ul>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+    </div>
+    <div id="content-container">
+		<table style="width: 100%; height: 425px">
+			<tr>
+				<td class="auto-style4" style="height: 46px; width: 45%">M<sub>1</sub></td>
+				<td style="height: 46px; width: 33%"></td>
+				<td class="auto-style4" style="height: 46px; width: 33%">M<sub>2</sub></td>
+			</tr>
+			<tr>
+				<td class="auto-style4" style="width: 33%">
+				<img alt="Machine 1" height="144" src="images/machine1.png" width="135" /><table style="width: 100%">
+					<tr>
+				<td style="width: 275px" class="auto-style5">IC = 2,487 instr</td>
+					</tr>
+					<tr>
+				<td style="width: 275px" class="auto-style5">CPI = 2.6 cyc/instr</td>
+					</tr>
+					<tr>
+				<td style="width: 275px" class="auto-style5">Clock = 4.6 GHz</td>
+					</tr>
+				</table>
+				</td>
+				<td class="auto-style5"><form name="performance_calc">
+<table style="width: 70px" class="auto-style7">
+	<tr>
+		<td class="style1" colspan="7" style="height: 34px"><strong>
+		Performance Calculation for M</strong></td>
+	</tr>
+	<tr>
+		<td style="width: 16px">Time</td>
+		<td style="width: 16px">=</td>
+		<td>IC</td>
+		<td>x</td>
+		<td>CPI</td>
+		<td>x</td>
+		<td style="width: 192px">Clock Period</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>=</td>
+		<td>
+		<input type="text" name="input_IC" onchange="calcPerformance(input_IC.value, input_CPI.value, input_t_clock.value, this.form)" style="width: 95px" /></td>
+		<td> </td>
+		<td>
+		<input type="text" name="input_CPI" onchange="calcPerformance(input_IC.value, input_CPI.value, input_t_clock.value, this.form)" style="width: 95px" /></td>
+		<td> </td>
+		<td>
+		<input type="text" name="input_t_clock" onchange="calcPerformance(input_IC.value, input_CPI.value, input_t_clock.value, this.form)" style="width: 95px" /></td>
+	</tr>
+	<tr>
+		<td style="width: 16px">&nbsp;</td>
+		<td style="width: 16px">=</td>
+		<td colspan="5">
+		<input type="text" name="output_t_exe" style="width: 123px" /></td>
+	</tr>
+	<tr>
+		<td colspan="7">&nbsp;</td>
+	</tr>
+</table>
+</form>
+
+</td>
+				<td class="auto-style4">
+				<img alt="Machine 2" height="149" src="images/machine2.png" style="float: right" width="216" /><table style="width: 100%">
+					<tr>
+				<td class="auto-style5">IC = 2,487 instr</td>
+					</tr>
+					<tr>
+				<td class="auto-style5">CPI = 3.8 cyc/instr</td>
+					</tr>
+					<tr>
+				<td class="auto-style5">Clock = 2.3 GHz</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+		</table>
+    </div>
+</div>
+
+<script type="text/javascript">
+	function calcPerformance(IC, CPI, t_clock, form)
+	{
+		var A = parseFloat(IC);
+		var B = parseFloat(CPI);
+		var C = parseFloat(t_clock);
+		
+		form.output_t_exe.value = A*B*C;	
+	}
+</script>
+
+
+
+</body>
+
+</html>

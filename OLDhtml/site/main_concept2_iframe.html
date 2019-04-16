@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="en-us" http-equiv="Content-Language" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>ICW - Concepts</title>
+<style type="text/css">
+.header {
+	text-align: center;
+	color: #FFFFFF;
+	background-color: #000080;
+}
+
+.navigation {
+	margin-left: .5em;
+	margin-bottom: .5em;	
+}
+
+.mainContent {
+	border-style: solid;
+	border-color: #000080;
+	text-align: center;
+}
+.nav {
+	text-align: left;
+}
+</style>
+</head>
+
+<body style="font-family:Arial, Helvetica, sans-serif">
+
+<table style="width: 100%; height: 526px">
+	<tr>
+		<td class="header" style="height: 44px; width: 20%"><strong>
+		Concepts</strong></td>
+		<td class="header" style="height: 44px; width: 20%"><strong>ICW 
+		Workbench</strong></td>
+		<td class="header" style="height: 44px; width: 20%"><strong>
+		Supervisor</strong></td>
+		<td class="header" style="height: 44px; width: 20%"><strong>
+		Students</strong></td>
+		<td class="header" style="height: 44px; width: 20%"><strong>Mentor</strong></td>
+	</tr>
+	<tr>
+		<td valign="top" class="mainContent">
+		<div class="nav">
+		<br />
+		<p><strong>System Analysis</strong></p>
+			<ul class="navigation">
+				<li class="navigation"><a href="#">Reliability</a></li>
+				<li class="navigation"><a href="#">Robustness</a></li>
+				<li class="navigation"><a href="#">Compexity</a></li>
+				<li class="navigation"><a href="#">Performance</a><ul class="navigation">
+					<li class="navigation">Hardware<ul class="navigation">
+						<li class="navigation"><a href="#">Single Unit</a></li>
+						<li class="navigation"><strong><a href="#">Comparitive</a></strong></li>
+					</ul>
+					</li>
+					<li class="navigation">Components<ul class="navigation">
+						<li class="navigation"><a href="#">Memory</a></li>
+						<li class="navigation"><a href="#">Bus</a></li>
+						<li class="navigation"><a href="#">Network</a></li>
+					</ul>
+					</li>
+				</ul>
+				</li>
+			</ul>
+			<p>&nbsp;</p>
+			<br />
+		</div>
+		</td>
+		<td colspan="4" class="mainContent" valign="top">
+		<table style="width: 100%; height: 425px">
+
+			<tr>
+				<td>
+					<b>M<sub>1</sub></b><br />
+				<img alt="Machine 1" height="144" src="images/machine1.png"  />
+				<br />
+				IC = 2,487 instr
+				<br />
+				CPI = 2.6 cyc/instr
+				<br />
+				Clock = 4.6 GHz
+				</td>
+				<td>
+				<iframe frameborder="0" scrolling="no" id="I1" name="I1" src="calc_perform2.html" style="height: 450px; width: 580px">
+				Your browser does not support inline frames or is currently configured not to display inline frames.
+				</iframe>
+
+				</td>
+				
+			</tr>
+			<tr><td></td></tr>
+			<tr>
+				<td>
+					<b>M<sub>2</b></sub><br />
+				<img alt="Machine 2" height="144" src="images/machine2.png" />
+				<br />
+				IC = 2,487 instr
+				<br />
+				CPI = 3.8 cyc/instr
+				<br />
+				Clock = 2.3 GHz
+				</td>
+	
+				
+			</tr>
+			
+
+				
+				</table>
+				</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+</table>
+
+<script type="text/javascript">
+	function calcPerformance(IC, CPI, t_clock, form)
+	{
+		var A = parseFloat(IC);
+		var B = parseFloat(CPI);
+		var C = parseFloat(t_clock);
+		
+		form.output_t_exe.value = A*B*C;	
+	}
+	
+	function calcCompare(t1,t2)
+	{
+		var A = parseFloat(t1);
+		var B = parseFloat(t2);
+		
+		if (t1>t2) {form.output_t_exe.value = "M2 is faster!"}
+		else if (t2>t1) {form.output_t_exe.value = "M1 is faster!"}
+		else {form.compare_t_exe.value = "M1 and M2 are equal!"}
+	}
+
+
+</script>
+
+
+
+</body>
+
+</html>

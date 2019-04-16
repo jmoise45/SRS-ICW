@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<html xsl:version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml">
+  <body style="font-family:Arial;font-size:12pt;background-color:#EEEEEE">
+    <xsl:for-each select="icw/topic">
+      <div style="background-color:teal;color:white;padding:4px">
+        <span style="font-weight:bold"><xsl:value-of select="@title"/></span>        
+      </div>
+      <div style="margin-left:20px;margin-bottom:1em;margin-top:1em;font-size:10pt">
+		<h3 style="text-decoration:underline;">Overview</h3>
+		<p>
+		<em>Summary:&#160;&#160;&#160;</em><xsl:value-of select="overview/summary"/>
+		</p>
+		<p>
+		<em>Objectives:&#160;&#160;&#160;</em><xsl:value-of select="overview/objectives"/>
+		</p>
+		<p>
+		<em>Skills to be Learned:&#160;&#160;&#160;</em>
+		</p>
+		<ul>
+		<xsl:for-each select="overview/skills/skill">
+			<li><xsl:value-of select="."/></li>
+		</xsl:for-each>
+		</ul>
+		
+		<h3 style="text-decoration:underline;">Lesson</h3>
+		<p>
+		<em>Design Principle:&#160;&#160;&#160;</em><xsl:value-of select="lesson/design-principle"/>
+		</p>
+		<p>
+		<em>Key Concepts:&#160;&#160;&#160;</em>
+		</p>
+		<ul>
+		<xsl:for-each select="lesson/concepts/concept">
+			<li><xsl:value-of select="."/></li>
+		</xsl:for-each>
+		</ul>		
+		
+		<p>
+		<em>Summary:&#160;&#160;&#160;</em><xsl:value-of select="lesson/summary"/>
+		</p>		
+		<p>
+		<em>Background:&#160;&#160;&#160;</em>
+		<xsl:for-each select="lesson/background/text">
+			<p>
+				<xsl:value-of select="."/>
+			</p>
+		</xsl:for-each>
+		<div style="padding:20px;text-align:center;">
+		<xsl:for-each select="lesson/background/image">
+			<img>
+				<xsl:attribute name="src">
+					<xsl:value-of select="." />
+				</xsl:attribute> 
+				<xsl:attribute name="border">0</xsl:attribute>
+				<!--<xsl:attribute name="width">240</xsl:attribute>
+				<xsl:attribute name="height">300</xsl:attribute>-->
+			</img>
+			<div><strong>Figure&#160;<xsl:value-of select="@figure"/>.</strong>&#160;&#160;<xsl:value-of select="@caption"/></div>
+		</xsl:for-each>
+		</div>
+		</p>
+		<p>
+		<em>Theory:&#160;&#160;&#160;</em><xsl:value-of select="lesson/theory"/>
+		</p>
+		<p>
+		<em>Examples:&#160;&#160;&#160;</em><xsl:value-of select="lesson/examples"/>
+		</p>		
+
+		
+		<h3 style="text-decoration:underline;">Self-Test</h3>
+		<br />
+		<br />
+		<br />
+
+		<div>
+		<xsl:for-each select="text">
+			<p>
+			<xsl:value-of select="."/>
+			</p>
+		</xsl:for-each>
+		</div>
+      </div>
+    </xsl:for-each>
+  </body>
+</html>
+

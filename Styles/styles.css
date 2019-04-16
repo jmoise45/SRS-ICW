@@ -1,0 +1,142 @@
+/* CSS Document */
+
+.header {
+	text-align: center;
+	color: #FFFFFF;
+	background-color: #000080;
+}
+
+.navigation {
+	margin-left: .5em;
+	margin-bottom: .5em;	
+}
+
+.mainContent {
+	border-style: solid;
+	border-color: #000080;
+	text-align: center;
+}
+
+.nav {
+	text-align: left;
+}
+
+#example5 {
+	float: left;	
+}
+	
+.expand_all,
+.collapse_all {	
+	cursor: pointer;
+}
+	
+.example_menu {
+	font-size: 90%;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	vertical-align: top;
+	width: 236px;
+}
+
+.example_menu ul {
+			display: none;
+			list-style: none;
+			margin: 0;
+			padding: 0;
+}
+
+#menu5 {
+			margin: 0;
+}
+
+#menu5 li,
+.example_menu li {
+			background-image: none;
+			margin: 0;
+			padding: 0;
+}
+
+.example_menu ul ul {
+			display: block;
+}
+
+.example_menu ul ul li a {
+			padding-left: 20px;
+			width: 209px;
+}
+
+.example_menu a {
+			color: #000;
+			cursor: pointer;
+			display: block;
+			font-weight: bold;
+			margin-left: 0;
+			padding: 2px 2px 2px 17px;
+			width: 212px;
+}
+
+.example_menu a.expanded {
+			background: #000080 url('Images/collapse.gif') no-repeat 3px 50%;
+			color: #FFFFFF;
+}
+
+.example_menu a.collapsed {
+			background: #000080 url('Images/expand.gif') no-repeat 3px 50%;
+			color: #FFFFFF;
+}
+
+.example_menu a:hover {
+			text-decoration: none;
+}
+
+.example_menu ul a {
+			background: #e8e8e8;
+			border-top: 2px solid #fff;
+			color: #000;
+			display: block;
+			font-weight: normal;
+			padding: 2px 2px 2px 10px;
+			width: 219px;
+}
+
+.example_menu ul a:link {
+			font-weight: normal;
+}
+
+.example_menu ul a:hover {
+			background : #f5f5f5;
+			text-decoration: underline;
+}
+		
+.example_menu li.active a {
+			background: #fff;
+}
+		
+.example_menu li.active li a {
+			background: #e8e8e8;
+}
+
+#menu5 li.footer,
+.example_menu .footer {
+			background: transparent url('Images/footer.jpg') no-repeat 0 0;
+			border-top: 2px solid #fff;
+			height: 9px;
+			line-height: 15px;
+			margin: 0 0 10px 0;
+			width: 231px;
+} 
+
+.example_menu .footer span {
+			display: none;
+}
+
+td {
+
+	text-align: center;
+
+}
+
+#menu {
+display:none;position:absolute;background:white; border-width: 2px; border-style: solid;	
+}

@@ -1,0 +1,821 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="en-us" http-equiv="Content-Language" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>Performance Calculation for M</title> <script type="text/javascript" src="Script/jquery.js"></script> 
+
+<link rel="stylesheet" type="text/css" href="Styles/shadowbox.css">
+<script type="text/javascript" src="Script/shadowbox.js"></script>
+<link rel="stylesheet" type="text/css" href="Styles/styles.css">
+<script type="text/javascript" src="Script/custom_script.js"></script> 
+
+<script type="text/javascript">
+		
+Shadowbox.init();
+	
+</script>
+
+</head>
+
+<body>
+
+<div id="menu">	
+	<ul>
+		<li><a rel="shadowbox" href="PDFs/Conceptual_Background.pdf"><b>Conceptual Background</b></a></li>
+		<li><a rel="shadowbox" href="PDFs/Historical_Background.pdf">Historical Background</a></li>		
+		<li><a rel="shadowbox" href="PDFs/Economic_Background.pdf">Economic Background</a></li>
+		<li><a rel="shadowbox" href="OLDhtml/video.mp4">Predecessor Concepts</a></li>		
+		<li><a rel="shadowbox" href="OLDhtml/audio.mp3">Coding Examples</a> (if applicable)</li>		
+		<li><a rel="shadowbox" href="PDFs/Math_Example.pdf">Math Examples</a> (if applicable)</li>	
+	</ul>
+</div>
+
+
+<H3>5.3. Pipeline Control and Hazards </H3>
+
+<A NAME=Sec5.3></A>
+<P><A HREF="PatHen-Readings.html#ExSec5.3"><B>Reading Assignments and Exercises</B></A> 
+
+<P ALIGN=JUSTIFY>The control of pipeline processors has similar issues
+to the control of multicycle datapaths.  Pipelining leaves the meaning
+of the nine control lines unchanged, that is, those lines which
+controlled the multicycle datapath.  In pipelining, we set control
+lines (to defined values) in each stage for each instruction.  This is
+done in hardware by extending pipeline registers to include control
+information and circuitry.
+
+<H4>5.3.1. Pipeline Control Issues and Hardware</H4>
+
+<P ALIGN=JUSTIFY>Observe that there is nothing to
+control during instruction fetch and decode (IF and ID).  Thus, we can
+begin our control activities (initialization of control signals)
+during ID, since control will only be exerted during EX, MEM, and WB
+stages of the pipeline.  Recalling that the various stages of control
+and buffer circuitry between the pipeline stages are labelled IF/ID,
+ID/EX, EX/MEM, and MEM/WB, we have the propagation of control shown
+in Figure 5.5.
+
+<P ALIGN=CENTER><IMG SRC="Figure5.5-PipelineControl.gif"><BR><BR>
+<B>Figure 5.5.</B> Propagation of control through the EX, MEM, and
+WB states of the MIPS pipelined datapath [Maf01,MK98].</P>
+
+<P ALIGN=JUSTIFY>Here, the following stages perform work as specified:
+
+<P><UL><LI><P ALIGN=JUSTIFY><I>IF/ID</I>: Initializes control by
+       passing the <I>rs</I>, <I>rd</I>, and <I>rt</I> fields of the
+       instruction, together with the opcode and <I>funct</I> fields,
+       to the control circuitry.
+
+<P>    <LI><P ALIGN=JUSTIFY><I>ID/EX</I>: Buffers control for the EX,
+       MEM, and WB stages, while executing control for the EX stage.
+       Control decides what operands will be input to the ALU,
+       what ALU operation will be performed, and whether or not a
+       branch is to be taken based on the ALU Zero output.
+
+<P>    <LI><P ALIGN=JUSTIFY><I>EX/MEM</I>: Buffers control for the MEM
+       and WB stages, while executing control for the MEM stage.  The
+       control lines are set for memory read or write, as well as for
+       data selection for memory write.  This stage of control also
+       contains the branch control logic.
+
+<P> <LI><P ALIGN=JUSTIFY><I>MEM/WB</I>: Buffers and executes control
+       for the WB stage, and selects the value to be written into the
+       register file.
+</UL>
+
+<P ALIGN=JUSTIFY>Figure 5.6 shows how the control lines (red) are
+arranged on a per-stage basis, and how the stage-specific control
+signals are buffered and passed along to the next applicable stage.
+
+<P ALIGN=CENTER><IMG SRC="Figure5.6-PipelineControlLines.gif"><BR><BR>
+<B>Figure 5.6.</B> Propagation of control through the EX, MEM, and
+WB states of the MIPS pipelined datapath [Maf01,MK98].</P>
+
+<BLOCKQUOTE>
+<FONT COLOR=BLUE><P ALIGN=JUSTIFY><I>Reading Assigment</I>: Study the
+propagation of control signals for the example program given on
+p. 471 of the textbook, which is illustrated stepwise on pp. 472-476 of
+the textbook.</FONT>
+</BLOCKQUOTE>
+
+<H4>5.3.2. Overview of Hazards</H4>
+
+<P ALIGN=JUSTIFY>Pipeline processors have several problems associated
+with controlling smooth, efficient execution of instructions on the
+pipeline.  These problems are generally called <I>hazards</I>, and
+include the following three types:
+
+<P><UL><LI><P ALIGN=JUSTIFY><I>Structural Hazards</I> occur when
+           different instructions collide while trying to access the
+           same piece of hardware in the same segment of a pipeline.
+           This type of hazard can be alleviated by having redundant
+           hardware for the segments wherein the collision occurs.
+	   Occasionally, it is possible to insert stalls or reorder
+	   instructions to omit this type of hazard.
+
+<P> <LI><P ALIGN=JUSTIFY><I>Data Hazards</I> occur when an instruction
+           depends on the result of a previous instruction still in
+           the pipeline, which result has not yet been computed.  The
+	   simplest remedy inserts stalls in the execution sequence,
+	   which reduces the pipeline's efficiency.  The solution to
+	   data dependencies is twofold.  First, one can <I>forward</I>
+	   the ALU result to the writeback or data fetch stages.  Second,
+	   in selected instances, it is possible to restructure the code
+	   to eliminate some data dependencies.  Forwarding paths are
+	   shown as thin blue or red lines in Figure 5.4.
+
+<P> <LI><P ALIGN=JUSTIFY><I>Control Hazards</I> can result from branch
+           instructions.  Here, the branch target address might not be
+           ready in time for the branch to be taken, which results in
+           <I>stalls</I> (dead segments) in the pipeline that have to
+           be inserted as local wait events, until processing can
+           resume after the branch target is executed.  Control
+           hazards can be mitigated through accurate branch prediction
+           (which is difficult), and by <I>delayed branch</I>
+           strategies.
+</UL>
+
+<P ALIGN=JUSTIFY>We next examine hazards in detail, and discuss several
+techniques for eliminating or relieving hazards.
+
+<H4>5.3.3. Data Hazards</H4>
+
+<P ALIGN=JUSTIFY><B>Definition.</B> A <I>data hazard</I> occurs when the
+current instruction requires the result of a preceding instruction,
+but there are insufficient segments in the pipeline to compute the
+result and write it back to the register file in time for the current
+instruction to read that result from the register file.
+
+<P ALIGN=JUSTIFY>We typically remedy this problem in one of three ways:
+
+<P><UL><LI><P ALIGN=JUSTIFY><I>Forwarding</I>: In order to resolve a
+         dependency, one adds special circuitry to the pipeline that
+         is comprised of wires and switches with which one forwards
+         or transmits the desired value to the pipeline segment that
+         needs that value for computation.  Although this adds hardware
+	 and control circuitry, the method works because it takes far
+	 less time for the required value(s) to travel through a wire
+	 than it does for a pipeline segment to compute its result.
+
+<P>    <LI><P ALIGN=JUSTIFY><I>Code Re-Ordering</I>: Here, the compiler
+         reorders statements in the source code, or the assembler
+         reorders object code, to place one or more statements between
+         the current instruction and the instruction in which the
+         required operand was computed as a result.  This requires an
+         "intelligent" compiler or assembler, which must have detailed
+         information about the structure and timing of the pipeline on
+         which the data hazard would occur.  We call this type of
+         software a <I>hardware-dependent compiler</I>.
+
+<P>    <LI><P ALIGN=JUSTIFY><I>Stall Insertion</I>: It is possible to
+         insert one or more stalls (no-op instructions) into the pipeline,
+	 which delays the execution of the current instruction until the
+	 required operand is written to the register file.  This decreases
+	 pipeline efficiency and throughput, which is contrary to the
+	 goals of pipeline processor design.  Stalls are an expedient method
+	 of last resort that can be used when compiler action or forwarding
+	 fails or might not be supported in hardware or software design.
+</OL>
+
+<P ALIGN=JUSTIFY>The following example is illustrative.
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><B>Example.</B> Suppose we have the following
+sequence of instructions:
+
+<PRE>
+     sub   $2,   $1,   $3   # Register 2 is the output of sub
+     and   $8,   $2,   $5   # Operand #1 depends on Register 2 data
+     or    $9,   $6,   $2   # Operand #2 depends on Register 2 data
+     add   $7,   $2,   $2   # Add result depends on Register 2 data
+     sw    $6,20($2)        # Store (memory write) depends on Register 2
+</PRE>
+
+<P ALIGN=JUSTIFY>whose pipeline scheduling diagram is shown in Figure
+5.7.
+
+<P ALIGN=CENTER><IMG SRC="Figure5.7-MIPS-DataHazard-Ex1.gif"><BR><BR>
+<B>Figure 5.7.</B> Example of data hazards in a sequence of MIPS
+instructions, where the red (blue) arrows indicate dependencies
+that are problematic (not problematic) [Pat98,MK98].</P>
+
+<P ALIGN=JUSTIFY><I>Problem</I>: The first instruction
+(<CODE>sub</CODE>), starting on clock cycle 1 (CC1) completes on CC5,
+when the result in Register 2 is written to the register file.  If we
+did nothing to resolve data dependencies, then no instruction that
+read Register 2 from the register file could read the "new" value
+computed by the sub instruction until CC5.  The dependencies in the
+other instructions are illustrated by solid lines with arrowheads.  If
+register read and write cannot occur within the same clock cycle (we
+will see how this could happen in Section 5.3.4), then only the fifth
+instruction (sw) can access the contents of register 2 in the manner
+indicated by the flow of sequential execution in the MIPS code
+fragment shown previously.
+
+<P ALIGN=JUSTIFY><I>Solution #1 - Forwarding</I>: The result generated
+by the <CODE>sub</CODE> instruction can be <I>forwarded</I> to the
+other stages of the pipeline using special control circuitry (data
+bus switchable to any other segment, which can be implemented via a
+decoder or crossbar switch).  This is indicated notionally in Figure
+5.7 by solid red lines with arrowheads.  If the register file can read
+in the first half of a cycle and write in the second half of a cycle,
+then the forwarding in CC5 is not problematic.  Otherwise, we would
+have to delay the execution of the <CODE>add</CODE> instruction by one
+clock cycle (see Figure 5.9 for insertion of a <I>stall</I>).
+
+<P ALIGN=JUSTIFY><I>Solution #2 - Code Re-Ordering</I>: Since all
+Instructions 2 through 5 in the MIPS code fragment require Register 2
+as an operand, we do not have instructions <I>in that particular code
+fragment</I> to put between Instruction 1 and Instruction 2.  However,
+let us assume that we have other instructions that (a) do not depend
+on the results of Instructions 1-5, and (b) themselves induce no
+dependencies in Instructions 1-5 (e.g., by writing to register 1, 2,
+3, 5, or 6).  In that case, we could insert two instructions between
+Instructions 1 and 2, if register read and write could occur
+concurrently.  Otherwise, we would have to insert three such
+instructions.  The latter case is illustrated in the following figure,
+where the inserted instructions and their pipeline actions are colored
+dark green.
+
+<P ALIGN=CENTER><IMG SRC="Figure5.8-MIPS-DataHazard-Ex1b.gif"><BR><BR>
+<B>Figure 5.8.</B> Example of code reordering to solve data hazards in a
+sequence of MIPS instructions [Pat98,MK98].</P>
+
+<P ALIGN=JUSTIFY><I>Solution #3 - Stalls</I>: Suppose that we had no
+instructions to insert between Instructions 1 and 2.  For example,
+there might be data dependencies arising from the inserted
+instructions that would themselves have to be repaired.
+Alternatively, the program execution order (functional dependencies)
+might not permit the reordering of code.  In such cases, we have to
+insert stalls, also called <I>bubbles</I>, which are no-op
+instructions that merely delay the pipeline execution until the
+dependencies are no longer problematic with respect to pipeline
+timing.  This is illustrated in Figure 5.9 by inserting three stalls
+between Instructions 1 and 2.
+
+<P ALIGN=CENTER><IMG SRC="Figure5.9-MIPS-DataHazard-Ex1c.gif"><BR><BR>
+<B>Figure 5.9.</B> Example of stall insertion to solve data hazards in a
+sequence of MIPS instructions [Pat98,MK98].</P>
+
+<P ALIGN=JUSTIFY>As mentioned previously, the insertion of stalls
+is the least desireable technique because it delays the execution of
+an instruction without accomplishing any useful work (in contrast to
+code re-ordering).
+</BLOCKQUOTE>
+
+<H4>5.3.4. Structural Hazards</H4>
+
+<P ALIGN=JUSTIFY><B>Definition.</B> A <I>structural hazard</I> occurs 
+when there is insufficient hardware to support a computation in a
+given pipeline segment.
+
+<P ALIGN=JUSTIFY>For example, consider the data dependency between the
+first and fourth instructions (<CODE>sub</CODE> and <CODE>add</CODE>)
+of the example in Section 5.3.3.  Here, a register file write and a
+register file read are scheduled in CC5.  This can be resolved by (a)
+duplicating hardware, or (b) modifying the existing hardware to
+support concurrent operations.  If we duplicated the register
+file, then we could perform concurrent read and write operations, but
+there would be a <I>consistency problem</I>.  That is, at a given
+clock cycle, registers in one register file could have different
+values than the corresponding registers in the other register file.
+This inconsistency is clearly unacceptable if accurate computation
+is to be maintained.
+
+<P ALIGN=JUSTIFY>Instead, we can modify the register file so that it
+(1) performs register write on the first half of the clock cycle and
+(2) performs register read on the second half of the clock cycle.  In
+earlier hardware, designers sometimes inserted a delay between write
+and read that was very small in relation to the clock cycle time, in
+order to ensure convergence of the register file write.
+
+<P ALIGN=JUSTIFY>Other structural hazards could occur during the
+branch instruction, if there were not two ALUs in the EX segment of
+the pipeline.  That is, with only one ALU, we would have to
+simultaneously compute the BTA and determine (via subtraction) whether
+or not the branch condition was fulfilled.  This would not be possible
+without two concurrent adders in the ALU, which is what we currently
+have in our MIPS pipeline design shown in Figure 5.4.
+
+<P ALIGN=JUSTIFY>A further structural hazard could occur if we only
+used one memory for both instructions and data.  For example, in
+Figure 5.7, suppose the <CODE>sub</CODE> instruction was instead
+a <CODE>sw</CODE> instruction.  Then, we would be writing to data
+memory in CC4 for Instruction #1 and reading from instruction memory
+in CC4 for Instruction #4.  Clearly, if there was only one memory
+there would be a conflict.  
+
+<P ALIGN=JUSTIFY>Similar to the problem with the concurrent reads and
+writes on the register file, there are two ways to solve this dilemma.
+First, we can design a special-purpose memory module that permits
+writing (reading) on the first (resp. second) half of the clock cycle,
+as we said could be done with the register file.  However, this
+requires special (expensive) hardware.  Second, we can use two fast
+caches, one for instructions, and one for data, that access a large,
+slower main memory in which instructions and data are both stored.
+The latter method is used in practice because caches and main memory
+already exist, and the memory management hardware for these types of
+components also exists.  Thus, we can use off-the-shelf hardware to
+solve a problem that would otherwise require special-purpose
+development of expensive hardware.  Although this might not be as much
+fun as developing new hardware, it is more cost-effective, which
+matters when one is designing and producing computers for profit.
+
+<H4>5.3.5. Control (Branch) Hazards</H4>
+
+<P ALIGN=JUSTIFY>Control hazards are the most difficult types of
+hazards arising from normal operation of a program.  In the next
+section, we will see that exceptions (e.g., overflow) can play
+particularly interesting types of havoc with smooth pipeline
+execution.
+
+<P ALIGN=JUSTIFY>The most common type of control hazard is the branch
+instruction, which has two alternative results: (1) jump to the branch
+target address if the instruction succeeds, or (2) execute the
+instruction after the branch (at PC+4 of instruction memory) if the
+branch fails.
+
+<P ALIGN=JUSTIFY>The problem with the branch instruction is that we
+usually do not know which result will occur (i.e., whether or not the
+branch will be taken) until the branch condition is computed.  Often,
+the branch condition depends on the result of the preceding instruction,
+so we cannot precompute the branch condition to find out whether or
+not the branch will be taken.  
+
+<P ALIGN=JUSTIFY>The following four strategies are employed in resolving
+control dependencies due to branch instructions.  
+
+<P ALIGN=JUSTIFY><B>5.3.5.1. Assume Branch Not Taken.</B> As we saw
+previously, we can insert stalls until we find out whether or not the
+branch is taken.  However, this slows pipeline execution unacceptably.
+A common alternative to stalling is to continue execution of the
+instruction stream as though the branch was not taken.  The
+intervening instructions between the branch and its target are then
+executed.  If the branch is not taken, this is not a harmful or
+disruptive technique.  However, if the branch is taken, then we must
+discard the results of the instructions executed after the branch
+statement.  This is done by flushing the IF, ID, and EX stages of the
+pipeline for the discarded instructions.  Execution continues
+uninterrupted after the branch target.
+
+<P ALIGN=JUSTIFY>The cost of this technique is approximately equal to
+the cost of discarding instructions.  For example, if branches are not
+taken 50 percent of the time, and the cost of discarding results is
+negligible, then this technique reduces by 50 percent the cost of
+control hazards.
+
+<P ALIGN=JUSTIFY><B>5.3.5.2. Reducing Branch Delay.</B> In the MIPS
+pipeline architecture shown schematically in Figure 5.4, we currently
+assume that the branch condition is evaluated in Stage 3 of the
+pipeline (EX).  If we move the branch evaluation up one stage, and put
+special circuitry in the ID (Decode, Stage #2), then we can evaluate
+the branch condition for the <CODE>beq</CODE> instruction.  This would
+allow us to take the branch in EX instead of MEM, since we would have
+ready for Stage 3 (EX) the <I>Zero</I> output of the comparator that
+would normally be computed in EX.  The hardware needed to compute
+equality is merely a series of parallel <I>xnor</I> gates <I>and</I>-ed
+together, then inverted.  
+
+<BLOCKQUOTE>
+<FONT COLOR=BLUE><P ALIGN=JUSTIFY><I>Exercise</I>: Determine how
+this type of circuitry could be configured.</FONT>
+</BLOCKQUOTE>
+
+<P ALIGN=JUSTIFY>The advantage of this technique is that only one
+instruction needs to be discarded rather than two, as in the previous
+section.  This reduces hardware cost and time required to flush the
+pipeline, since only the IF and ID stages would need to be flushed,
+instead of the three stages in the preceding example.
+
+<P ALIGN=JUSTIFY><B>5.3.5.3. Dynamic Branch Prediction.</B> It would
+be useful to be able to predict whether or not a majority of the
+branches are taken or not taken.  This can be done in software, using
+intelligent compilers, and can also be done at runtime.  We concentrate
+on the software-intensive techniques first, since they are less expensive
+to implement (being closer to the compiler, which is easier to modify
+than the hardware).
+
+<P ALIGN=JUSTIFY>The most advantageous situation is one where the branch
+condition does not depend on instructions immemdiately preceding it, as
+shown in the following code fragment:
+
+<PRE>
+     add $5, $5, $6     # One of the registers for beq comparison is modified
+     sub $4, $3, $6     # Nothing important to the branch here
+     and $7, $8, $6     # Nothing important to the branch here
+     and $9, $6, $6     # Nothing important to the branch here
+<B>     beq $5, $6,</B> target
+</PRE>
+
+<P ALIGN=JUSTIFY>Here, the branch compares Registers 5 and 6, which
+are last modified in the <CODE>add</CODE> instruction.  We can
+therefore precompute the branch condition as <CODE>sub r $5,
+$6</CODE>, where <I>r</I> denotes a destination register.  If r = 0,
+then we know the branch will be taken, and the runtime module
+(pipeline loader) can schedule the jump to the branch target address
+with full confidence that the branch will be taken.
+
+<P ALIGN=JUSTIFY>Another approach is to keep a history of branch
+statements, and to record what addresses these statements branch.
+Since the vast majority of branches are used as tests of loop indices,
+then we know that the branch will almost always jump to the loopback
+point.  If the branch fails, then we know the loop is finished, and
+this happens only once per loop.  Since most loops are designed to
+have many iterations, branch failure occurs less frequently in loops
+than does taking the branch.
+
+<P ALIGN=JUSTIFY>Thus, it makes good sense to assume that a branch
+will jump to the place that it jumped to before.  However, in dense
+decision structures (e.g., nested or cascaded <I>if</I> statements),
+this situation does not always occur.  In such cases, one might not be
+able to tell from the preceding branch whether or not the branching
+behavior will be repeated.  It is then reasonable to use a
+multi-branch lookahead.
+
+<BLOCKQUOTE>
+<FONT COLOR=BLUE><P ALIGN=JUSTIFY><I>Reading Assigment</I>: Study the
+discussion of multi-bit branch prediction schemes given on
+pp. 501-502 of the textbook.</FONT>
+</BLOCKQUOTE>
+
+<P ALIGN=JUSTIFY>Another clever technique of making branches more
+efficient is the <I>branch delay slot</I>.  We previously discussed
+delayed branches when we overviewed the multicycle datapath
+implementation of the <CODE>beq</CODE> instruction.  In summary, the
+concept of efficient branching has two parts.  First, the branch
+target address is computed in the ID stage of the pipeline, to
+determine as early as possible the instruction to fetch if the branch
+succeeds.  Since this is done in the second stage of the pipeline,
+there is an instruction I following this (in the first or IF stage).
+After I moves to the ID stage, then the branch target (pointed to
+by either PC+4 or the BTA) is loaded into the IF stage.  
+
+<P ALIGN=JUSTIFY>It is this instruction (I) that is called the
+<I>branch delay slot</I> (BDS).  In the BDS can be safely placed an
+instruction that does not have data dependencies with respect to (a)
+the branch condition, (b) the instruction following the branch
+condition, or (c) the branch target.  This ensures that, when the
+instruction J is executed (J is the instruction to which control is
+transferred after the branch condition is evaluated, whether J is
+pointed to by PC+4 or BTA), then the instruction I will have been
+executed previously, and the pipe will not have a stall where I would
+have been.  As a result, the pipe will remain full throughout the
+branch evaluation and execution, unless an exception occurs.
+
+<H4>5.3.6. Exceptions as Hazards</H4>
+
+<P ALIGN=JUSTIFY>Hardware and software must work together in any
+architecture, especially in a pipeline processor.  Here, the ISA and
+processor control must be designed so that the following steps occur
+when an exception is detected:
+
+<P><OL><LI><P ALIGN=JUSTIFY>Hardware detects an exception (e.g.,
+       overflow in the ALU) and stops the offending instruction at the
+       EX stage. 
+
+<P> <LI><P ALIGN=JUSTIFY>Pipeline loader and scheduler allow all prior
+       instructions (e.g., those already in the pipeline in MEM and
+       WB) to complete.
+
+<P> <LI><P ALIGN=JUSTIFY>All instructions that are present in the
+       pipeline after the exception is detected are flushed from the
+       pipeline.
+
+<P>    <LI><P ALIGN=JUSTIFY>The address of the offending instruction
+       (usually the address in main memory) is saved in the EPC register,
+       and a code describing the exception is saved in the Cause register.
+
+<P>    <LI><P ALIGN=JUSTIFY>Hardware control branches to the exception
+       handling routine (part of the operating system).
+
+<P>    <LI><P ALIGN=JUSTIFY>The exception handler performs one of three
+       actions: (1) notify the user of the exception (e.g., divide-by-zero
+       or arithmetic-overflow) then terminate the program; (2) try to
+       correct or mitigate the exception then restart the offending
+       instruction; or (3) if the exception is a benign interrupt (e.g.,
+       an I/O request), then save the program/pipeline state, service the
+       interrupt request, then restart the program at the instruction 
+       pointed to by EPC + 4.
+</OL>
+
+<P ALIGN=JUSTIFY>In any case, the pipeline is flushed as described.  
+
+<P ALIGN=JUSTIFY>In general, we can say that, if a pipeline has N
+segments, and the EX stage is at segment 1 &lt i &lt N, then two
+observations are key to the prediction of pipeline performance:
+
+<P><UL><LI><P ALIGN=JUSTIFY><I>Flushing</I> negates the processing of
+       the (i-1) instructions following the offending instruction.
+       These must be reloaded into the pipe, at the cost of i cycles
+       (one cycle to flush, i-1 cycles to reload the i-1 instructions
+       <I>after</I> the exception is processed).
+
+<P> <LI><P ALIGN=JUSTIFY><I>Completing</I> the N-i instructions that
+       were loaded into the pipeline prior to the offending
+       instruction takes N-i clock cycles, which are executed (a)
+       prior to, or (b) concurrently with, the reloading of the
+       instructions i-1 that followed the i-th instruction (in the EX
+       stage).
+</UL>
+
+<P ALIGN=JUSTIFY>It is readily seen that the total number of wasted
+cycles equals (i-1) + (N-i) = N - 1, which is precisely the number
+of cycles that it takes to set up or reload the pipeline.  
+
+<P ALIGN=JUSTIFY>The proliferation of unproductive cycles
+can be mitigated by the following technique:
+
+<P><OL><LI><P ALIGN=JUSTIFY>Freeze the pipeline state as soon as an
+       exception is detected.  
+
+<P>    <LI><P ALIGN=JUSTIFY>Process the exception via the exception
+       handler, and decide whether or not to halt or restart the
+       pipeline.
+
+<P> <LI><P ALIGN=JUSTIFY>If the pipeline is restarted, reload the
+       (i-1) instructions following the offending instruction,
+       concurrently with completing execution of the (N-i)
+       instructions that were being processed prior to the offending
+       instruction.
+</OL>
+
+<P ALIGN=JUSTIFY>If Step 3 can be performed as stated, then the
+best-case penalty is only one cycle, plus the time incurred by
+executing the exception handler.  If the entire pipeline needs to be
+flushed and restarted, then the worst-case penalty is N cycles
+incurred by flushing the pipe, then reloading the pipeline
+<I>after</I> the instructions preceding the offending instruction have
+been executed.  If the offending instruction must be restarted, then a
+maximum of <I>i</I> cycles are lost (one cycle for flush, plus (i-1)
+cycles to restart the instructions in the pipe following the offending
+instruction).
+
+<P ALIGN=JUSTIFY>In the next section, we collect the concepts about
+pipeline performance that we have been discussing, and show how to
+compute the CPI for a pipeline processor under constraint of stalls,
+structural hazards, branch penalties, and exception penalties.
+
+<H3>5.4. Pipeline Performance Analysis</H3>
+
+<A NAME=Sec5.4></A>
+<P><A HREF="PatHen-Readings.html#ExSec5.4"><B>Reading Assignments and Exercises</B></A> 
+
+<P ALIGN=JUSTIFY>As we said early on in this course, we are trying to
+teach the technique of <I>performance analysis</I>, which helps one to
+intelligently determine whether or not a given processor is suitable
+computationally for a specific application.  In this section, we
+develop performance equations for a pipeline processor, and do so in a
+stepwise way, so you can see how the various hazards and penalties
+affect performance.
+
+<H4>5.4.1. CPI of a Pipeline Processor</H4>
+
+<P ALIGN=JUSTIFY>Suppose an N-segment pipeline processes M instructions 
+without stalls or penalties.  We know that it takes N-1 cycles to load
+(setup) the pipeline, and M cycles to complete the instructions.  Thus,
+the number of cycles is given by:
+
+<P ALIGN=CENTER>N<SUB>cyc</SUB> = N + M - 1 .</P>
+
+<P ALIGN=JUSTIFY>The cycles per instruction are easily computed:
+
+<P ALIGN=CENTER>CPI = N<SUB>cyc</SUB>/M = 1 + (N - 1)/M .</P>
+
+<P ALIGN=JUSTIFY>Thus, CPI for a finite program will always be greater
+than one.  This stands in sharp contradiction to the first fallacy of 
+pipeline processing, which says:
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><B>Fallacy #1:</B> <I>CPI of a pipeline processor is
+always equal to 1.0, since one instruction is processed per cycle.</I>
+</BLOCKQUOTE>
+
+<P ALIGN=JUSTIFY>This statement is fallacious because it ignores the
+overhead that we have just discussed.  The fallacy is similar to
+claiming that you only spend eight hours at the office each day, so
+you must have 16 hours per day of "fun time".  However, you have to
+take time to commute to/from the office, buy groceries, and do all the
+other homely tasks of life, many of which are in no way related to
+"fun time".  In practice, such tasks are drudgery that is a type of
+overhead.
+
+<H4>5.4.2. Effect of Stalls</H4>
+
+<P ALIGN=JUSTIFY>Now let us add some stalls to the pipeline processing
+scheme.  Suppose that we have a N-segment pipeline processing M
+instructions, and we must insert K stalls to resolve data dependencies.
+This means that the pipeline now has a setup penalty of N-1 cycles,
+as before, a stall penalty of K cycles, and a processing cost (as before)
+of M cycles to process the M instructions.  Thus, our governing equations
+become:
+
+<P ALIGN=CENTER>N<SUB>cyc</SUB> = N + M + K - 1 .</P>
+
+<P ALIGN=JUSTIFY>and
+
+<P ALIGN=CENTER>CPI = N<SUB>cyc</SUB>/M = 1 + (N + K - 1)/M .</P>
+
+<P ALIGN=JUSTIFY>In practice, what does this tell us?  Namely, that
+the stall penalty (and all the other penalties that we will examine)
+adversely impact CPI.  Here is an example to show how we would analyze
+the problem of stalls in a pipelined program where the percentage of
+instructions that incur stalls versus non-stalls are specified.
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><B>Example.</B> Suppose that an N-segment pipeline
+executes M instructions, and that a fraction f<SUB>stall</SUB> of the
+instructions require the insertion of K stalls per instruction to
+resolve data dependencies.  The total number of stalls is given by
+f<SUB>stall</SUB> &#183 M &#183 K (fraction of instructions that are
+stalls, times the total number of instructions, times the average number
+of stalls per instruction).  By substitution, our preceding equations
+for pipeline performance become:
+
+<P ALIGN=CENTER>N<SUB>cyc</SUB> = N + M + (f<SUB>stall</SUB> &#183 M &#183 K) - 1 .</P>
+
+<P ALIGN=JUSTIFY>and
+
+<P ALIGN=CENTER>CPI = N<SUB>cyc</SUB>/M = 1 + (f<SUB>stall</SUB> &#183 K) + (N - 1)/M .</P>
+
+<P ALIGN=JUSTIFY>So, the CPI penalty due to the combined effects of
+setup cost and stalls now increases to fK + (N - 1)/M.  If
+f<SUB>stall</SUB> = 0.1, K = 3, N = 5, and M = 100, then CPI = 1 + 0.3
++ 4/100 = 1.34, which is 34 percent larger than the fallacious
+assumption of CPI = 1.
+</BLOCKQUOTE>
+
+<P ALIGN=JUSTIFY>This leads to the next fallacy of pipeline processing:
+
+<BLOCKQUOTE><B>Fallacy #2:</B> <I>Stalls are not a big problem with
+pipelines - you only have to worry about the number of stalls, not
+the percentage of instructions that induce stalls.</I>
+</BLOCKQUOTE>
+
+<P ALIGN=JUSTIFY>This fallacy is particularly dangerous.  It is
+analogous to saying that the only thing that matters is the number of
+home burglaries each year, not the burglary rate per capita.  If you
+move to a new neighborhood, you want to know <I>both</I> the number
+and per-capita incidence of crimes in that neighborhood, not just the
+robbery count.  Then you can determine, from the population, whether
+or not it is safe to live there.
+
+<P ALIGN=JUSTIFY>Similarly, with a pipeline processor, you want to
+determine whether or not the instruction mix or ordering of
+instructions causes data dependencies, and what is the incidence of
+such dependencies.  For example, 1,000 instruction program with 20
+stalls will run more efficiently than a 1,000 instruction program with
+20 percent of the instructions requiring one stall each to resolve
+dependencies.
+
+<H4>5.4.3. Effect of Exceptions</H4>
+
+<P ALIGN=JUSTIFY>For purposes of discussion, assume that we have M
+instructions executing on an N-segment pipeline with no stalls, but
+that a fraction f<SUB>ex</SUB> of the instructions raise an exception
+in the EX stage.  Further assume that each exception requires that (a)
+the pipeline segments before the EX stage be flushed, (b) that the
+exception be handled, requiring an average of H cycles per exception,
+then that (c) the instruction causing the exception and its following
+instructions be reloaded into the pipeline.
+
+<P ALIGN=JUSTIFY>Thus, f<SUB>ex</SUB> &#183 M instructions will cause
+exceptions.  In the MIPS pipeline, each of these instructions causes
+three instructions to be flushed out of the pipe (IF, ID, and EX
+stages), which incurs a penalty of four cycles (one cycle to flush,
+and three to reload) plus H cycles to handle the exception. Thus,
+the pipeline performance equations become:
+
+<P ALIGN=CENTER>N<SUB>cyc</SUB> = N - 1 + (1 - f<SUB>ex</SUB>) &#183 M + (f<SUB>ex</SUB> &#183 M &#183 (H + 4)) ,</P>
+
+<P ALIGN=JUSTIFY>which we can rewrite as
+
+<P ALIGN=CENTER>N<SUB>cyc</SUB> = M + [N - 1 - M + (1 - f<SUB>ex</SUB>) &#183 M + (f<SUB>ex</SUB> &#183 M &#183 (H + 4))] .</P>
+
+<P ALIGN=JUSTIFY>Rearranging terms, the equation for CPI can be
+expressed as
+
+<P ALIGN=CENTER>CPI = N<SUB>cyc</SUB>/M = 1 + [1 - f<SUB>ex</SUB> + (f<SUB>ex</SUB> &#183 (H+4)) - 1 + (N - 1)/M] .</P>
+
+<P ALIGN=JUSTIFY>After combining terms, this becomes:
+
+<P ALIGN=CENTER>CPI = N<SUB>cyc</SUB>/M = 1 + [(f<SUB>ex</SUB> &#183 (H+3)) + (N - 1)/M] .</P>
+
+
+<P ALIGN=JUSTIFY>We can see by examination of this equation and the
+expression for CPI due to stalls that exceptions have a more
+detrimental effect, for two reasons.  First, the overhead for stalls
+(K stalls per affected instruction) is K < 4 cycles in the MIPS
+pipeline (since the pipeline has only five segments).  Second, the
+cost of each exception is H+3 cycles per affected instruction.  Since
+H > 0 for a nontrivial exception handler, the cost of an exception in
+the MIPS pipeline (under the preceding assumptions) will exceed the
+cost of remedying a hazard using stalls.  The good news, however, is
+that there are usually fewer exceptions in programs than data or
+structural dependencies, with the exception of I/O-intensive programs
+(many I/O interrupts) and arithmetic-intensive programs (possible
+overflow or underflow exceptions).
+
+<H4>5.4.4. Effect of Branches</H4>
+
+<P ALIGN=JUSTIFY>Branches present a more complex picture in pipeline
+performance analysis.  Recall that there are three ways of dealing
+with a branch: (1) Assume the branch is not taken, and if the branch
+is taken, flush the instructions in the pipe after the branch, then
+insert the instruction pointed to by the BTA; (2) the converse of 1);
+and (3) use a delayed branch with a branch delay slot and re-ordering
+of code (assuming that this can be done).
+
+<P ALIGN=JUSTIFY>The first two cases are symmetric.  Assume that an
+error in branch prediction (i.e., taking the branch when you expected
+not to, and conversely) requires L instruction to be flushed from the
+pipeline (one cycle for flushing plus L-1 "dead" cycles, since the
+branch target can be inserted in the IF stage).  Thus, the cost of
+each branch prediction error is L cycles.  Further assume that 
+a fraction f<SUB>br</SUB> of the instructions are branches and
+f<SUB>be</SUB> of these instructions result in branch prediction
+errors.  
+
+<P ALIGN=JUSTIFY>The penalty in cycles for branch prediction
+errors is thus given by
+
+<P ALIGN=CENTER><I>branch_penalty</I> = f<SUB>br</SUB> &#183
+f<SUB>be</SUB> &#183 M instructions &#183 L cycles per instruction .</P>
+
+<P ALIGN=JUSTIFY>The pipeline performance equations then become:
+
+<P ALIGN=CENTER>N<SUB>cyc</SUB> = N - 1 + (1 - f<SUB>br</SUB> &#183
+f<SUB>be</SUB>) &#183 M + (f<SUB>br</SUB> &#183 f<SUB>be</SUB> &#183 M &#183 L) ,</P>
+
+<P ALIGN=JUSTIFY>which we can rewrite as
+
+<P ALIGN=CENTER>N<SUB>cyc</SUB> = M + [N - 1 - M + (1 - f<SUB>br</SUB> &#183
+f<SUB>be</SUB>) &#183 M + (f<SUB>br</SUB> &#183 f<SUB>be</SUB> &#183 M &#183 L) ,</P>
+
+<P ALIGN=JUSTIFY>Rearranging terms, the equation for CPI can be
+expressed as
+
+<P ALIGN=CENTER>CPI = N<SUB>cyc</SUB>/M = 1 + [(1 - f<SUB>br</SUB> &#183 f<SUB>be</SUB>) + (f<SUB>br</SUB> &#183 f<SUB>be</SUB> &#183 L) - 1 + (N - 1)/M] .</P>
+
+<P ALIGN=JUSTIFY>After combining terms, this becomes:
+
+<P ALIGN=CENTER>CPI = N<SUB>cyc</SUB>/M = 1 + [(f<SUB>br</SUB> &#183 f<SUB>be</SUB> &#183 (L-1)) + (N - 1)/M] .</P>
+
+<P ALIGN=JUSTIFY>In the case of the branch delay slot, we assume that
+the branch target address is computed and the branch condition is
+evaluated at the ID stage.  Thus, if the branch prediction is correct,
+there is no penalty.  Depending on the method by which the pipeline
+evaluates the branch and fetches (or pre-fetches) the branch target, a
+maximum of two cycles penalty (one cycle for flushing, one cycle for
+fetching and inserting the branch target) is incurred for insertion of
+a stall in the case of a branch prediction error.  In this case, the
+pipeline performance equations become:
+
+<P ALIGN=CENTER>N<SUB>cyc</SUB> = N - 1 + (1 - f<SUB>br</SUB> &#183
+f<SUB>be</SUB>) &#183 M + (f<SUB>br</SUB> &#183 f<SUB>be</SUB> &#183 2M) ,</P>
+
+<P ALIGN=JUSTIFY>which implies the following equation for CPI as a
+function of branches and branch prediction errors:
+
+<P ALIGN=CENTER>CPI = N<SUB>cyc</SUB>/M = 1 + [f<SUB>br</SUB> &#183 f<SUB>be</SUB> + (N - 1)/M] .</P>
+
+<P ALIGN=JUSTIFY>Since f<SUB>br</SUB> << 1 is usual, and
+f<SUB>be</SUB> is, on average, assumed to be no worse than 0.5, the
+product f<SUB>br</SUB> &#183 f<SUB>be</SUB>, which represents the
+additional branch penalty for CPI in the presence of delayed branch
+and BDS, is generally small.
+
+<P ALIGN=CENTER>_______________<SUB>//</SUB>_______________</P>
+
+
+
+<P ALIGN=JUSTIFY>This concludes our discussion of pipelining.
+We next concentrate on the discussion and analysis of supporting
+technologies, such as memories and buses.
+
+
+
+
+
+</BLOCKQUOTE>
+
+<P><HR><P>
+<BLOCKQUOTE>
+<H3>References</H3>
+
+<P ALIGN=JUSTIFY>[Maf01] Mafla, E. <I>Course Notes, CDA3101</I>, at URL <CODE>http://www.cise.ufl.edu/~emafla/</CODE> (as-of 11 Apr 2001).
+
+<P ALIGN=JUSTIFY>[MK98] Copyright 1998 Morgan Kaufmann Publishers, Inc. All Rights Reserved, per copyright notice request at http://www.mkp.com/books_catalog/cod2/cod2ecrt.htm (1998).
+
+<P ALIGN=JUSTIFY>[Pat98] Patterson, D.A. and
+J.L. Hennesey. <I>Computer Organization and Design: The
+Hardware/Software Interface</I>, Second Edition, San Francisco, CA:
+Morgan Kaufman (1998).
+
+
+</BLOCKQUOTE>
+
+<P><HR>
+
+</body>

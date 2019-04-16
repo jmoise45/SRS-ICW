@@ -1,0 +1,724 @@
+<H3>1.4. Digital Logic Design</H3>
+
+
+<P ALIGN=JUSTIFY>Digital logic is hardware that implements the
+functions of Boolean algebra, which are <I>or</I>, <I>and</I>, <I>not</I>,
+as well as combinations of these functions.  Boolean algebra 
+operations are extensively employed in computing, and form the
+basis for the vast majority of arithmetic operations, as we shall
+see later in this course.  
+
+<P ALIGN=JUSTIFY>We begin this section by discussing the operands
+and operations that comprise Boolean algebra, then show how these
+<I>logical operations</I> are implemented in simple digital devices.
+
+<H4>1.4.1. Theory of Logical Operations</H4>
+
+<P ALIGN=JUSTIFY>The kind of logic that we use in computing is
+generally called <I>formal logic</I>, which is one of the three bases
+of mathematics.  (The other two bases are measurement theory and
+algebraic manipulation.)  The type of formal logic that we will use in
+this course is called <I>Boolean logic</I> or <I>Boolean algebra</I>
+(the terms are interchangeable).  There are other types of formal
+logics, such as interval logic (often called <I>fuzzy logic</I>), but
+we will not consider them in this course.
+
+<P ALIGN=JUSTIFY><B>Definition.</B> An <I>algebra</I> is a tuple
+<I>A</I> = (<I>F</I>,<I>O</I>) that contains a set of values
+<I>F</I> and a set of operations <I>O</I> on those values.  
+
+<P ALIGN=JUSTIFY><B>Example.</B> The algebra of real numbers
+contains operations such as addition, multiplication, and
+division, with operands selected from the real numbers <B>R</B>.
+
+<P ALIGN=JUSTIFY><B>Definition.</B> Boolean algebra 
+<I>B</I> = ({0,1}, <I>O</I>) contains a set of operations <I>O</I> called
+<I>logical-or</I>, <I>logical-and</I>, <I>logical-not</I>, etc.,
+that operate upon numbers in the set {0,1} (i.e., operate on
+zero(es) or one(s)).
+
+<P ALIGN=JUSTIFY><B>Example: <I>logical-not</I></B> -  The <I>not</I>
+function inverts the value of its input.  Thus, 0 = <I>not</I>(1) and
+1 = <I>not</I>(0).  Because the <I>not</I> function has only one
+input, it is called a <I>unary operation</I>.
+
+<P ALIGN=JUSTIFY><B>Example: <I>logical-and</I></B> - The <I>and</I>
+function takes the <I>minimum</I> of its two inputs.  Thus,
+0 = <I>and</I>(0,0) = <I>and</I>(0,1) = <I>and</I>(1,0).  However, 1 =
+<I>and</I>(1,1).  Because the <I>and</I> function has two inputs, it
+is called a <I>binary operation</I>.  (This use of the word "binary" is
+similar to calling the set {0,1} the "binary numbers", because there
+are only two numbers in the set.)
+
+<P ALIGN=JUSTIFY><B>Example: <I>logical-or</I></B> - The <I>or</I>
+function takes the <I>maximum</I> of its two inputs.  Thus,
+0 = <I>or</I>(0,0), with 1 = <I>or</I>(0,1) = <I>or</I>(1,0) =
+<I>or</I>(1,1).  
+
+<P ALIGN=JUSTIFY>It is important to note that all logical operations
+can be constructed from <I>not</I> and <I>and</I>.  In your discrete
+mathematics course (COT3100 at UF/CISE), you will see (or have seen)
+how to do this.  For now, it is useful to accept this assertion and
+continue on.
+
+<P ALIGN=JUSTIFY>We next consider how digital logic is represented in
+term of truth tables and graphic symbols used in circuit diagrams.  In
+Section 1.4.3, we will discuss how digital logic can be implemented in
+hardware.
+
+<H4>1.4.2. Representations of Digital Logic</H4>
+
+<P ALIGN=JUSTIFY>When we are working with digital logic, it is easy
+to describe the functionality of a logic device in terms of a truth
+table.  
+
+<P ALIGN=JUSTIFY><B>Definition.</B> A <I>truth table</I> is a tabular
+representation of a logical operation that completely defines the
+operation.  
+
+<P ALIGN=JUSTIFY><B>Observation.</B> A logical operation with N inputs
+will have 2<SUP>N</SUP> entries in its truth table.  If an operation
+has many inputs, then its truth table can be represented compactly by
+listing only those entries that have nonzero output.
+
+<P ALIGN=JUSTIFY>There are also a variety of graphic symbols that are
+used with digital logic functions.  In Figure 1.13, we show the
+symbols for the <I>and</I> as well as <I>or</I> gates, with their
+truth table representations.  If we represented these truth tables
+compactly, then the <I>and</I> operation would have only one row in
+its truth table, namely, [1 1 1].
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><FONT COLOR=BLUE><B>Self-Exercise.</B> How many rows
+are there in the compact representation of the <I>or</I> operation's truth
+table, and what are these rows?</FONT>
+</BLOCKQUOTE>
+
+<P ALIGN=CENTER><IMG SRC="Figure1.13-AndOrTables.gif"><BR><BR>
+<B>Figure 1.13.</B> Graphic symbols and truth tables for the logic
+gates that implement <I>and</I> as well as <I>or</I> operations,
+adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>The <I>not</I> gate is represented graphically as
+shown in Figure 1.14a.  By appending a circle to the output of a gate
+symbol, we can represent the effect of putting a <I>not</I> gate after
+the gate represented by the symbol.  For example, the output of the
+<I>and</I> gate is inverted by the <I>not</I> gate to form the <I>nand</I>
+gate, as shown in Figure 1.14b.  A similar situation is shown for the
+<I>nor</I> gate in Figure 1.14c.  Note that the truth table for the
+<I>nand</I> operation has three nonzero entries, whereas the truth
+table for the <I>and</I> operation had only one nonzero entry.  A
+symmetric condition exists for the <I>nor</I> operation.
+
+<P ALIGN=CENTER><IMG SRC="Figure1.14a-NOTgate.gif"><IMG
+SRC="Figure1.14b-NANDgate.gif"><IMG
+SRC="Figure1.14c-NORgate.gif"><BR><BR> <B>Figure 1.14.</B> Graphic
+symbols and truth tables for negative logic gates that implement (a)
+<I>not</I>, (b) <I>nand</I>, (c) <I>nor</I> operations -  adapted from
+[Maf01].</P>
+
+<P ALIGN=JUSTIFY>In the next section, we discuss how these basic
+gates are implemented in electronic circuits.
+
+<H4>1.4.3. Circuit Implementation of Digital Logic</H4>
+
+<P ALIGN=JUSTIFY>In 1947, scientists at Bell Laboratories developed
+the <I>transistor</I>, which is a circuit element whose conductivity
+varies with applied voltage.  The advantage of the transistor is that
+a relatively small input current can be used to control a much larger
+power-supply current.  The general concept involved in the operation
+of the transistor is similar to that of the vacuum tube (recall our
+discussion of <I>first-generation computers</I>), but requires much
+less power and space.  Also, the transistor can change state much more
+quickly than a vacuum tube - as sometimes said in electrical
+engineering, the transistor has a <I>higher switching frequency</I>.
+
+<P ALIGN=JUSTIFY><B>1.4.3.1. Simple Model of A Transistor NOT
+Gate.</B> Figure 1.15 shows a diagram of a transistor that implements
+negative logic.  Note that the <I>collector supply voltage</I>
+V<SUB>cc</SUB> is positive, and the current from this power source
+flows through a current limiting resistor, whose symbol is the jagged
+line below V<SUB>cc</SUB>.  The resistor is designed to prevent
+damage to the transistor junction, which is delicate.  (This
+junction is comprised of several semiconducting materials deposited on
+a small wafer of silicon or germanium called <I>substrate</I>.  As we
+discussed in Section 1.3, the dimensions of features etched into the
+substrate are presently on the order of 0.2 micron, so it doesn't take
+much excess current to cause electrical arcing across these features,
+which renders the transistor useless.)
+
+<P ALIGN=JUSTIFY>A <I>control voltage</I> (shown in Figure 1.15 as the
+input signal A) is applied to the <I>base</I> of the transistor.  If A
+= 0, the conductivity of the transistor is low, and the current from
+the collector is not grounded at the emitter.  This causes a voltage
+difference to be present between the emitter (at ground) and the
+collector (at V<SUB>cc</SUB>).  Symmetrically, when A = 1 (i.e., a
+voltage significantly higher than zero), then the conductivity of the
+transistor is enhanced, and V<SUB>cc</SUB> is grounded.  This produces
+little or no voltage drop across the collector-emitter junction, and
+the output at the collector is effectively zero.  When the output of
+the transistor is taken from the collector (as shown in Figure 1.15),
+these two conditions cause a <I>not</I> operation to be implemented.
+
+<P ALIGN=CENTER><IMG SRC="Figure1.15-NOTcircuit.gif"><BR><BR>
+<B>Figure 1.15.</B> Transistor implementation of a NOT gate,
+adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY><B>1.4.3.2. NAND Gate Circuit.</B> The <I>nand</I>
+gate is implemented using the operating principle of the <I>not</I>
+circuit shown in Figure 15.  As shown in Figure 1.16, if both
+transistors have a high input (A = 1 and B = 1), then both transistors
+conduct, and V<SUB>cc</SUB> is grounded.  This produces little or no
+voltage drop from the voltage supply to ground, and near-zero voltage
+(logical zero value) occurs at the gate's output.  This implements the
+entry for zero output in the <I>nand</I> gate's truth table, shown
+again in Figure 1.16 for purposes of verification.
+
+<P ALIGN=JUSTIFY>If either (or both) input(s) of the <I>nand</I>
+circuit shown in Figure 1.16 is (are) low, then the two transistors
+taken together do not form a conducting path, and there is a
+significant voltage drop (logical one) at the gate output.  This
+implements the nonzero entries of the <I>nand</I> gate's truth table.
+
+<P ALIGN=CENTER><IMG SRC="Figure1.16-NANDcircuit.gif"><BR><BR>
+<B>Figure 1.16.</B> Transistor implementation of a NAND gate,
+adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY><B>1.4.3.3. NOR Gate Circuit.</B> The <I>nor</I>
+gate is implemented using the operating principle of the <I>not</I>
+circuit shown in Figure 15.  As shown in Figure 17, if both
+transistors have a low input (A = 0 and B = 0), then both transistors
+do not conduct, and V<SUB>cc</SUB> cannot be grounded.  This produces a
+significant voltage drop from the voltage supply to ground, and a
+logical one value occurs at the gate's output.  This implements the
+sole entry for unitary output in the <I>nor</I> gate's truth table, shown
+again in Figure 17 for purposes of verification.
+
+<P ALIGN=JUSTIFY>Conversely, if either (or both) input(s) of the <I>nand</I>
+circuit shown in Figure 1.16 is (are) high, then either (both) transistor(s)
+form a conducting path that grounds V<SUB>cc</SUB>, yielding no
+significant voltage drop (logical zero) at the gate output.  This
+implements the zero entries of the <I>nor</I> gate's truth table.
+
+<P ALIGN=CENTER><IMG SRC="Figure1.17-NORcircuit.gif"><BR><BR>
+<B>Figure 1.17.</B> Transistor implementation of a NOR gate,
+adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>Integrated circuits often contain multiple gates in
+one in-line package.  For example, the layout of a <I>quad nand
+gate</I> IC is shown in Figure 1.18.  Note that the notch in the
+circuit packaging material, shown on the left-hand side of the IC,
+helps orient the IC user to the pin ordering scheme.  Each <I>nand</I>
+gate input and output pin is unique, with a pin for the common supply
+voltage V<SUB>cc</SUB>, and another pin for common ground.
+
+<P ALIGN=CENTER><IMG SRC="Figure1.18-QuadNandIC.gif"><BR><BR>
+<B>Figure 1.18.</B> Example of <I>quad nand gate</I> integrated circuit
+pin-out diagram, adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>We next examine how the laws of Boolean algebra
+can be used to generate designs for more complicated logic circuits.
+
+<H4>1.4.4. More Complex Logic Circuits</H4>
+
+<P ALIGN=JUSTIFY>In this section, we present several examples of how
+complex logic circuits can be designed from equations that represent
+the circuit's functionality, or from truth tables.
+
+<P ALIGN=JUSTIFY><B>1.4.4.1. Laws of Boolean Algebra.</B> Each type of
+formal logic has rules for manipulating operations and operands.  In
+Boolean algebra, the following rules hold:<P>
+
+<UL><P ALIGN=JUSTIFY><B>Assumption.</B> Let <B>B</B> = {0,1}, with
+          p,q,r <IMG ALIGN=MIDDLE SRC="Syms/in.gif"> <B>B</B> and
+          x,y,z <IMG ALIGN=MIDDLE SRC="Syms/in.gif"> <B>R</B>.  This
+          assumption will hold for the subsequent discussion.
+
+<P ALIGN=JUSTIFY> <B>Identity.</B> In arithmetic with real numbers, x
+          &#183 1 = x and x + 0 = x.  In logic, the analogous
+          statements are
+
+          <P ALIGN=CENTER>
+          p <I>and</I> 1 <IMG ALIGN=TOP SRC="Syms/equiv.gif"> p,
+          and p <I>or</I> 0 <IMG ALIGN=TOP SRC="Syms/equiv.gif"> p .
+          </P>
+
+<P ALIGN=JUSTIFY> <B>Domination.</B> In arithmetic with real numbers,
+          x &#183 0 = 0.  The logical analogue is
+
+          <P ALIGN=CENTER> p <I>and</I> 0 <IMG ALIGN=TOP
+          SRC="Syms/equiv.gif"> 0 .  </P>
+
+<P ALIGN=JUSTIFY> Symmetrically, p <I>or</I> 1 <IMG ALIGN=TOP
+          SRC="Syms/equiv.gif"> 1 .
+
+<P ALIGN=JUSTIFY> <B>Idempotency.</B> This property can be used to
+          simplify <I>and</I> or <I>or</I> operations, i.e., 
+
+<P ALIGN=CENTER> p <I>or</I> p <IMG ALIGN=TOP SRC="Syms/equiv.gif">
+          p<BR>p <I>and</I> p <IMG ALIGN=TOP SRC="Syms/equiv.gif">
+          p . </P>
+          
+<P ALIGN=JUSTIFY> <B>Double Negation.</B> In arithmetic, -(-x) = x.
+In logic,
+
+          <P ALIGN=CENTER> <I>not</I>(<I>not</I>(p)) <IMG ALIGN=TOP
+          SRC="Syms/equiv.gif"> p. </P>
+          
+<P ALIGN=JUSTIFY> <B>Commutativity.</B> In arithmetic, addition and
+          multiplication are commutative, i.e., x + y = y + x and x
+          &#183 y = y &#183 x.  In logic, we have analogous
+          formulations:
+
+          <P ALIGN=CENTER> p <I>or</I> q <IMG ALIGN=TOP
+          SRC="Syms/equiv.gif"> q <I>or</I> p <BR>
+          p <I>and</I> q <IMG ALIGN=TOP
+          SRC="Syms/equiv.gif"> q <I>and</I> p . </P>
+          
+<P ALIGN=JUSTIFY> <B>Associativity.</B> In arithmetic, addition and
+          multiplication are associative, i.e., (x + y)+ z = x + (y +
+          z) and (x &#183 y) &#183 z = x &#183 (y &#183 z).  In logic,
+          we have the analogous formulations:
+
+          <P ALIGN=CENTER> (p <I>or</I> q) <I>or</I> r <IMG ALIGN=TOP
+          SRC="Syms/equiv.gif"> p <I>or</I> (q <I>or</I> r) <BR>
+          (p <I>and</I> q) <I>and</I> r <IMG ALIGN=TOP
+          SRC="Syms/equiv.gif"> p <I>and</I> (q <I>and</I> r) . </P>
+          
+<P ALIGN=JUSTIFY> <B>Distributivity.</B> In arithmetic, multiplication
+          distributes over addition.  In logic, we have a similar
+          situation:
+
+          <P ALIGN=CENTER> p <I>and</I> (q <I>or</I> r) <IMG ALIGN=TOP
+          SRC="Syms/equiv.gif"> (p <I>and</I> q) <I>or</I> (p <I>and</I> r) <BR>
+           p <I>or</I> (q <I>and</I> r) <IMG ALIGN=TOP
+          SRC="Syms/equiv.gif"> (p <I>or</I> q) <I>and</I> (p <I>or</I> r) . </P>
+
+<P ALIGN=JUSTIFY> <B>DeMorgan's Laws.</B> Manipulation of logical
+          statements is greatly aided by DeMorgan's laws, which
+          describe a property that resembles distributivity:
+
+          <P ALIGN=CENTER> <I>not</I>(p <I>or</I> q) <IMG ALIGN=TOP
+          SRC="Syms/equiv.gif"> <I>not</I>(p) <I>and</I> <I>not</I>(q) <BR>
+          <I>not</I>(p <I>and</I> q) <IMG ALIGN=TOP
+          SRC="Syms/equiv.gif"> <I>not</I>(p) <I>or</I> <I>not</I>(q) . </P>
+
+</UL> 
+<BLOCKQUOTE>
+<FONT COLOR=BLUE><B>Self-Exercise.</B> Construct truth tables for (a)
+   distributive and (b) DeMorgan's Laws, listed above.</FONT>
+</BLOCKQUOTE>
+
+
+<P ALIGN=JUSTIFY><B>1.4.4.2. Circuit Equivalence.</B> Using the
+preceding equivalences, especially DeMorgan's laws, it is possible to
+transform one circuit form (e.g., <I>nor</I> logic) into another form
+(e.g., <I>nand</I> logic).  Here, <I>nor</I> logic uses <I>nor</I> gates,
+and symmetrically for <I>nand</I> logic.
+
+<P ALIGN=CENTER><IMG SRC="Figure1.19-CircuitEquivalence.gif"><BR><BR>
+<B>Figure 1.19.</B> Example of <I>quad nand gate</I> integrated circuit
+pin-out diagram, adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>For example, Figure 1.19 shows a circuit that outputs a
+one when inputs A and C are both one, or when A and B are both one, and
+outputs a zero otherwise.  Note that the left-hand circuit has the same
+truth table as the right-hand circuit.  Also note that the circuit
+equation for the left-hand circuit (AC + AB) can be rewritten using
+the <I>distributive law</I> (from Section 1.4.4.1) to yield A(C+B),
+which is the equation for the right-hand circuit.  Here, the <I>minterm</I>
+<I>AC</I> means (A <I>and</I> C), and the minterm <I>C + B</I> means
+(C <I>or</I> B).  
+
+<P ALIGN=JUSTIFY>Logic transformations are primarily used for circuit
+minimization.  For example, Note that the right-hand circuit in Figure
+1.19 has only two gates, while the left-hand circuit uses three gates.
+This is because the expression AC + AB requires three operations (two
+<I>and</I>, one <I>or</I>), while the expression A(C + B) requires
+two operations (one <I>and</I>, one <I>or</I>).
+
+<P ALIGN=JUSTIFY><B>1.4.4.3. Majority-Vote Circuit.</B> Given N inputs
+a<SUB>1</SUB>, a<SUB>2</SUB>, ..., a<SUB>N</SUB>, the majority vote
+function outputs a one when N/2 or more of the inputs are ones, and
+zero otherwise.  (If N is odd, then N/2 is rounded up to the nearest
+integer.)  Figure 1.20 illustrates a logic circuit that implements
+the majority vote function for three inputs.  Observe that the inputs
+A, B, and C and their negations (represented by a bar above each variable)
+are present in buses (vertical lines), then are combined to form 
+the four minterms listed in the equation for M.  Including the <I>not</I>
+gates used for negation, eight gates are required to implement this
+circuit.  Note, however, that the <I>and</I> gates each have three
+inputs (corresponding to the three variables in each minterm) and the
+<I>or</I> gate that produces the circuit output has four inputs 
+(corresponding to the four minterms of the equation for M).
+
+<P ALIGN=CENTER><IMG SRC="Figure1.20-MajorityVoteCkt.gif"><BR><BR>
+<B>Figure 1.20.</B> Example of Majority Vote Circuit, its truth table,
+and the governing equation, adapted from [Maf01].</P>
+
+<BLOCKQUOTE>
+<FONT COLOR=BLUE><B>Self-Exercise.</B> How many minterms would
+there be in the equation for the majority-vote circuit with four
+inputs?  five inputs?  N inputs?</FONT>
+</BLOCKQUOTE>
+
+<H4>1.4.5. Comparators and Combinatorial Logic</H4>
+
+<P ALIGN=JUSTIFY>Combinatorial logic circuits include multiplexers,
+demultiplexers, encoders, decoders, and comparators.  A combinatorial
+circuit has many inputs and one (or, sometimes, more than one) output.
+The output(s) of a combinatorial circuit are uniquely determined by
+the inputs.  Combinatorial circuits have no memory elements.  We will
+begin our discussion of combinatorial circuits with the simple example
+of a comparator, then progress to the multiplexer and decoder.
+
+<P ALIGN=JUSTIFY><B>1.4.5.1. Comparator.</B> It is often useful to
+determine whether or not two operands are equal, which is called
+<I>comparison</I>.  A digital logic circuit that determines whether or
+not two four-bit operands A =
+(A<SUB>0</SUB>,A<SUB>1</SUB>,A<SUB>2</SUB>,A<SUB>3</SUB>) and B =
+(B<SUB>0</SUB>,B<SUB>1</SUB>,B<SUB>2</SUB>,B<SUB>3</SUB>) are equal is
+shown in Figure 1.20.  The algorithm that the circuit implements is
+based on the concept of an <I>exclusive-or</I> operation (also called
+an <I>xor</I> operation), which is instantiated in an <I>xor</I> gate.
+
+<P ALIGN=JUSTIFY>The <I>xor</I> function resembles the inclusive or,
+except that when both inputs are high, the <I>xor</I> output is zero,
+as shown in the following truth tables:
+
+<PRE>                 A   B   X                 A   B   X   
+             -+---------------         -+---------------
+          <B>xor</B> |  0   0   0          <B>or</B>  |  0   0   0
+              |  0   1   1              |  0   1   1
+              |  1   0   1              |  1   0   1
+              |  1   1   0              |  1   1   1
+</PRE>
+
+<P ALIGN=JUSTIFY>After the <I>xor</I> operation is applied to each bit
+of A and B (we call this <I>bitwise processing</I>), the <I>xor</I>
+outputs are operated on by a quad-input <I>nor</I> gate.  Thus, if any
+of the bits are different, the <I>or</I> part of the <I>nor</I> gate
+will return a one, and the <I>not</I> part of the <I>nor</I> gate will
+return a zero.  If A<SUB>0</SUB> = B<SUB>0</SUB> <I>and</I>
+A<SUB>1</SUB> = B<SUB>1</SUB> <I>and</I> A<SUB>2</SUB> = B<SUB>2</SUB>
+<I>and</I> A<SUB>3</SUB> = B<SUB>3</SUB>, then the <I>nor</I> gate
+will applu the <I>or</I> operation to the outputs of the <I>xor</I>
+gates (which will all be one) to yield a one, which will be inverted
+at the output of the <I>nor</I> gate to yield a zero.
+
+<P ALIGN=CENTER><IMG SRC="Figure1.21-ComparatorCkt.gif"><BR><BR>
+<B>Figure 1.21.</B> Example of Comparator Circuit, adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY><B>1.4.5.2. Multiplexer.</B> A multiplexer has
+<I>n</I> control signals and 2<SUP><I>n</I></SUP> inputs (sometimes
+called <I>data lines</I>).  The purpose of a multiplexer is to use the
+control signals to decide which of the inputs will be routed to the
+multiplexer's output.  Thus, the multiplexer is a type of switching
+device that chooses its output from among its inputs, based on control
+signals.
+
+<P ALIGN=JUSTIFY>For example, Figure 1.22 illustrates a multiplexer
+with <I>n</I> = 2 control lines (A, B) and 2<SUP><I>n</I></SUP> inputs
+(D<SUB>0</SUB> through D<SUB>3</SUB>).  Note that inverters (<I>not</I>
+gates) provide the complement of A and B for constructing the minterms
+of the circuit's governing equation.  
+
+<P ALIGN=CENTER><IMG SRC="Figure1.22-MuxCkt.gif"><BR><BR>
+<B>Figure 1.22.</B> Example of Multiplexer Circuit, adapted from [Maf01].
+</P>
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><FONT COLOR=BLUE><B>Self-Exercise.</B> Write the
+governing equation of the multiplexer shown in Figure 1.22.  How does
+this compare with the governing equation of the majority-vote circuit
+shown in Figure 1.20?  In what detailed ways are these circuits
+different?</FONT>
+</BLOCKQUOTE>
+
+<P ALIGN=JUSTIFY><B>1.4.5.3. Decoder.</B> A decoder can be loosely
+thought of as a kind of reverse multiplexer, without the control lines.
+A decoder has <I>n</I> inputs, and 2<SUP><I>n</I></SUP> outputs.  The
+input <I>indexes</I> the output - for example, if the input is 000,
+then the output D<SUB>0</SUB> will be high.  If the input is 001,
+(or 010) then the output D<SUB>1</SUB> (resp. D<SUB>2</SUB>) will be high,
+and so forth. 
+
+<P ALIGN=JUSTIFY>For example, Figure 1.23 illustrates a decoder
+with <I>n</I> = 3 inputs (A, B, C) and 2<SUP><I>n</I></SUP> = 8 outputs
+(D<SUB>0</SUB> through D<SUB>7</SUB>).  As in the multiplexer circuit,
+inverters provide the input complements for constructing the minterms
+of the circuit's governing equation.   
+
+<P ALIGN=CENTER><IMG SRC="Figure1.23-DecoderCkt.gif"><BR><BR>
+<B>Figure 1.23.</B> Example of Decoder Circuit, adapted from [Maf01].</P>
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><FONT COLOR=BLUE><B>Self-Exercise.</B> Write the
+governing equation of the decoder shown in Figure 1.23.  How does this
+compare with the governing equation of the multiplexer shown in Figure
+1.22?  In what detailed ways are these circuits different?
+(<I>Hint</I>: Think about minterms, complementation, and DeMorgan's
+laws.)</FONT>
+</BLOCKQUOTE>
+
+<P ALIGN=JUSTIFY>Thus, decoders can be used to select one object from
+a large number of indexed objects, given a Boolean representation of
+the index of that object at the decoder's input.  For example, if the
+decoder outputs each control a relay that switches a voltage through a
+different resistor value, then it is possible to construct an
+<I>n</I>-to-2<SUP><I>n</I></SUP> decoder that converts an <I>n</I>-bit
+input signal into an analog voltage ranging from zero to
+2<SUP><I>n</I></SUP> units.  However, the circuitry for large <I>n</I>
+can become prohibitive, so this technique is of pedagogic interest only.
+
+<H4>1.4.6. Programmable Logic Arrays</H4>
+
+<P ALIGN=JUSTIFY>It is readily seen that circuits such as those shown
+in Section 1.4.5 can become prohibitively complex, large, and
+power-consumptive if implemented on a circuit board with many chips
+containing various types of logic gates.  Thus, it is reasonable to
+ask how we might put a complex digital circuit on a chip.  There are
+two ways to do this.  First, the circuit can be custom-fabricated,
+which is very expensive, especially for small quantities.  Second,
+one can use <I>programmable logic</I>, which provides many different
+types of gates on a chip, with a programmable network of interconnects
+between the gates.  Programmable logic has widespread software support,
+so it is relatively easy (using modern design tools) to design a circuit,
+reduce it to a logic schematic (diagram of connectivity and parameters
+of logic elements in a circuit), then use a computer to program a
+special logic device called a PLA (programmable logic array).
+
+<P ALIGN=JUSTIFY>In Figure 1.24, we illustrate a simple PLA circuit.
+This type of circuit is called <I>two-level logic</I> because there
+are two levels of processing (i.e., <I>and</I> gates at Level 1,
+<I>or</I> gates at Level 2). 
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><FONT COLOR=BLUE><B>Self-Exercise.</B> What are the
+two levels of processing in the circuits shown in Section 1.4.5?
+</FONT>
+</BLOCKQUOTE>
+
+<P ALIGN=JUSTIFY>In practice, programmable logic devices are made in a
+variety of gate configurations, connectivity networks, and gate
+densities.  One of the more important types of PLAs is called FPGA,
+for <A
+HREF="http://www.vlsivie.tuwien.ac.at/mitarbeiter/gschwind/fpga.html">
+<B>Field Programmable Gate Array</B></A>.  FPGAs represent a new
+method of designing custom ICs. Unlike conventionals Gate Arrys, FPGAs
+can be designed and programmed by a computer user (e.g., a hardware
+designer), and represent an advanced stage of evolution from
+Programmable Logic Devices (PLD).  FPGAs are advantageous because they
+have a much higher gate density than PLAs or PLDs, and offer greater
+flexibility.  FPGAs are useful for rapid prototyping, especially of
+large or complex circuits. Designs can be described using
+(a) schematic layout tools, (b) synthesis from a hardware description
+language model, or (c) high-level language driven synthesis tools.
+
+<P ALIGN=CENTER><IMG SRC="Figure1.24-PLA.gif"><BR><BR> <B>Figure
+1.24.</B> Example of programmable logic array, adapted from
+[Maf01].</P>
+
+<P ALIGN=JUSTIFY>The circuit shown in Figure 1.24 is a fused-link
+circuit.  To program this circuit, a software-driven programming
+device merely applies a large voltage to open-circuit (or "blow") each
+of the fuses (small boxes in Figure 1.24) that control access to a
+given input of a specific gate.  For example, if the fuse at the
+junction of <I>and</I> gate #1 output and <I>or</I> gate #5 input is
+blown, then the <I>and</I> gate output cannot is not an input to that
+<I>or</I> gate.
+
+<P ALIGN=JUSTIFY>There is a paper on the Web on 
+<A HREF="http://www.ent.ohiou.edu/~basit/ee561/paper.html">
+<B>Design of High Speed, Low Powered Dynamic Programmable Logic Arrays</B></A>
+that is useful for advanced reading in this interesting topical area.
+
+<P ALIGN=JUSTIFY>We next discuss clocked logic circuits.
+
+<H4>1.4.7. Synchronous Logic</H4>
+
+<P ALIGN=JUSTIFY>Thus far, we have considered only <I>asynchronous logic
+circuits</I>, in which the input pulses are allowed to propagate through
+the circuit at their own speed.  This is acceptable for simple logic
+designs, but has the disadvantage that one needs to wait a short (usually
+somewhat indeterminate) time for the circuit output to stabilize.  In
+time-critical applications where timing precision is required, the
+asynchronous approach to circuit design and implementation does not always
+produce useful results, due to indeterminacies in the output settling time.
+
+<P ALIGN=JUSTIFY>To remedy this problem, <I>synchronous logic circuits</I>
+have been developed whose transition from one state to another is mediated
+by a <I>clock pulse</I>.  (This can be thought of like people in a band
+playing in time to the conductor.)  The vast majority of logic circuits
+use <I>edge triggered clocking</I>, which means that the state change in
+a circuit (e.g., from State Element 1 to State Element 2 in Figure 1.25a)
+occurs only when the clock pulse changes from a zero value to a one.
+
+<P ALIGN=CENTER><IMG SRC="Figure1.25a-SynchClock.gif"><BR>(a)<BR><IMG
+SRC="Figure1.25b-AsynchTrans.gif"><BR>(b)<BR><BR> <B>Figure 1.25.</B>
+State changes in logic circuits: (a) synchronous logic changes state
+on the leading clock pulse (0-1 transition), and (b) asynchronous
+logic does not require a clock to change state - adapted from
+[Maf01].</P>
+
+<P ALIGN=JUSTIFY>To better understand synchronous logic, which is the
+dominant form in digital computing, we next examine how a clock works.
+We then discuss latches and storage circuits such as clocked latches
+and flip-flops.
+
+<P ALIGN=JUSTIFY><B>1.4.7.1. Principles of the Clock.</B> When we think 
+of a digital clock, the image of a numerical timekeeping device comes
+to mind.  However, in digital logic, a clock is really a very precise
+oscillator that changes its output from zero to one, then back to zero
+in a regular, predictable way.  
+
+<P ALIGN=JUSTIFY>For example, in Figure 1.26, a clock is comprised of 
+an oscillator whose output is thresholded to form a train of rectangular
+pulses, called a <I>square wave</I>.  The <I>clock period</I> is measured
+from one 0-1 transition to the next 0-1 transition.  The addition of a
+delaying device after the clock output causes <I>phase lag</I> between
+the clock signals C1 and C2.
+
+<P ALIGN=CENTER><IMG SRC="Figure1.26-Clock.gif"><BR><BR> <B>Figure
+1.26.</B> Example of clock output, with symmetric (A) and asymmetric
+(B and C) clock pulses, adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>Within a clock cycle, there is the time a pulse is
+high (t<SUB>H</SUB>) and the time it is low (t<SUB>L</SUB>).  If
+t<SUB>H</SUB> does not equal t<SUB>L</SUB> within a small measurement
+error, then we say that the clock pulse is <I>asymmetric</I>.
+This term also holds for a phase-shifted pulse, as shown in signal
+B of Figure 1.26.
+
+<P ALIGN=JUSTIFY>If t<SUB>H</SUB>&lt t<SUB>L</SUB> within a small
+measurement error, then we say that the <I>pulse duty cycle is less
+than one</I>.  This case is shown in Figure 1.26, for the clock signal
+labelled C.  If t<SUB>H</SUB> &gt t<SUB>L</SUB> within a small
+measurement error, then we say that the <I>pulse duty cycle is greater
+than one</I>.
+
+<P ALIGN=JUSTIFY><B>1.4.7.2. The SR Latch.</B> Early in computing
+practice, it was desirable to store a bit in a small memory device.
+Since the only usable storage devices were relays (an
+electromechanical device) and delay lines that used the metal Mercury
+(chemical symbol Hg), it was decided to adapt asynchronous relay-based
+logic (very slow) to produce a storage element that could hold one
+bit.
+
+<P ALIGN=CENTER><IMG SRC="Figure1.27-SRlatch.gif"><BR><BR> <B>Figure
+1.27.</B> The two states of the SR latch, adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>Figure 1.27 shows a modern version of this concept,
+called the <I>SR Latch</I>, which is implemented in <I>nor</I> logic.
+(Using DeMorgan's Laws, it is possible to implement this in
+<I>nand</I> logic.)  When the Set input is high and the Reset input is
+low, State 1 results, and conversely for State 0.  Thus, the Set
+(Reset) puts a 1 (0) value at the output Q.  It is not difficult to
+see that placing this circuit after an oscillator could product the
+clock pulses shown in Figure 1.26.
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><FONT COLOR=BLUE><B>Self-Exercise.</B> Derive
+the truth tables for State 0 and State 1 of the SR latch shown in
+Figure 1.27. 
+</FONT>
+</BLOCKQUOTE>
+
+<P ALIGN=JUSTIFY><B>1.4.7.3. Clocked Latches.</B> The problems with
+the asynchronous SR Latch shown in Figure 1.27 are (a) the S and
+R inputs can be energized at any time, and (b) settling of the
+circuit to yield its output value occurs immediately after the
+S or R signals are provided.  This situation is remedied in the
+Clocked SR Latch of Figure 1.28, where two <I>and</I> gates are
+used in conjunction with a clock to drive the SR Latch of Figure 1.27.
+
+<P ALIGN=JUSTIFY>The circuit works the same as the SR Latch, with the
+following important exceptions.  First, if S or R are one, and the
+clock value is zero, then the output of the <I>and</I> gates is zero.
+If S or R equals one, and the clock is high, then the S,R values are
+passed to the input of the SR latch, but only while the clock is high.
+This gives the latch time t<SUB>H</SUB> to settle (see Section 1.4.7.1).
+If S or R are zero, then it doesn't matter what the value of the clock
+is - the inputs to the SR Latch remain zero.
+
+<P ALIGN=CENTER><IMG SRC="Figure1.28-ClkSRlatch.gif"><BR><BR> <B>Figure
+1.28.</B> The Clocked SR Latch, adapted from [Maf01].</P>
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><FONT COLOR=BLUE><B>Self-Exercise.</B> (1) Derive the
+truth table for the clocked input to the SR Latch in Figure 1.28,
+using the <I>and</I> gate logic, as shown. (2) Prove (using truth
+tables) how this could or could not be implemented in <I>nor</I> logic.
+</FONT>
+</BLOCKQUOTE>
+
+<P ALIGN=JUSTIFY>A problem with the clocked SR latch is that it has
+two inputs, and they have a <I>forbidden configuration</I>.  Namely,
+one cannot apply both S = 1 and R = 1 to the circuit simultaneously -
+it won't know which state to enter!  This problem is resolved with
+the <I>Clocked D Latch</I>, which is a minor variation on the clocked
+SR latch.
+
+<P ALIGN=JUSTIFY>As shown in Figure 1.29, the D latch adds a <I>not</I>
+gate or inverter to the input of the clocked SR latch, so that its "S"
+and "R" inputs always have opposite values.  In order to avoid confusion
+with the SR latch, the input is called <I>D</I>.  The clock
+pulse is applied to the input, as it was with the SR latch.
+
+<P ALIGN=CENTER><IMG SRC="Figure1.29-ClkDlatch.gif"><BR><BR> <B>Figure
+1.29.</B> The Clocked D Latch, adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>As shown in Figure 1.29, the D latch has the following
+<I>timing behavior</I> (from the D,C,Q signals below the latch circuit). 
+The D signal is the input (data), C is the clock, and Q is the output.
+When D goes high (0-1 transition), nothing happens to the latch until
+C goes high.  (If D is low by the time C goes high, then the latch does
+not change state.)
+
+<P ALIGN=JUSTIFY>If D is high and C goes high, then the latch changes
+state.  There is a slight delay from the time C goes high to the time
+Q goes high, which is called the <I>propagation delay</I> (a function
+of the type of logic used, the semiconductor fabrication technique,
+wire lengths, etc.)  When C goes low, whether or not D is high, the
+latch output (Q) stays high.  This is the memory function of the
+SR latch that we discussed earlier.  However, if D is low, then if
+C goes low (1-0 transition), Q goes low after the propagation delay
+occurs.  Thus, the D latch only stores a unitary input (D = 1) for
+a time equal to the period of the clock.  This can be verified by
+inspecting the timing diagram in Figure 1.29.
+
+<P ALIGN=JUSTIFY><B>1.4.7.4. The D Flip-Flop.</B> In order to make
+the D latch store a value throughout the high state of the clock,
+it is necessary to make a more complex circuit using the D latch,
+which we call a <I>D flip-flop</I>.  The flip-flop is so named because
+it can be toggled back and forth between two states (Q = 0 and Q = 1)
+by varying D.  The D flip-flop is comprised of two D latches and an
+inverter, as shown in Figure 1.30
+
+<P ALIGN=CENTER><IMG SRC="Figure1.30-Dflipflop.gif"><BR><BR> <B>Figure
+1.30.</B> The D flip-flop with timing diagram, adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>Per Figure 1.30 the D flip-flop has the
+following <I>timing behavior</I> (determined from the D,C,Q signals
+below the latch circuit).  When D goes high (0-1 transition),
+nothing happens to the latch until C goes high.  (If D is low by the
+time C goes high, then the latch does not change state.)  At the
+trailing edge of the clock pulse (1-0 transition), Q goes high if
+it was previously low.  If Q was previously high, nothing happens
+to Q.  When D goes low, nothing happens to Q until the
+clock pulse goes low.  Then, after a propagation delay, Q goes low.
+
+<P ALIGN=JUSTIFY>There are two critical time intervals associated with
+the D flip-flop.  The <I>setup time</I> is the time required to keep D
+high, in order to wait for the trailing edge of the clock pulse.  The
+<I>hold time</I> is the time required to hold D high after setup, to
+ensure that Q stays high.
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><FONT COLOR=BLUE><B>Self-Exercise.</B> (1) Derive the
+truth table for each of the four input states of the D flip-flop as
+shown in Figure 1.30.  <I>Hint</I>: Input states are defined by the
+values of D and C (e.g., State 0: D = 0, C = 0->0; State 2: D = 0,
+C = 0 -> 1; etc.)
+</FONT>
+</BLOCKQUOTE>

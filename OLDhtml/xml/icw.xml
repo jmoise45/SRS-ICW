@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="icw.xsl"?>
+<icw>
+	<topic title="CPU Performance Equation">
+		<overview title="CPU Performance Equation">
+			<summary>
+				When designing a CPU, we want to make each program run as fast as possible.  This means that we will minimize execution time (texe).  So we need to express the input as number of instructions, also called instruction count (IC).  To improve efficiency, we want to make each instruction take as few cycles as possible, so we have cycles per instruction (CPI).  And, we have to work within the constraint of a CPU clock cycle time, called clock time (tclock).			
+			</summary>
+			<objectives>
+				<objective>
+				In this lesson, we will learn how to express the concept of CPU performance in terms of execution time texe, which will be formulated in terms of IC, CPI, and tclock.
+				</objective>
+			</objectives>
+			<skills>
+			<skill>
+				Understand the CPU performance equation
+			</skill>
+			<skill>
+				Know how to predict execution time using CPU performance equation
+			</skill>
+			<skill>
+				Learn how to solve for different variables in the performance equation, to help design component parts of a computer. 
+			</skill>
+			</skills>
+		</overview>	
+		<lesson>
+			<design-principle>FASTER IS BETTER</design-principle>
+			
+			<concepts>
+				<concept>
+					Performance = Execution Time
+				</concept>
+				<concept>
+					Minimize CPI
+				</concept>				
+			</concepts>
+			
+			<summary>
+				When designing a CPU, we want to make each program run as fast as possible.  This means that we will minimize execution time (texe).  So we need to express the input as number of instructions, also called instruction count (IC).  To improve efficiency, we want to make each instruction take as few cycles as possible, so we have cycles per instruction (CPI).  And, we have to work within the constraint of a CPU clock cycle time, called clock time (tclock).
+			</summary>
+			
+			<background>
+				<text>
+					The instruction count (IC) is determined mainly by the program and compiler, and influenced by the instruction set architecture (ISA), as Figure 1 illustrates.
+				</text>
+				<text>
+					The cycles per instruction are determined mainly by the ISA and microarchitecture (e.g., structure of the datapath) with some influence from the compiler.  This is shown in red in Figure 1.
+				</text>
+				<image figure="1" caption="CPU performance equation, with influences on its terms.">
+					figure1.png
+				</image>
+				<text>
+					The clock cycle time is mainly a function of hardware, with some influence from the microarchitecture.  
+				</text>
+			</background>
+			
+			<theory><![CDATA[
+					We combine these terms in the CPU performance equation, as follows:
+									texe = IC  .  CPI  .  tclock
+						This works, because IC is in units of instructions, CPI has units of cycles per instruction, and tclock has units of seconds per cycle:
+						Terms:		      IC		   .	  CPI	       .	  tclock
+						Units:		instructions	   .	cycles	       .	seconds	
+												   instruction	   cycle
+						So the resulting execution time is in units of seconds, because the units of instructions cancel and units of cycles cancel.
+					You might ask - "what about the clock rate" (or clock frequency)?
+						Suppose we let fclock denote CPU clock frequency in units of cycles per second.  Then, ?tclock = 1 / fclock¬ , in units of seconds per cycle.
+						So, the CPU performance equation can be rewritten as:
+									texe = ( IC  .  CPI ) / fclock¬	
+					]]>
+			</theory>
+			
+			<examples>
+			</examples>
+			
+		</lesson>
+		<self-test>
+		</self-test>
+	</topic>
+	
+	
+	
+	
+	<lesson id="100">
+		<title>Test Course 100</title>
+		<text>This is lesson 0</text>
+		<image>http://www.cise.ufl.edu/~car/CIS4914/html/launch.png</image>
+		<audio>http://www.cise.ufl.edu/~car/CIS4914/html/audio.mp3</audio>
+		<video>http://www.cise.ufl.edu/~car/CIS4914/html/video.mp4</video>
+		<text>More text here... after the image, audio, and video.</text>		
+	</lesson>
+
+	<lesson id="101">
+		<title>Test Course 101</title>
+		<text>This is lesson 1</text>
+		<image>http://www.cise.ufl.edu/~car/CIS4914/html/launch.png</image>
+		<audio>http://www.cise.ufl.edu/~car/CIS4914/html/audio.mp3</audio>
+		<video>http://www.cise.ufl.edu/~car/CIS4914/html/video.mp4</video>
+		<text>More text here... after the image, audio, and video.</text>
+	</lesson>
+
+	<lesson id="102">
+		<title>Test Course 102</title>
+		<text>Welcome to lesson 2</text>
+		<image>http://www.cise.ufl.edu/~car/CIS4914/html/launch.png</image>
+		<audio>http://www.cise.ufl.edu/~car/CIS4914/html/audio.mp3</audio>
+		<video>http://www.cise.ufl.edu/~car/CIS4914/html/video.mp4</video>
+		<text>More text here... after the image, audio, and video.</text>
+	</lesson>
+</icw>

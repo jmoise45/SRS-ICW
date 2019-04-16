@@ -1,0 +1,559 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="en-us" http-equiv="Content-Language" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>Performance Calculation for M</title> <script type="text/javascript" src="Script/jquery.js"></script> 
+
+<link rel="stylesheet" type="text/css" href="Styles/shadowbox.css">
+<script type="text/javascript" src="Script/shadowbox.js"></script>
+<link rel="stylesheet" type="text/css" href="Styles/styles.css">
+<script type="text/javascript" src="Script/custom_script.js"></script> 
+
+<script type="text/javascript">
+		
+Shadowbox.init();
+	
+</script>
+
+</head>
+
+<body>
+
+<div id="menu">	
+	<ul>
+		<li><a rel="shadowbox" href="PDFs/Conceptual_Background.pdf"><b>Conceptual Background</b></a></li>
+		<li><a rel="shadowbox" href="PDFs/Historical_Background.pdf">Historical Background</a></li>		
+		<li><a rel="shadowbox" href="PDFs/Economic_Background.pdf">Economic Background</a></li>
+		<li><a rel="shadowbox" href="OLDhtml/video.mp4">Predecessor Concepts</a></li>		
+		<li><a rel="shadowbox" href="OLDhtml/audio.mp3">Coding Examples</a> (if applicable)</li>		
+		<li><a rel="shadowbox" href="PDFs/Math_Example.pdf">Math Examples</a> (if applicable)</li>	
+	</ul>
+</div>
+
+
+<A NAME=Sec3.1></A>
+<H3>3.1. Arithmetic and Logic Operations</H3>
+
+<P><A HREF="PatHen-Readings.html#ExSec3.1"><B>Reading Assignments and Exercises</B></A> 
+
+<P ALIGN=JUSTIFY>The ALU is the core of the computer - it performs
+arithmetic and logic operations on data that not only realize the
+goals of various applications (e.g., scientific and engineering
+programs), but also manipulate addresses (e.g., pointer arithmetic).
+In this section, we will overview algorithms used for the basic
+arithmetic and logical operations.  A key assumption is that twos
+complement representation will be employed, unless otherwise noted.
+
+<H4>3.1.1. Boolean Addition</H4>
+
+<P ALIGN=JUSTIFY>When adding two numbers, if the sum of the digits
+in a given position equals or exceeds the modulus, then a <I>carry</I>
+is propagated.  For example, in Boolean addition, if two ones are added,
+the sum is obviously two (base 10), which exceeds the modulus of 2 for
+Boolean numbers (<B>B</B> = <B>Z</B><SUB>2</SUB> = {0,1}, the integers
+modulo 2).  Thus, we record a zero for the sum and propagate a carry
+valued at one into the next more significant digit, as shown in 
+Figure 3.1.
+
+<P ALIGN=CENTER><IMG SRC="Figure3.1-BoolAddn.gif"><BR><BR>
+<B>Figure 3.1.</B> Example of Boolean addition with carry propagation,
+adapted from [Maf01].</P>
+
+<H4>3.1.2. Boolean Subtraction</H4>
+
+<P ALIGN=JUSTIFY>When subtracting two numbers, two alternatives
+present themselves.  First, one can formulate a subtraction algorithm,
+which is distinct from addition.  Second, one can negate the
+subtrahend (i.e., in <I>a - b</I>, the subtrahend is <I>b</I>) then
+perform addition.  Since we already know how to perform addition as
+well as twos complement negation, the second alternative is more
+practical.  Figure 3.2 illustrates both processes, using the decimal
+subtraction 12 - 5 = 7 as an example.
+
+<P ALIGN=CENTER><IMG SRC="Figure3.2-BoolSubtrn.gif"><BR><BR>
+<B>Figure 3.2.</B> Example of Boolean subtraction using (a) unsigned
+binary representation, and (b) addition with twos complement negation -
+adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>Just as we have a carry in addition, the subtraction
+of Boolean numbers uses a <I>borrow</I>.  For example, in Figure 3.2a,
+in the first (least significant) digit position, the difference 0 - 1
+in the one's place is realized by borrowing a one from the two's place
+(next more significant digit).  The borrow is propagated upward
+(toward the most significant digit) until it is zeroed (i.e., until we
+encounter a difference of 1 - 0).
+
+<H4>3.1.3. Overflow</H4>
+
+<P ALIGN=JUSTIFY>Overflow occurs when there are insufficient bits in a
+binary number representation to portray the result of an arithmetic
+operation.  Overflow occurs because computer arithmetic is not closed
+with respect to addition, subtraction, multiplication, or division.
+Overflow <I>cannot</I> occur in addition (subtraction), if the
+operands have different (resp. identical) signs.  
+
+<P ALIGN=JUSTIFY>To detect and compensate for overflow, one needs n+1
+bits if an n-bit number representation is employed.  For example, in
+32-bit arithmetic, 33 bits are required to detect or compensate for
+overflow.  This can be implemented in addition (subtraction) by
+letting a carry (borrow) occur into (from) the sign bit.  To make a
+pictorial example of convenient size, Figure 3.3 illustrates the
+four possible sign combinations of differencing 7 and 6 using a
+number representation that is four bits long (i.e., can represent
+integers in the interval [-8,7]).
+
+<P ALIGN=CENTER><IMG SRC="Figure3.3-BoolOverflow.gif"><BR><BR>
+<B>Figure 3.3.</B> Example of overflow in Boolean arithmetic,
+adapted from [Maf01].</P>
+
+<H4>3.1.4. MIPS Overflow Handling</H4>
+
+<P ALIGN=JUSTIFY>MIPS raises an <I>exception</I> when overflow occurs.
+Exceptions (or interrupts) act like procedure calls.  The register
+<CODE>$epc</CODE> stores the address of the instruction that
+<I>caused</I> the interrupt, and the instruction
+
+<P ALIGN=CENTER><CODE>mfc <B>register</B>, $epc</CODE> </P>
+
+<P ALIGN=JUSTIFY>moves the contents of <CODE>$epc</CODE> to
+<I>register</I>.  For example, <I>register</I> could be
+<CODE>$t1</CODE>.  This is an efficient approach, since no conditional
+branch is needed to test for overflow.
+
+<P ALIGN=JUSTIFY>Two's complement arithmetic operations
+(<CODE>add</CODE>, <CODE>addi</CODE>, and <CODE>sub</CODE>
+instructions) raise exceptions on overflow.  In contrast,
+unsigned arithmetic (<CODE>addu</CODE> and <CODE>addiu</CODE>)
+instructions do not raise an exception on overflow, since they
+are used for arithmetic operations on addresses (recall our
+discussion of pointer arithmetic in Section 2.6).  In terms
+of high-level languages, C ignores overflows (always uses
+<CODE>addu</CODE>, <CODE>addiu</CODE>, and <CODE>subu</CODE>),
+while FORTRAN uses the appropriate instruction to detect overflow.
+Figure 3.4 illustrates the use of conditional branch on overflow
+for signed and unsigned addition operations.
+
+<P ALIGN=CENTER><IMG SRC="Figure3.4-AddnOverflow.gif"><BR><BR>
+<B>Figure 3.4.</B> Example of overflow in Boolean arithmetic,
+adapted from [Maf01].</P>
+
+<H4>3.1.5. Logical Operations</H4
+
+<P ALIGN=JUSTIFY>Logical operations apply to fields of bits within a
+32-bit word, such as bytes or bit fields (in C, as discussed in the
+next paragraph).  These operations include shift-left and shift-right
+operations (<CODE>sll</CODE> and <CODE>srl</CODE>), as well as bitwise
+<I>and</I>, <I>or</I> (<CODE>and</CODE>, <CODE>andi</CODE>,
+<CODE>or</CODE>, <CODE>ori</CODE>).  As we saw in Section 2, bitwise
+operations treat an operand as a vector of bits and operate on each
+bit position.
+
+<P ALIGN=JUSTIFY>C bit fields are used, for example, in programming
+communications hardware, where manipulation of a bit stream is
+required.  In Figure 3.5 is presented C code for an example
+communications routine, where a structure called <CODE>receiver</CODE>
+is formed from an 8-bit field called <I>receivedByte</I> and two
+one-bit fields called <I>ready</I> and <I>enable</I>.  The C routine
+sets <CODE>receiver.ready</CODE> to 0 and <CODE>receiver.enable</CODE>
+to 1.
+
+<P ALIGN=CENTER><IMG SRC="Figure3.5-Cbitfields.gif"><BR><BR>
+<B>Figure 3.5.</B> Example of C bit field use in MIPS,
+adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>Note how the MIPS code implements the functionality
+of the C code, where the state of the registers $s0 and $s1 is
+illustrated in the five lines of diagrammed register contents below
+the code.  In particular, the initial register state is shown in the
+first two lines.  The <CODE>sll</CODE> instruction loads the contents
+of <CODE>$s1</CODE> (the receiver) into <CODE>$s0</CODE> (the data
+register), and the result of this is shown on the second line of the
+register contents.  Next, the <CODE>srl</CODE> instruction left-shifts
+<CODE>$s0</CODE> 24 bits, thereby discarding the <I>enable</I> and
+<I>ready</I> field information, leaving just the received byte.  To
+signal the receiver that the data transfer is completed, the
+<CODE>andi</CODE> and <CODE>ori</CODE> instructions are used to set
+the enable and ready bits in <CODE>$s1</CODE>, which corresponds to
+the <I>receiver</I>.  The data in <CODE>$s0</CODE> has already been
+received and put in a register, so there is no need for its further
+manipulation.
+
+<A NAME=Sec3.2></A>
+<H3>3.2. Arithmetic Logic Units and the MIPS ALU</H3>
+
+<P><A HREF="PatHen-Readings.html#ExSec3.2"><B>Reading Assignments and
+Exercises</B></A>
+
+<P ALIGN=JUSTIFY>In this section, we discuss hardware building blocks,
+ALU design and implementation, as well as the design of a 1-bit ALU
+and a 32-bit ALU.  We then overview the implementation of the MIPS
+ALU.
+
+<H4>3.2.1. Basic Concepts of ALU Design</H4>
+
+<P ALIGN=JUSTIFY>ALUs are implemented using lower-level components
+such as logic gates, including <I>and</I>, <I>or</I>, <I>not</I> gates
+and multiplexers.  These building blocks work with individual bits,
+but the actual ALU works with 32-bit registers to perform a variety of
+tasks such as arithmetic and shift operations.  
+
+<P ALIGN=JUSTIFY>In principle, an ALU is built from 32 separate 1-bit
+ALUs.  Typically, one constructs separate hardware blocks for each
+task (e.g., arithmetic and logical operations), where each operation
+is applied to the 32-bit registers in parallel, and the selection of
+an operation is controlled by a multiplexer.  The advantage of this
+approach is that it is easy to add new operations to the instruction
+set, simply by associating an operation with a multiplexer control 
+code.  This can be done provided that the mux has sufficient capacity.
+Otherwise, new data lines must be added to the mux(es), and the CPU
+must be modified to accomodate these changes.
+
+<H4>3.2.2. 1-bit ALU Design</H4>
+
+<P ALIGN=JUSTIFY>As a result, the ALU consists of 32 muxes (one for
+each output bit) arranged in parallel to send output bits from each
+operation to the ALU output.  
+
+<P ALIGN=JUSTIFY><B>3.2.2.1. And/Or Operations.</B> As shown in Figure
+3.6, a simple (1-bit) ALU operates <I>in parallel</I>, producing all
+possible results that are then selected by the multiplexer
+(represented by an oval shape at the output of the <I>and</I> /
+<I>or</I> gates.  The output C is thus selected by the multiplexer.
+(<I>Note</I>: If the multiplexer were to be applied at the input(s)
+rather than the output, twice the amount of hardware would be
+required, because there are two inputs versus one output.)
+
+<P ALIGN=CENTER><IMG SRC="Figure3.6-1bitALU.gif"><BR><BR>
+<B>Figure 3.6.</B> Example of a simple 1-bit ALU, where the
+oval represents a multiplexer with a control code denoted
+by <I>Op</I> and an output denoted by C - 
+adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY><B>3.2.2.2. Full Adder.</B> Now let us consider the
+one-bit adder.  Recalling the carry situation shown in Figure 3.1, we
+show in Figure 3.7 that there are two types of carries - <I>carry
+in</I> (occurs at the input) and <I>carry out</I> (at the output).
+
+<P ALIGN=CENTER><IMG SRC="Figure3.7-Adder1.gif"><BR><BR>
+<B>Figure 3.7.</B> Carry-in and carry-out in Boolean addition,
+adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>Here, each bit of addition has three input bits
+(A<SUB>i</SUB>, B<SUB>i</SUB>, and CarryIn<SUB>i</SUB>), as well
+as two output bits (Sum<SUB>i</SUB>, CarryOut<SUB>i</SUB>), where
+CarryIn<SUB>i+1</SUB> = CarryOut<SUB>i</SUB>. (Note: The "i"
+subscript denotes the i-th bit.)  This relationship can be seen
+when considering the full adder's truth table, shown below:
+
+<P ALIGN=CENTER><IMG SRC="FullAdder-TruthTable.gif"></P>
+
+<P ALIGN=JUSTIFY>Given the four one-valued results in the truth table,
+we can use the sum-of-products method to construct a one-bit adder
+circuit from four three-input <I>and</I> gates and one four-input
+<I>or</I> gate, as shown in Figure 3.8a.  The CarryOut calculation can
+be similarly implemented with three two-input <I>and</I> gates and one
+three-input <I>or</I> gate, as shown in Figure 3.8b.  These two circuits
+can be combined to effect a one-bit full adder with carry, as shown in
+Figure 3.8c.
+
+<P ALIGN=CENTER><IMG SRC="Figure3.8-AdderCkt1.gif"><BR><BR>
+&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+(a) &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp (b)<BR><BR>
+<P ALIGN=CENTER><IMG SRC="Figure3.8-AdderCkt2.gif"><BR><BR>(c)<BR><BR>
+<B>Figure 3.7.</B> Full adder circuit (a) sum-of-products form
+from above-listed truth table, (b) CarryOut production, and
+(c) one-bit full adder with carry - 
+adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>Recalling the symbol for the one-bit adder, we can add an
+addition operation to the one-bit ALU shown in Figure 3.6.  This is done
+by putting two control lines on the output mux, and by having an
+additional control line that inverts the <I>b</I> input (shown as "Binvert")
+in Figure 3.9).  
+
+<P ALIGN=CENTER><IMG SRC="Figure3.9-ALUdesign2.gif"><BR><BR> (a) &nbsp
+&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp (b)<BR><BR> <B>Figure
+3.9.</B> One-bit ALU with three operations: <I>and</I>, <I>or</I>, and
+addition: (a) Least significant bit, (b) Remaining bits - adapted from
+[Maf01].</P>
+
+<H4>3.2.3. 32-bit ALU Design</H4>
+
+<P ALIGN=JUSTIFY>The final implementation of the preceding technique
+is in a 32-bit ALU that incorporates the <I>and</I>, <I>or</I>, and
+addition operations.  The 32-bit ALU can be simply constructed from
+the one-bit ALU by chaining the carry bits, such that
+CarryIn<SUB>i+1</SUB> = CarryOut<SUB>i</SUB>, as shown in Figure 3.10.
+
+<P ALIGN=CENTER><IMG SRC="Figure3.10-ALUdesign3.gif"><BR><BR><B>Figure
+3.10.</B> 32-bit ALU with three operations: <I>and</I>, <I>or</I>, and
+addition - adapted from 
+[Maf01].</P>
+
+<P ALIGN=JUSTIFY>This yields a composite ALU with two 32-bit input
+vectors <B>a</B> and <B>b</B>, whose i-th bit is denoted by
+<B>a</B><SUB>i</SUB> and <B>b</B><SUB>i</SUB>, where i = 0..31.  The
+result is also a 32-bit vector, and there are two control buses - one
+for Binvert, and one for selecting the operation (using the mux shown
+in Figure 3.9).  There is one CarryOut bit (at the bottom of Figure
+3.10), and no CarryIn.
+
+<P ALIGN=JUSTIFY>We next examine the MIPS ALU and how it supports
+operations such as shifting and branching.
+
+<H4>3.2.4. MIPS ALU Design</H4>
+
+<P ALIGN=JUSTIFY>We begin by assuming that we have the generic one-bit
+ALU designed in Sections 3.2.1-3.2.3, and shown below:
+
+<P ALIGN=CENTER><IMG SRC="MIPS-ALUdesign3.gif"></P>
+
+<P ALIGN=JUSTIFY>Here, the <I>Bnegate</I> input is the same as the
+<I>Binvert</I> input in Figure 3.9, and we assume that we have three
+control inputs to the mux whose control line configuration is
+associated with an operation, as follows:
+
+<P ALIGN=CENTER><IMG SRC="MIPS-ALUcontrol3.gif"></P>
+
+<P ALIGN=JUSTIFY><B>3.2.4.1. Support for the <CODE>slt</CODE>
+Instruction.</B> The <CODE>slt</CODE> instruction (set on less-than)
+has the following format:
+
+<P ALIGN=CENTER><CODE><B>slt rd, rs, rt</B></CODE></P>
+
+<P ALIGN=JUSTIFY>where rd = 1 if rs < rt, and rd = 0 otherwise.
+
+<P ALIGN=JUSTIFY>Observe that the inputs rs and rt can represent high-level
+language input variables A and B.  Thus, we have the following implication:
+
+<P ALIGN=CENTER>A < B => A - B < 0 ,</P>
+
+<P ALIGN=JUSTIFY>which is implemented as follows:
+
+<P><UL><P><B>Step 1.</B> Perform subtraction using negation and a full adder
+
+<P>       <B>Step 2.</B> Check most significant bit (sign bit)
+
+<P>       <B>Step 3.</B> Sign bit tells us whether or not A < B
+</UL>
+
+<P ALIGN=JUSTIFY>To implement <CODE>slt</CODE>, we need (a) new input
+line called <I>Less</I> that goes directly to the mux, and (b) a new
+control code (111) to select the <CODE>slt</CODE> operation.
+Unfortunately, the result for <CODE>slt</CODE> cannot be taken
+directly as the output from the adder.  Instead, we need a new output
+line called <I>Set</I> that is used only for the <CODE>slt</CODE>
+instruction.  Overflow detection logic is also associated with this
+bit.  The additional logic that supports <CODE>slt</CODE> is shown in
+Figure 3.11.
+
+<P ALIGN=CENTER><IMG SRC="Figure3.11-ALU-slt.gif"><BR><BR><B>Figure
+3.11.</B> One-bit ALU with additional logic for <I>slt</I> operation -
+adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>Thus, for a 32-bit ALU, the additional cost of the
+<CODE>slt</CODE> instruction is (a) augmentation of each of 32 muxes
+to have three control lines instead of two, (b) augmentation of each
+of 32 one-bit ALU's control signal structure to have an additional
+(<I>Less</I>) input, and (c) the addition of overflow detection
+circuitry, a <I>Set</I> output, and an <I>xor</I> gate on the output
+of the sign bit.
+
+<P ALIGN=JUSTIFY><B>3.2.4.2. Support for the <CODE>bne</CODE>
+Instruction.</B> Recall the branch-on-not-equal instruction <CODE>bne
+r1, r2, Label</CODE>, where r1 and r2 denote registers and Label is a
+branch target label or address.  To implement <CODE>bne</CODE>, we 
+observe that the following implication holds: 
+
+<P ALIGN=CENTER>A - B = 0 => A = B .</P>
+
+<P ALIGN=JUSTIFY>then add hardware to test if the comparison between A
+and B implemented as (A - B) is zero.  Again, this can be done using
+negation and the full adder that we have already designed as part of
+the ALU.  The additional step is to <I>or</I> all 32 results from each
+of the one-bit ALUs, then invert the output of the <I>or</I>
+operation.  Thus, if all 32 bits from the one-bit full adders are
+zero, then the output of the <I>or</I> gate will be zero (inverted, it
+will be one).  Otherwise, the output of the <I>or</I> gate wil be one
+(inverted, it will be zero).  We also need to consider A - B, to see
+if there is overflow when A = 0.  A block diagram of the hardware
+modification is shown in Figure 3.12.
+
+<P ALIGN=CENTER><IMG SRC="Figure3.12-ALU-bne.gif"><BR><BR><B>Figure
+3.12.</B> 32-bit ALU with additional logic to support <I>bne</I> and
+<I>slt</I> instructions - adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>Here, the additional hardware involves 32 separate
+output lines from the 342 one-bit adders, as well as a cascade of
+<I>or</I> gates to implement a 32-input <I>nor</I> gate (which doesn't
+exist in practice, due to excessive fan-in requirement).
+
+<P ALIGN=JUSTIFY><B>3.2.4.3. Support for Shift Instructions.</B>
+Considering the <CODE>sll</CODE>, <CODE>srl</CODE>, and <CODE>sra</CODE>
+instructions, these are supported in the ALU under design by adding a
+data line for the shifter (both left and right).  However, the shifters
+are much more easily implemented at the transistor level (e.g., outside
+the ALU) rather than trying to fit more circuitry onto the ALU itself.
+
+<P ALIGN=JUSTIFY>In order to implement a shifter external to the ALU,
+we consider the design of a <I>barrel shifter</I>, shown schematically
+in Figure 3.13.  Here, the closed siwtch pattern, denoted by black
+filled circles, is controlled by the CPU through control lines to a mux
+or decoder.  This allows data line x<SUB>i</SUB> to be sent to 
+output x<SUB>j</SUB>, where i and j can be unequal.  
+
+<P ALIGN=CENTER><IMG SRC="Figure3.13-BarrelShifter.gif"><BR><BR><B>Figure
+3.13.</B> Four bit barrel shifter, where "x >> 1" denotes a shift
+amount greater than one - adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>This type of N-bit shifter is well understood and
+easy to construct, but has space complexity of <B>O</B>(N<SUP>2</SUP>).
+
+<P ALIGN=JUSTIFY><B>3.2.4.4. Support for Immediate Instructions.</B> In
+the MIPS immediate instruction formats, the first input to the ALU is
+the first register (we'll call it <I>rs</I>) in the immediate command,
+while the second input is either data from a register <I>rt</I> or a
+zero or sign-extended constant (immediate).  To support this type of
+instruction, we need to add a mux at the second input of the ALU, as
+shown in Figure 3.14.  This allows us to select whether <I>rt</I> or
+the sign-extended immediate is input to the ALU. 
+
+<P ALIGN=CENTER><IMG SRC="Figure3.14-ALUimmediate.gif"><BR><BR><B>Figure
+3.14.</B> Supporting immediate instructions on a MIPS ALU design, where
+IR denotes the instruction register, and (/<SUP>16</SUP>) denotes a
+16-bit parallel bus - adapted from [Maf01].</P>
+
+<H4>3.2.5. ALU Performance Issues</H4>
+
+<P ALIGN=JUSTIFY>When estimating or measuring ALU performance, one
+wonders if a 32-bit ALU is as fast as a 1-bit ALU - what is the degree
+of parallelism, and do all operations execute in parallel?  In
+practice, some operations on N-bit operands (e.g., addition with
+sequential propagation of carries) take <B>O</B>(N) time.  Other
+operations, such as bitwise logical operations, take <B>O</B>(1) time.
+Since addition can be implemented in a variety of ways, each with a
+certain level of parallelism, it is wise to consider the possibility
+of a full adder being a computational bottleneck in a simple ALU.
+
+<P ALIGN=JUSTIFY>We previously discussed the ripple-carry adder
+(Figure 3.10) that propagates the carry bit from stage i to stage i+1.
+It is readily seen that, for an N-bit input, <B>O</B>(N) time is
+required to propagate the carry to the most significant bit.  In
+contrast, the fastest N-bit adder uses <B>O</B>(log<SUB>2</SUB>N)
+stages in a tree-structured configuration with N-1 one-bit adders.
+Thus, the complexity of this technique is <B>O</B>(log<SUB>2</SUB>N)
+work.  In a sequential model of computation, this translates to
+<B>O</B>(log<SUB>2</SUB>N) time.  If one is adding smaller numbers
+(e.g., up to 10-bit integers with current memory technology), then a
+<I>lookup table</I> can be used that (1) forms a memory address A by
+concatenating binary representations of the two operands, and (2)
+produces a result stored in memory that is accessed using A.  This
+takes <B>O</B>(1) time, that is dependent upon memory bandwidth.
+
+<P ALIGN=JUSTIFY>An intermediate approach between these extremes is to
+use a <I>carry-lookahead adder</I> (CLA).  Suppose we do not know the value
+of the carry-in bit (which is usually the case).  We can express the
+generation (g) of a carry bit for the i-th position of two operands
+<I>a</I> and <I>b</I>, as follows:
+
+<P ALIGN=CENTER>g<SUB>i</SUB> = a<SUB>i</SUB> b<SUB>i</SUB> ,</P>
+
+<P ALIGN=JUSTIFY>where the i-th bits of <I>a</I> and <I>b</I> are
+<I>and</I>-ed.  Similarly, the propagated carry is expressed as:
+
+<P ALIGN=CENTER>p<SUB>i</SUB> = a<SUB>i</SUB> + b<SUB>i</SUB> ,</P>
+
+<P ALIGN=JUSTIFY>where the i-th bits of <I>a</I> and <I>b</I> are
+<I>or</I>-ed.  This allows us to recursively express the carry bits 
+in terms of the carry-in c<SUB>0</SUB>, as follows:
+
+<P ALIGN=CENTER><IMG SRC="MIPS-carrylookahead.gif"></P>
+
+<P ALIGN=JUSTIFY>Did we get rid of the ripple?  (Well, sort of...)  What
+we did was transform the work involved in carry propagation from the
+adder circuitry to a large equation for c<SUB>N</SUB>.  However, this
+equation must still be computed in hardware.  (<I>Lesson</I>: In
+computing, you don't get much for free.)
+
+<P ALIGN=JUSTIFY>Unfortunately, it is prohibitively costly to build a
+CLA circuit for operands as large as 16 bits.  Instead, we can use the
+CLA principle to create a two-tiered circuit, for example, at the
+bottom level an array of four 4-bit full adders (economical to construct),
+connected at the top level by a CLA, as shown below:
+
+<P ALIGN=CENTER><IMG SRC="MIPS-carrylookahead2.gif"></P>
+
+<P ALIGN=JUSTIFY>Using a two-level CLA architecture, where lower-
+(upper-)case g and p denote the first (second) level generates and
+carries, we have the following equations:
+
+<UL><UL>
+<P ALIGN=JUSTIFY>P<SUB>0</SUB> = p<SUB>3</SUB> + p<SUB>2</SUB> + p<SUB>1</SUB> + p<SUB>0</SUB> <BR>
+P<SUB>1</SUB> = p<SUB>7</SUB> + p<SUB>6</SUB> + p<SUB>5</SUB> + p<SUB>4</SUB> <BR>
+P<SUB>2</SUB> = p<SUB>11</SUB> + p<SUB>10</SUB> + p<SUB>9</SUB> + p<SUB>8</SUB> <BR>
+P<SUB>3</SUB> = p<SUB>15</SUB> + p<SUB>14</SUB> + p<SUB>13</SUB> + p<SUB>12</SUB> <BR><BR>
+
+G<SUB>0</SUB> = g<SUB>3</SUB> + p<SUB>3</SUB>g<SUB>2</SUB> + p<SUB>3</SUB>p<SUB>2</SUB>g<SUB>1</SUB> + p<SUB>3</SUB>p<SUB>2</SUB>p<SUB>1</SUB>g<SUB>0</SUB><BR>
+
+G<SUB>1</SUB> = g<SUB>7</SUB> + p<SUB>7</SUB>g<SUB>6</SUB> + p<SUB>7</SUB>p<SUB>6</SUB>g<SUB>5</SUB> + p<SUB>7</SUB>p<SUB>6</SUB>p<SUB>5</SUB>g<SUB>4</SUB><BR>
+
+G<SUB>2</SUB> = g<SUB>11</SUB> + p<SUB>11</SUB>g<SUB>10</SUB> + p<SUB>11</SUB>p<SUB>10</SUB>g<SUB>9</SUB> + p<SUB>11</SUB>p<SUB>10</SUB>p<SUB>9</SUB>g<SUB>8</SUB><BR>
+
+G<SUB>3</SUB> = g<SUB>15</SUB> + p<SUB>15</SUB>g<SUB>14</SUB> + p<SUB>15</SUB>p<SUB>14</SUB>g<SUB>13</SUB> + p<SUB>15</SUB>p<SUB>14</SUB>p<SUB>13</SUB>g<SUB>12</SUB><BR>
+</UL></UL>
+
+<P ALIGN=JUSTIFY>Assuming that <I>and</I> as well as <I>or</I> gates
+have the same propagation delay, comparative analysis of the ripple
+carry vs. carry lookahead adders reveals that the total time to
+compute a CLA result is the summation of all gate delays along the
+longest path through the CLA.  In the case of the 16-bit adder
+exemplified above, the CarryOut signals c<SUB>16</SUB> and
+C<SUB>4</SUB> define the longest path.  For the ripple carry adder,
+this path has length 2(16) = 32.  
+
+<P ALIGN=JUSTIFY>For the two-level CLA, we get two levels of logic in
+terms of the architecture (P and G versus p and g).  P<SUB>i</SUB> is
+specified in one level of logic using p<SUB>i</SUB>.  G<SUB>i</SUB> is
+specified in one level of logic using p<SUB>i</SUB> and g<SUB>i</SUB>.
+Also, p<SUB>i</SUB> and g<SUB>i</SUB> each represent one level of
+logic computed in terms of inputs a<SUB>i</SUB> and b<SUB>i</SUB>.
+Thus, the CLA critical path length is 2 + 2 + 1 = 5, which means that
+two-level 16-bit CLA is 6.4 = 32/5 times faster than a 16-bit ripple
+carry adder.
+
+<P ALIGN=JUSTIFY>It is also useful to note that the logic equation
+for a one-bit adder can be expressed more simply with <I>xor</I> logic,
+for example:
+
+<P ALIGN=CENTER>A + B = A <I>xor</I> B <I>xor</I> CarryIn .</P>
+
+<P ALIGN=JUSTIFY>In some technologies, <I>xor</I> is more efficient
+than <I>and</I>/<I>or</I> gates.  Also, processors are now designed
+in CMOS technology, which allows fewer muxes (this also applies to
+the barrel shifter).  However, the design principles are similar.
+
+<H4>3.2.6. Summary</H4>
+
+<P ALIGN=JUSTIFY>We have shown that it is feasible to build an ALU to
+support the MIPS ISA.  The key idea is to use a multiplexer to select
+the output from a collection of functional units operating in
+parallel.  We can replicate a 1-bit ALU that uses this principle, with
+appropriate connections between replicates, to produce an N-bit ALU.
+
+<P ALIGN=JUSTIFY>Important things to remember about ALUs are: (a) all
+of the gates are working in parallel, (b) the speed of a gate is
+affected by the number of inputs (degree of <I>fan-in</I>), and (c)
+the speed of a circuit depends on the number of gates in the longest
+computational path through the circuit (this can vary per operation).
+Finally, we have shown that changes in architectural organization can
+improve performance, similar to better algorithms in software.
+
+
+</body>

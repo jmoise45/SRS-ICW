@@ -1,0 +1,418 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="en-us" http-equiv="Content-Language" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>ICW - Concepts</title>
+
+<script type="text/javascript" src="jquery.js"></script> 
+
+<style type="text/css">
+.header {
+	text-align: center;
+	color: #FFFFFF;
+	background-color: #000080;
+}
+
+.navigation {
+	margin-left: .5em;
+	margin-bottom: .5em;	
+}
+
+.mainContent {
+	border-style: solid;
+	border-color: #000080;
+	text-align: center;
+}
+.nav {
+	text-align: left;
+}
+
+
+
+#example5 {
+
+	float: left;	
+}
+
+	
+.expand_all,
+
+.collapse_all {	
+	cursor: pointer;
+
+}
+
+	
+.example_menu {
+
+			font-size: 90%;
+
+			list-style: none;
+
+			margin: 0;
+
+			padding: 0;
+
+			vertical-align: top;
+
+			width: 236px;
+
+		}
+
+		.example_menu ul {
+
+			display: none;
+
+			list-style: none;
+
+			margin: 0;
+
+			padding: 0;
+
+		}
+
+
+
+		#menu5 {
+
+			margin: 0;
+
+		}
+
+
+
+		#menu5 li,
+
+		.example_menu li {
+
+			background-image: none;
+
+			margin: 0;
+
+			padding: 0;
+
+		}
+
+		.example_menu ul ul {
+
+			display: block;
+
+		}
+
+		.example_menu ul ul li a {
+
+			padding-left: 20px;
+
+			width: 209px;
+
+		}
+
+		.example_menu a {
+
+			color: #000;
+
+			cursor: pointer;
+
+			display: block;
+
+			font-weight: bold;
+
+			margin-left: 0;
+
+			padding: 2px 2px 2px 17px;
+
+			width: 212px;
+
+		}
+
+		.example_menu a.expanded {
+
+			background: #000080 url('images/collapse.gif') no-repeat 3px 50%;
+			color: #FFFFFF;
+
+		}
+
+		.example_menu a.collapsed {
+
+			background: #000080 url('images/expand.gif') no-repeat 3px 50%;
+			color: #FFFFFF;
+
+		}
+
+		.example_menu a:hover {
+
+			text-decoration: none;
+
+		}
+
+		.example_menu ul a {
+
+			background: #e8e8e8;
+
+			border-top: 2px solid #fff;
+
+			color: #000;
+
+			display: block;
+
+			font-weight: normal;
+
+			padding: 2px 2px 2px 10px;
+
+			width: 219px;
+
+		}
+
+		.example_menu ul a:link {
+
+			font-weight: normal;
+
+		}
+
+		.example_menu ul a:hover {
+
+			background : #f5f5f5;
+
+			text-decoration: underline;
+
+		}
+
+		.example_menu li.active a {
+
+			background: #fff;
+
+		}
+
+		.example_menu li.active li a {
+
+			background: #e8e8e8;
+
+		}
+
+
+
+		#menu5 li.footer,
+
+		.example_menu .footer {
+
+			background: transparent url('images/footer.jpg') no-repeat 0 0;
+
+			border-top: 2px solid #fff;
+
+			height: 9px;
+
+			line-height: 15px;
+
+			margin: 0 0 10px 0;
+
+			width: 231px;
+
+		}
+
+		.example_menu .footer span {
+
+			display: none;
+
+		}
+</style>
+
+<script type="text/javascript" src="jquery.js"></script>
+
+	<script type="text/javascript">
+
+		//$(document).bind("contextmenu", function(e) {
+		//	$('#menu').css({			
+		//		top: e.pageY+'px',			
+		//		left: e.pageX+'px'		}).show();		
+		//	return false;	
+		//});	
+	
+		var webpageArray = [
+			"calc_perform_iframe.html",
+			"calc_perform2_iframe.html", 
+		]; 
+
+		function loadPage(num) {   
+			var iframe = document.getElementById("I1"); 
+			iframe.src = webpageArray[num]; 
+			return false; // mandatory!
+		}
+	
+		$(document).ready(function() {
+		
+			setTimeout(function() {
+
+
+
+				// Accordion
+
+				$('#menu5 > li > a.expanded + ul').slideToggle('medium');
+
+				$('#menu5 > li > a').click(function() {
+
+					$('#menu5 > li > a.expanded').not(this).toggleClass('expanded').toggleClass('collapsed').parent().find('> ul').slideToggle('medium');
+
+					$(this).toggleClass('expanded').toggleClass('collapsed').parent().find('> ul').slideToggle('medium');
+
+				});
+
+			}, 250);
+
+			$('#menu').click(function() {        
+				$('#menu').hide();    
+			});    
+			$(document).click(function() {       
+				$('#menu').hide();    
+			});
+			
+			// force update with initial values
+			$('#input_IC').trigger('change');
+			$('#input_IC2').trigger('change');
+		});
+		
+					
+		
+
+	</script>
+
+
+</head>
+
+<body style="font-family:Arial, Helvetica, sans-serif">
+
+	<div id="menu" style="display:none;position:absolute;background:white">	<ul>		<li>Historical Background</li>		<li>Economic Background</li>		<li>Predecessor Concepts</li>		<li>Coding Examples (if applicable)</li>		<li>Math Examples (if applicable)</li>	</ul></div>
+
+<table style="width: 100%; height: 1526px">
+	<tr>
+		<td class="header" style="height: 44px; width: 20%"><strong>
+		Concepts</strong></td>
+		<td class="header" style="height: 44px; width: 20%"><strong>ICW 
+		Workbench</strong></td>
+		<td class="header" style="height: 44px; width: 20%"><strong>
+		Supervisor</strong></td>
+		<td class="header" style="height: 44px; width: 20%"><strong>
+		Students</strong></td>
+		<td class="header" style="height: 44px; width: 20%"><strong>Mentor</strong></td>
+	</tr>
+	<tr>
+		<td valign="top" class="mainContent">
+		<div class="nav">
+
+<br />
+		<p><strong>Computer Organization (CDA3101)</strong></p>
+
+<div id="example5">
+
+
+
+		<ul id="menu5" class="example_menu">
+
+<li><a class="collapsed">Introduction</a>
+
+
+
+		</li>
+
+			<li class="footer"><span> </span></li>
+
+<li><a class="collapsed">Underlying Technology</a>
+
+		<ul>
+
+			<li><a href="#">Technology Trends</a></li>
+
+			<li><a href="#">Review of Digital Logic</a>
+
+		</ul>
+
+		</li>
+
+			<li class="footer"><span> </span></li>
+
+<li><a class="collapsed">Performance</a>
+
+		<ul>
+
+						<li><a href="#">Performance Models</a>
+
+									<ul>
+
+										<li><a href="" onclick="return loadPage(0)">Single Unit</a></li>
+										<li><a href="" onclick="return loadPage(1)">Comparative</a></li>
+
+									</ul>	
+								</li>
+
+
+						</li>
+						<li><a href="#">Performance Measurement</a></li>
+						<li><a href="#">Benchmarking</a></li>
+
+		</ul>
+
+		</li>
+
+			<li class="footer"><span> </span></li>
+<li><a class="collapsed">Datapath Design</a>
+
+		<ul>
+
+						<li><a href="#">ALU Design</a></li>
+						<li><a href="#">Arithmetic Operations</a></li>
+						<li><a href="#">Datapath Design</a></li>
+						<li><a href="#">Pipelined Datapath Design</a></li>
+						<li><a href="#">Datapath Control</a></li>
+
+		</ul>
+
+		</li>
+
+			<li class="footer"><span> </span></li>
+<li><a class="collapsed">Memory and I/O</a>
+
+		<ul>
+
+						<li><a href="#">Memory</a></li>
+						<li><a href="#">I/O Devices</a></li>
+
+		</ul>
+
+		</li>
+
+			<li class="footer"><span> </span></li>
+<li><a class="collapsed">Optimizing Performance</a>
+
+		<ul>
+
+						<li><a href="#">System Performance Analysis</a></li>
+						<li><a href="#">Parallel Computing</a></li>
+
+		</ul>
+
+		</li>
+
+			<li class="footer"><span> </span></li>
+
+		</ul>
+
+</div>
+
+	
+					</div>
+		</td>
+		<td>
+			<iframe frameborder="0" scrolling="no" id="I1" name="I1" height="100%" width="920px">
+				Your browser does not support inline frames or is currently configured not to display inline frames.
+			</iframe>
+		</td>
+	</tr>
+</table>
+
+
+
+</body>
+
+</html>

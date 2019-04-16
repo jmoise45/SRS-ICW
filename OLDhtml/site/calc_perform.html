@@ -1,0 +1,70 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="en-us" http-equiv="Content-Language" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>Performance Calculation for M</title>
+<style type="text/css">
+td {
+/*	text-align: left;*/
+	text-align: center;
+/*	text-align: right;
+	text-align: justify;*/
+}
+</style>
+</head>
+
+<body>
+<form name="performance_calc">
+<table style="width: 70px">
+	<tr>
+		<td colspan="7" style="height: 34px"><strong>
+		Performance Calculation for M<sub>1</sub></strong></td>
+	</tr>
+	<tr>
+		<td style="width: 16px">Time</td>
+		<td style="width: 16px">=</td>
+		<td>IC</td>
+		<td>x</td>
+		<td>CPI</td>
+		<td>x</td>
+		<td style="width: 192px">Clock Period</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>=</td>
+		<td><input type="text" name="input_IC_1" onchange="calcPerformance_1(input_IC_1.value, input_CPI_1.value, input_t_clock_1.value, this.form)" /></td>
+		<td> </td>
+		<td><input type="text" name="input_CPI_1" onchange="calcPerformance_1(input_IC_1.value, input_CPI_1.value, input_t_clock_1.value, this.form)" /></td>
+		<td> </td>
+		<td><input type="text" name="input_t_clock_1" onchange="calcPerformance_1(input_IC_1.value, input_CPI_1.value, input_t_clock_1.value, this.form)" /></td>
+	</tr>
+	<tr>
+		<td style="width: 16px">&nbsp;</td>
+		<td style="width: 16px">=</td>
+		<td colspan="5">
+		<input type="text" name="output_t_exe_1" style="width: 245px" /></td>
+	</tr>
+	<tr>
+		<td colspan="7">&nbsp;</td>
+	</tr>
+</table>
+
+
+<script type="text/javascript">
+	function calcPerformance_1(IC, CPI, t_clock, form)
+	{
+		var A = parseFloat(IC);
+		var B = parseFloat(CPI);
+		var C = parseFloat(t_clock);
+		
+		form.output_t_exe_1.value = A*B*C;	
+	}
+	
+</script>
+
+</body>
+
+</html>

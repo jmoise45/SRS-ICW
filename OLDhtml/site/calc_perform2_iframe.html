@@ -1,0 +1,215 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="en-us" http-equiv="Content-Language" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>Performance Calculation for M</title> <script type="text/javascript" src="jquery.js"></script> 
+
+	<script type="text/javascript">
+
+		function calcPerformance1(IC, CPI, t_clock, form)
+		{
+			var A = parseFloat(IC);
+			var B = parseFloat(CPI);
+			var C = parseFloat(t_clock);
+			
+			if (!isNaN(A))
+				$('#ic_1').html("IC = " + A + " instr");
+			else
+				$('#ic_1').html("IC = - instr");
+			if (!isNaN(B))
+				$('#cpi_1').html("CPI = " + B + " cyc/instr");
+			else
+				$('#cpi_1').html("CPI = - cyc/instr");
+			if (!isNaN(C))
+				$('#clock_1').html("Clock = " + C + " GHz");
+			else
+				$('#clock_1').html("Clock = - GHz");
+			
+			
+			form.output_t_exe1.value = A*B*C;	
+		}
+		
+		function calcPerformance2(IC, CPI, t_clock, form)
+		{
+			var A = parseFloat(IC);
+			var B = parseFloat(CPI);
+			var C = parseFloat(t_clock);
+			
+			$('#ic_2').html("IC = " + A + " instr");
+			$('#cpi_2').html("CPI = " + B + " cyc/instr");
+			$('#clock_2').html("Clock = " + C + " GHz");
+			
+			form.output_t_exe2.value = A*B*C;	
+		}
+		
+		function calcCompare(form)
+		{		var m1 = parseInt(form.output_t_exe1.value);		var m2 = parseInt(form.output_t_exe2.value);		
+
+			if (m2 < m1) 		{			form.compare_t_exe.value = "M2 IS FASTER!";		}
+			else if (m1 < m2)		{			form.compare_t_exe.value = "M1 IS FASTER!";		}		
+			else 		{			form.compare_t_exe.value = "M1 IS EQUAL TO M2!";		}
+		}
+		
+			<!-- RIGHT-CLICK MENU SCRIPT -->
+			$(document).bind("contextmenu", function(e) {		
+			$('#menu').css({			
+			top: e.pageY+'px',			
+			left: e.pageX+'px'		}).show();		
+			return false;	});		
+			$(document).ready(function() {   
+			$('#menu').click(function() {       
+			$('#menu').hide();    });    
+			$(document).click(function() {       
+			$('#menu').hide();    });});
+	</script>
+
+</head>
+
+<body>
+<div id="menu" style="display:none;position:absolute;background:white">	
+	<ul>
+		<li>
+		<b>Conceptual Background</b>
+		<ul>
+			<li><a href="#">Historical Background</a></li>		
+			<li><a href="#">Economic Background</a></li>
+		</ul>
+		</li>
+		<li><a href="#">Predecessor Concepts</a></li>		
+		<li><a href="#">Coding Examples</a> (if applicable)</li>		
+		<li><a href="#">Math Examples</a> (if applicable)</li>	
+	</ul>
+</div>
+	<table style="width: 100%; height: 425px">
+		<tr>
+			<td style="height: 46px; width: 30%">M<sub>1</sub></td>
+			<td style="height: 46px; width: 40%"></td>
+			<td style="height: 46px; width: 30%">M<sub>2</sub></td>
+		</tr>
+		<tr>
+			<td>
+			<img alt="Machine 1" height="144" src="images/machine1.png" width="135" /><table style="width: 100%">
+				<tr>
+			<td id="ic_1" style="width: 275px">IC = - instr</td>
+				</tr>
+				<tr>
+			<td id="cpi_1" style="width: 275px">CPI = - cyc/instr</td>
+				</tr>
+				<tr>
+			<td id="clock_1" style="width: 275px">Clock = - GHz</td>
+				</tr>
+			</table>
+			</td>
+			<td>
+			<style type="text/css">
+			td {
+			/*	text-align: left;*/
+				text-align: center;
+			/*	text-align: right;
+				text-align: justify;*/
+			}
+			</style>
+			<form name="performance_calc1">
+			<table style="width: 70px">
+				<tr>
+					<td colspan="7" style="height: 34px"><strong>
+					Performance Calculation for M<sub>1</sub></strong></td>
+				</tr>
+				<tr>
+					<td style="width: 16px">Time</td>
+					<td style="width: 16px">=</td>
+					<td>IC</td>
+					<td>x</td>
+					<td>CPI</td>
+					<td>x</td>
+					<td style="width: 192px">Clock Period</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>=</td>
+					<td><input type="text" name="input_IC" onchange="calcPerformance1(input_IC.value, input_CPI.value, input_t_clock.value, this.form)"  value="2,487"/></td>
+					<td> </td>
+					<td><input type="text" name="input_CPI" onchange="calcPerformance1(input_IC.value, input_CPI.value, input_t_clock.value, this.form)" value="2.6"/></td>
+					<td> </td>
+					<td><input type="text" name="input_t_clock" onchange="calcPerformance1(input_IC.value, input_CPI.value, input_t_clock.value, this.form)" value="4.6"/></td>
+				</tr>
+				<tr>
+					<td style="width: 16px">&nbsp;</td>
+					<td style="width: 16px">=</td>
+					<td colspan="5">
+					<input type="text" name="output_t_exe1"  style="width: 245px" /></td>
+				</tr>
+				<tr>
+					<td colspan="7">&nbsp;</td>
+				</tr>
+			</table>
+
+			<table style="width: 70px">
+				<tr>
+					<td colspan="7" style="height: 34px"><strong>
+					Performance Calculation for M<sub>2</sub></strong></td>
+				</tr>
+				<tr>
+					<td style="width: 16px">Time</td>
+					<td style="width: 16px">=</td>
+					<td>IC</td>
+					<td>x</td>
+					<td>CPI</td>
+					<td>x</td>
+					<td style="width: 192px">Clock Period</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>=</td>
+					<td><input type="text" name="input_IC2" onchange="calcPerformance2(input_IC2.value, input_CPI2.value, input_t_clock2.value, this.form)"  value="2,487"/></td>
+					<td> </td>
+					<td><input type="text" name="input_CPI2" onchange="calcPerformance2(input_IC2.value, input_CPI2.value, input_t_clock2.value, this.form)" value="3.8"/></td>
+					<td> </td>
+					<td><input type="text" name="input_t_clock2" onchange="calcPerformance2(input_IC2.value, input_CPI2.value, input_t_clock2.value, this.form)"  value="2.3"/></td>
+				</tr>
+				<tr>
+					<td style="width: 16px">&nbsp;</td>
+					<td style="width: 16px">=</td>
+					<td colspan="5">
+					<input type="text" name="output_t_exe2" style="width: 245px" /></td>
+				</tr>
+				<tr>
+					<td colspan="7">&nbsp;</td>
+				</tr>
+				
+				<tr>
+					<td colspan="7" style="height: 34px"><strong>
+					Comparison for M<sub>1</sub> vs. M<sub>2</sub></strong></td>
+				</tr>
+				
+				<tr>
+					<td colspan="7">
+					<button type="button" onclick="calcCompare(this.form)">Compare!</button>	
+					<input type="text" name="compare_t_exe" style="width: 245px" /></td>
+				</tr>
+				<tr>
+					<td colspan="7">&nbsp;</td>
+				</tr>
+			</table>
+
+
+			</form>
+
+			</td>
+			<td>
+			<img alt="Machine 2" height="149" src="images/machine2.png" /><table style="width: 100%">
+				<tr>
+			<td id="ic_2">IC = - instr</td>
+				</tr>
+				<tr>
+			<td id="cpi_2">CPI = - cyc/instr</td>
+				</tr>
+				<tr>
+			<td id="clock_2">Clock = - GHz</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+	</table>
+</body>

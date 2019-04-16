@@ -1,0 +1,564 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="en-us" http-equiv="Content-Language" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>Performance Calculation for M</title> <script type="text/javascript" src="Script/jquery.js"></script> 
+
+<link rel="stylesheet" type="text/css" href="Styles/shadowbox.css">
+<script type="text/javascript" src="Script/shadowbox.js"></script>
+<link rel="stylesheet" type="text/css" href="Styles/styles.css">
+<script type="text/javascript" src="Script/custom_script.js"></script> 
+
+<script type="text/javascript">
+		
+Shadowbox.init();
+	
+</script>
+
+</head>
+
+<body>
+
+
+<div id="menu">	
+	<ul>
+		<li><a rel="shadowbox" href="PDFs/Conceptual_Background.pdf"><b>Conceptual Background</b></a></li>
+		<li><a rel="shadowbox" href="PDFs/Historical_Background.pdf">Historical Background</a></li>		
+		<li><a rel="shadowbox" href="PDFs/Economic_Background.pdf">Economic Background</a></li>
+		<li><a rel="shadowbox" href="OLDhtml/video.mp4">Predecessor Concepts</a></li>		
+		<li><a rel="shadowbox" href="OLDhtml/audio.mp3">Coding Examples</a> (if applicable)</li>		
+		<li><a rel="shadowbox" href="PDFs/Math_Example.pdf">Math Examples</a> (if applicable)</li>	
+	</ul>
+</div>
+
+<A NAME=Sec3.3></A>
+<H3>3.3. Boolean Multiplication and Division </H3>
+
+<P><A HREF="PatHen-Readings.html#ExSec3.3"><B>Reading Assignments and
+Exercises</B></A>
+
+<P ALIGN=JUSTIFY>Multiplication is more complicated than addition,
+being implemented by shifting as well as addition.  Because of the
+partial products involved in most multiplication algorithms, more time
+and more circuit area is required to compute, allocate, and sum the
+partial products to obtain the multiplication result.  
+
+<H4>3.3.1. Multiplier Design</H4>
+
+<P ALIGN=JUSTIFY>We herein discuss three versions of the multiplier
+design based on the <I>pencil-and-paper algorithm for
+multiplication</I> that we all learned in grade school, which operates
+on Boolean numbers, as follows:
+
+<PRE>          Multiplicand:   0010   # Stored in register r1
+          Multiplier:   x 1101   # Stored in register r2
+          --------------------
+	  Partial Prod    0010   # No shift for LSB of Multiplier
+             "      "    0000    # 1-bit shift of zeroes <B>(can omit)</B>
+             "      "   0010     # 2-bit shift for bit 2 of Multiplier
+             "      "  0010      # 3-bit shift for bit 3 of Multiplier
+          --------------------   # Zero-fill the partial products and add
+          PRODUCT      0011010   # Sum of all partial products -> r3
+</PRE>
+
+<P ALIGN=JUSTIFY>A flowchart of this algorithm, adapted for multiplication
+of 32-bit numbers, is shown in Figure 3.15, below, together with a 
+schematic representation of a simple ALU circuit that implements this
+version of the algorithm.  Here, the multiplier and the multiplicand
+are shifted relative to each other, which is more efficient than 
+shifting the partial products alone.
+
+<P ALIGN=CENTER><IMG SRC="Figure3.15-ALUmult1alg.gif"><BR>(a)<BR>
+<IMG SRC="Figure3.15-ALUmult1ckt.gif"><BR>(b)<BR>
+<B>Figure 3.15.</B> Pencil-and-paper multiplication of 32-bit Boolean
+number representations: (a) algorithm, and (b) simple ALU circuitry -
+adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>The second version of this algorithm is shown in
+Figure 3.16.  Here, the product is shifted with respect to the
+multiplier, and the multiplicand is shifted after the product register
+has been shifted. A 64-bit register is used to store both the
+multiplicand and the product.
+
+<P ALIGN=CENTER><IMG SRC="Figure3.16-ALUmult2alg.gif"><BR>(a)<BR> <IMG
+SRC="Figure3.16-ALUmult2ckt.gif"><BR>(b)<BR> <B>Figure 3.16.</B>
+Second version of pencil-and-paper multiplication of 32-bit Boolean
+number representations: (a) algorithm, and (b) schematic diagram of
+ALU circuitry - adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>The final version puts results in the product
+register if and only if the least significant bit of the product
+produced on the previous iteration is one-valued.  The product
+register only is shifted.  This reduces by approximately 50 percent
+the amount of shifting that has to be done, which reduces time and
+hardware requirements.  The algorithm and ALU schematic diagram is
+shown in Figure 3.17.
+
+<P ALIGN=CENTER><IMG SRC="Figure3.17-ALUmult3alg.gif"><BR>(a)<BR> <IMG
+SRC="Figure3.17-ALUmult3ckt.gif"><BR>(b)<BR> <B>Figure 3.17.</B>
+Third version of pencil-and-paper multiplication of 32-bit Boolean
+number representations: (a) algorithm, and (b) schematic diagram of
+ALU circuitry - adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>Thus, we have the following shift-and-add scheme for
+multiplication:
+
+<P ALIGN=CENTER><IMG SRC="MIPSrvw-ALUmult3alg.gif"></P>
+
+<P ALIGN=JUSTIFY>The preceding algorithms and circuitry does not hold
+for signed multiplication, since the bits of the multiplier no longer
+correspond to shifts of the multiplicand.  The following example is
+illustrative:
+
+<P ALIGN=CENTER><IMG SRC="SignedMultiplnProblem1.gif"></P>
+
+<P ALIGN=JUSTIFY>A solution to this problem is Booth's Algorithm,
+whose flowchart and corresponding schematic hardware diagram are
+shown in Figure 3.18.  Here, the examination of the multiplier
+is performed with <I>lookahead</I> toward the next bit.  Depending
+on the bit configuration, the multiplicand is positively or 
+negatively signed, and the multiplier is shifted or unshifted.
+
+<P ALIGN=CENTER><IMG SRC="Figure3.18-ALUboothmul-alg.gif"><BR>(a)<BR>
+<IMG SRC="Figure3.18-ALUboothmul-ckt.gif"><BR>(b)<BR> <B>Figure
+3.18.</B> Booth's procedure for multiplication of 32-bit Boolean
+number representations: (a) algorithm, and (b) schematic diagram of
+ALU circuitry - adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>Observe that Booth's algorithm requires only the
+addition of a subtraction step and the comparison operations for
+the two-bit codes, versus the one-bit comparison in the preceding
+three algorithms.  An example of Booth's algorithm follows:
+
+<P ALIGN=CENTER><IMG SRC="ALUboothmul-alg-Ex1.gif"></P>
+
+<P ALIGN=JUSTIFY>Here N = 4 iterations of the loop are required
+to produce a product from two N = 4 digit operands.  Four shifts and
+two subtractions are required.  From the analysis of the algorithm
+shown in Figure 3.18a, it is easily seen that the maximum work for
+multiplying two N-bit numbers is given by <B>O</B>(N) shift and
+addition operations.  From this, the worst-case computation time
+can be computed given CPI for the shift and addition instructions,
+as well as cycle time of the ALU.
+
+<H4>3.3.2. Design of Arithmetic Division Hardware</H4>
+
+<P ALIGN=JUSTIFY>Division is a similar operation to multiplication,
+especially when implemented using a procedure similar to the algorithm
+shown in Figure 3.18a.  For example, consider the pencil-and-paper
+method for dividing the byte 10010011 by the nybble 1011:
+
+<P ALIGN=CENTER><IMG SRC="ALUdivide-PPalg-Ex1.gif"></P>
+
+<P>The governing equation is as follows:
+
+<P ALIGN=CENTER>Dividend = Quotient &#183 Divisor + Remainder . </P>
+
+<P ALIGN=JUSTIFY><B>3.3.2.1. Unsigned Division.</B> The
+<I>unsigned</I> division algorithm that is similar to Booth's
+algorithm is shown in Figure 3.19a, with an example shown in Figure
+3.19b.  The ALU schematic diagram in given in Figure 3.19c.  The
+analysis of the algorithm and circuit is very similar to the preceding
+discussion of Booth's algorithm.
+
+<P ALIGN=CENTER><IMG
+SRC="Figure3.19-ALUboothdivunsign-alg.gif"><BR>(a)<BR> <IMG
+SRC="Figure3.19-ALUboothdivunsign-Ex1.gif"><BR>(b)<BR> <IMG
+SRC="Figure3.19-ALUboothdivunsign-ckt.gif"><BR>(c)<BR> <B>Figure
+3.19.</B> Division of 32-bit Boolean number representations: (a)
+algorithm, (b) example using division of the unsigned integer 7 by the
+unsigned integer 3, and (c) schematic diagram of ALU circuitry -
+adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY><B>3.3.2.2. Signed Divisiion.</B> With signed
+division, we negate the quotient if the signs of the divisor and
+dividend disagree.  The remainder and the divident must have the same
+signs.  The governing equation is as follows:
+
+<P ALIGN=CENTER>Remainder = Divident - (Quotient &#183 Divisor) , </P>
+
+<P ALIGN=JUSTIFY>and the following four cases apply:
+
+<P ALIGN=CENTER><IMG SRC="ALUdivide-Signs-Ex1.gif"></P>
+
+<P ALIGN=JUSTIFY>We present the preceding division algorithm, revised for
+signed numbers, as shown in Figure 3.20a.  Four examples, corresponding
+to each of the four preceding sign permutations, are given in Figure 3.20b
+and 3.20c.  
+
+<P ALIGN=CENTER><IMG
+SRC="Figure3.20-ALUboothdivsign-alg.gif"><BR><BR>(a)<BR> <IMG
+SRC="Figure3.20-ALUboothdivsign-Ex12.gif"><BR>(b)<BR> <IMG
+SRC="Figure3.20-ALUboothdivsign-Ex34.gif"><BR>(c)<BR> <B>Figure
+3.20.</B> Division of 32-bit Boolean number representations: (a)
+algorithm, and (b,c) examples using division of +7 or -7 by the
+integer +3 or -3; adapted from [Maf01].</P>
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><FONT COLOR=BLUE><B>Self-Exercise.</B> Be able to
+trace each example shown in Figure 3.20b,c through the algorithm whose
+flowchart is given in Figure 3.20a.  Know how each part of the
+algorithm works, and why it behaves that way. <I>Hint: This exercise,
+or a part of it, is likely to be an exam question.</I></FONT>
+</BLOCKQUOTE>
+
+<P ALIGN=JUSTIFY><B>3.3.2.3. Divisiion in MIPS.</B> MIPS supports
+multiplication and division using existing hardware, primarily the ALU
+and shifter.  MIPS needs one extra hardware component - a 64-bit
+register able to support <CODE>sll</CODE> and <CODE>sra</CODE>
+instructions.  The upper (high) 32 bits of the register contains the
+remainder resulting from division.  This is moved into a register in
+the MIPS register stack (e.g., <CODE>$t0</CODE>) by the
+<CODE>mfhi</CODE> command. The lower 32 bits of the 64-bit register
+contains the quotient resulting from division.  This is moved into a
+register in the MIPS register stack by the <CODE>mflo</CODE> command.
+
+<P ALIGN=JUSTIFY>In MIPS assembly language code, signed division is
+supported by the <CODE>div</CODE> instruction and unsigned division,
+by the <CODE>divu</CODE> instruction.  MIPS hardware does not check for
+division by zero.  <I>Thus, divide-by-zero exception must be detected 
+and handled in system software</I>.  A similar comment holds for overflow
+or underflow resulting from division.
+
+<P ALIGN=JUSTIFY>Figure 3.21 illustrates the MIPS ALU that supports
+integer arithmetic operations (+,-,x,/).  
+
+<P ALIGN=CENTER><IMG
+SRC="Figure3.21-MIPSALU-arith-ops-ckt.gif"><BR><BR><B>Figure 3.21.</B> MIPS
+ALU supporting the integer arithmetic operations (+,-,x,/), adapted
+from [Maf01].</P>
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><FONT COLOR=BLUE><B>Self-Exercise.</B> Show how the
+MIPS ALU in Figure 3.21 supports the integer arithmetic operations (+,-,x,/)
+using the algorithms and hardware diagrams given thus far.  <I>Hint:
+This exercise, or a part of it, is likely to be an exam question.</I></FONT>
+</BLOCKQUOTE>
+
+<A NAME=Sec3.4></A>
+<H3>3.4. Floating Point Arithmetic</H3>
+
+<P><A HREF="PatHen-Readings.html#ExSec3.4"><B>Reading Assignments and
+Exercises</B></A>
+
+<P ALIGN=JUSTIFY>Floating point (FP) representations of decimal numbers are
+essential to scientific computation using <I>scientific notation</I>.
+The standard for floating point representation is the IEEE 754
+Standard.  In a computer, there is a tradeoff between range and
+precision - given a fixed number of binary digits (bits), precision
+can vary inversely with range.  In this section, we overview decimal
+to FP conversion, MIPS FP instructions, and how registers are used for
+FP computations.
+
+<P ALIGN=JUSTIFY>We have seen that an n-bit register can represent
+unsigned integers in the range 0 to 2<SUP>n</SUP>-1, as well as signed
+integers in the range -2<SUP>n-1</SUP> to -2<SUP>n-1</SUP>-1.  However, there are very large numbers (e.g., 3.15576 &#183 10<SUP>23</SUP>),
+very small numbers (e.g., 10<SUP>-25</SUP>), rational numbers with
+repeated digits (e.g., 2/3 = 0.666666...), irrationals such as 2<SUP>1/2</SUP>,
+and transcendental numbers such as e = 2.718..., all of which need to be
+represented in computers for scientific computation to be supported.
+
+<P ALIGN=JUSTIFY>We call the manipulation of these types of numbers
+<I>floating point arithmetic</I> because the decimal point is not
+fixed (as for integers).  In C, such variables are declared as the
+<CODE>float</CODE> datatype.
+
+<H4>3.4.1. Scientific Notation and FP Representation </H4>
+
+<P ALIGN=JUSTIFY>Scientific notation has the following configuration:
+
+<P ALIGN=CENTER><IMG SRC="MIPS-SciNotation-cfg.gif"></P>
+
+<P ALIGN=JUSTIFY>and can be in <I>normalized form</I> (mantissa has
+exactly one digit to the left of the decimal point, e.g., 2.3425 &#183 10<SUP>-19</SUP>) or <I>non-normalized form</I>. Binary scientiic notation has the folowing configuration, which corresponds to the  decimal forms:
+
+<P ALIGN=CENTER><IMG SRC="MIPS-SciNotation-cfgbin.gif"></P>
+
+<P ALIGN=JUSTIFY>Assume that we have the following <I>normal
+format</I> for scientific notation in Boolean numbers:
+
+<P ALIGN=CENTER>+1.xxxxxxx<SUB>2</SUB> &#183 w<SUP>yyyyy<SUB>2</SUB></SUP> ,</P>
+
+<P ALIGN=JUSTIFY>where "xxxxxxx" denotes the <I>significand</I> and
+"yyyyy" denotes the <I>exponent</I> and we assume that the number has
+sign S.  This implies the following 32-bit representation for FP
+numbers:
+
+<P ALIGN=CENTER><IMG SRC="MIPS-SciNotation-cfg32b.gif"></P>
+
+<P ALIGN=JUSTIFY>which can represent decimal numbers ranging from -2.0
+&#183 10<SUP>-38</SUP> to 2.0 &#183 10<SUP>38</SUP>.
+
+<H4>3.4.2 Overflow and Underflow</H4>
+
+<P ALIGN=JUSTIFY>In FP, overflow and underflow are slightly different
+than in integer numbers.  FP overflow (underflow) refers to the
+positive (negative) exponent being too large for the number of bits
+alloted to it.  This problem can be somewhat ameliorated by the use of
+<I>double precision</I>, whose format is shown as follows:
+
+<P ALIGN=CENTER><IMG SRC="MIPS-SciNotation-cfg64b.gif"></P>
+
+<P ALIGN=JUSTIFY>Here, two 32-bit words  are combined to support an
+11-bit signed exponent and a 52-bit significand.   This representation
+is declared in C using the <CODE>double</CODE> datatype, and can support
+numbers with exponents ranging from -308<SUB>10</SUB> to 308<SUB>10</SUB>.
+The primary advantage is greater precision in the mantissa.
+
+<P ALIGN=JUSTIFY>The following chart illustrates specific types of
+overflow and underflow encountered in standard FP representation:
+
+<P ALIGN=CENTER><IMG SRC="MIPS-SciNotation-ovfl1.gif"></P>
+
+<H4>3.4.3. IEEE 754 Standard</H4>
+
+<P ALIGN=JUSTIFY>Both single- and double-precision FP representations
+are supported by the IEEE 754 Standard, which is used in the vast
+majority of computers since its publication in 1980.  IEEE 754
+facilitates the porting of FP programs, and ensures minimum standards
+of quality for FP computer arithmetic.  The result is a signed
+representation - the sign bit is 1 if the FP number represented by
+IEEE754 is negative.  Otherwise, the sign is zero.  A leading value of
+1 in the significand is implicit for normalized numbers.  Thus, the
+significand, which always has a value between zero and one, occupies
+23 + 1 bits in single-precision FP and 52 + 1 bits in double
+precision.  Zero is represented by a zero significand and a zero
+exponent - there is no leading value of one in the significand.  The
+IEEE 754 representation is thus computed as:
+
+<P ALIGN=CENTER>FPnumber = (-1)<SUP>S</SUP> &#183 (1 + Significand)
+&#183 2<SUP>Exponent</SUP> .</P>
+
+<P ALIGN=JUSTIFY>As a parenthetical note, the significand can be translated
+into decimal values via the following expansion:
+
+<P ALIGN=CENTER><IMG SRC="MIPS-SciNotation-signif.gif"></P>
+
+<P ALIGN=JUSTIFY>With IEEE 754, it is possible to manipulate FP
+numbers without having special-purpose FP hardware.  For example,
+consider the sorting of FP numbers.  IEEE 754 facilitates breaking FP
+numbers up into three parts (sign, significant, exponent).  The
+numbers to be sorted are ordered first according to sign (negative &lt
+positive), second according to exponent (larger exponent => larger number),
+and third according to significand (when one has at least two numbers with
+the same exponents).
+
+<P ALIGN=JUSTIFY>Another issue of interest in IEEE 754 is <I>biased
+notation</I> for exponents.  Observe that twos complement notation
+does not work for exponents: the largest negative (positive) exponent
+is 00000001<SUB>2</SUB> (11111111<SUB>2</SUB>).  Thus, we must add a
+<I>bias term</I> to the exponent to center the range of exponents on
+the bias number, which is then equated to zero.  The bias term is 127
+(1023) for the IEEE 754 single-precision (double-precision)
+representation.  This implies that
+
+<P ALIGN=CENTER>FPnumber = (-1)<SUP>S</SUP> &#183 (1 + Significand)
+&#183 2<SUP>(Exponent - Bias)</SUP> .</P>
+
+<P ALIGN=JUSTIFY>As a result, we have the following example of binary
+to decimal floating point conversion:
+
+<P ALIGN=CENTER><IMG SRC="MIPS-SciNotation-2to10cnv.gif"></P>
+
+<P ALIGN=JUSTIFY>Decimal-to-binary FP conversion is somewhat more
+difficult.  Three cases pertain: (1) the decimal number can be
+expressed as a fraction n/d where d is a power of two; (2) the decimal
+number has repeated digits (e.g., 0.33333); or (3) the decimal number
+does not fit either Case 1 or Case 2.  In Case 1, one selects the
+exponent as -log<SUB>2</SUB>(d), and converts n to binary notation.
+Case 3 is more difficult, and will not be discussed here.  Case 2 is
+exemplified in the following diagram:
+
+<P ALIGN=CENTER><IMG SRC="MIPS-SciNotation-10to2cnv.gif"></P>
+
+<P ALIGN=JUSTIFY>Here, the significand is 101 0101 0101 0101 0101 0101,
+the sign is negative (representation = 1), and the exponent is computed
+as 1 + 127 = 128<SUB>10</SUB> = 1000 0000<SUB>2</SUB>.  This yields
+the following representation in IEEE 754 standard notation:
+
+<P ALIGN=CENTER><IMG SRC="MIPS-SciNotation-10to2cnv2.gif"></P>
+
+<P ALIGN=JUSTIFY>The following table summarizes special values that
+can be represented using the IEEE 754 standard.
+
+<P ALIGN=CENTER><B>Table 3.1.</B> Special values in the IEEE 754 standard.<BR><BR><IMG SRC="MIPS-SciNotation-SpecialVals.gif"></P>
+
+<P ALIGN=JUSTIFY>Of particular interest in the preceding table is the
+<I>NaN</I> (not a number) representation.  For example, when taking
+the square root of a negative number, or when dividing by zero, we
+encounter operations that are undefined in the arithmetic operations
+over real numbers.  These results are called NaNs and are represented
+with an exponent of 255 and a zero significand.  NaNs can help with
+debugging, but they contaminate calculations (e.g., NaN + <I>x</I> =
+NaN).  The recommended approach to NaNs, especially for software
+designers or engineers early in their respective careers, is not to
+use NaNs.
+
+<P ALIGN=JUSTIFY>Another variant of FP representation is denormalized
+numbers, also called <I>denorms</I>.  These number representations
+were developed to remedy the problem of a gap among representable
+FP numbers near zero.  For example, the smallest positive number is
+x = 1.00... &#183 2<SUP>-127</SUP>, and the second smallest positive
+number is y = 1.001<SUB>2</SUB> &#183 2<SUP>-127</SUP> = 2<SUP>-127</SUP> +
+2<SUP>-150</SUP>.  This implies that the gap between zero and x is
+2<SUP>-127</SUP> and that the gap between x and y is 2<SUP>-150</SUP>,
+as shown in Figure 3.22a.  
+
+<P ALIGN=CENTER><IMG SRC="MIPS-SciNotation-denorms1.gif">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG SRC="MIPS-SciNotation-denorms2.gif"><BR><BR>(a)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(b)<BR><BR><B>Figure 3.22.</B> Denorms: (a) Gap between zero and 2<SUP>-127</SUP>, and (b) Denorms close this gap - adapted from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>This situation can be remedied by omitting the leading one
+from the significand, thereby <I>denormalizing</I> the FP representation.  
+The smallest positive number is now the denorm 0.0...1 &#183 2<SUP>-127</SUP>
+= 2<SUP>-150</SUP>, and the second smallest positive number is
+2<SUP>-149</SUP>.
+
+<H4>3.4.4. FP Arithmetic</H4>
+
+<P ALIGN=JUSTIFY>Applying mathematical operations to real numbers
+implies that some error will occur due to the floating point
+representation.  This is due to the fact that FP addition and
+subtraction are not associative, because the FP representation is only
+an approximation to a real number.
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><B>Example 1.</B> Using decimal numbers for clarity,
+let x = -1.5 &#183 10<SUP>38</SUP>, y = 1.5 &#183 10<SUP>38</SUP>, and
+z = 1.0.  With floating point representation, we have:
+
+<P ALIGN=CENTER>x + (y + z) = -1.5 &#183 10<SUP>38</SUP> + (1.5 &#183 10<SUP>38</SUP> + 1.0) = 0.0 </P>
+<P>and
+<P ALIGN=CENTER>
+(x + y) + z = (-1.5 &#183 10<SUP>38</SUP> + 1.5 &#183 10<SUP>38</SUP>) + 1.0 = 1.0 </P>
+
+<P ALIGN=JUSTIFY>The difference occurs because the value 1.0 cannot be
+distinguished in the significand of 1.5 &#183 10<SUP>38</SUP> due to
+insufficient precision (number of digits) of the significand in the FP
+representation of these numbers (IEEE 754 assumed).
+</BLOCKQUOTE>
+
+<P ALIGN=JUSTIFY>The preceding example leads to several implementational
+issues in FP arithmetic.  Firstly, <I>rounding</I> occurs when performing
+math on real numbers, due to lack of sufficient precision.  For example,
+when multiplying two N-bit numbers, a 2N-bit product results.  Since only
+the upper N bits of the 2N bit product are retained, the lower N bits are
+<I>truncated</I>.  This is also called <I>rounding toward zero</I>.  
+
+<P ALIGN=JUSTIFY>Another type of rounding is called <I>rounding to
+infinity</I>.  Here, if rounding toward +infinity, then we always
+round up.  For example, 2.001 is rounded up to 3, -2.001 is rounded up
+to 2.  Conversely, if rounding toward -infinity, then we always round
+down.  For example, 1.999 is rounded down to 1, -1.999 is rounded down
+to -2.  There is a more familiar technique, for example, where 3.7 is
+rounded to 4, and 3.1 is rounded to 3.  In this case, we resolve
+rounding from <I>n</I>.5 to the nearest even number, e.g.,
+3.5 is rounded to 4, and -2.5 is rounded to 2.
+
+<P ALIGN=JUSTIFY>A second implementational issue in FP arithmetic is
+addition and subtraction of numbers that have nonzero significands and
+exponents.  Unlike integer addition, we can't just add the significands.
+Instead, one must:
+
+<OL><P><LI>Denormalize the operands and shift one of the operands to
+           make the exponents of both numbers equal (we denote the
+           exponent by E).
+
+<P>    <LI>Add or subtract the significands to get the resulting significand.
+
+<P>    <LI>Normalize the resulting significand and change E to
+           reflect any shifts incurred by normalization.
+</OL>
+
+<P ALIGN=JUSTIFY>We will review several approaches to floating point
+operations in MIPS in the following section.
+
+<A NAME=Sec3.5></A>
+<H3>3.5. Floating Point in MIPS</H3>
+
+<P><A HREF="PatHen-Readings.html#ExSec3.5"><B>Reading Assignments and
+Exercises</B></A>
+
+<P ALIGN=JUSTIFY>The MIPS FP architecture uses separate floating point
+insturctions for IEEE 754 single and double precision.  Single
+precision uses <CODE>add.s</CODE>, <CODE>sub.s</CODE>,
+<CODE>mul.s</CODE>, and <CODE>div.s</CODE>, whereas double precision
+instructions are <CODE>add.d</CODE>, <CODE>sub.d</CODE>,
+<CODE>mul.d</CODE>, and <CODE>div.d</CODE>.  These instructions are
+much more complicated than their integer counterparts.  Problems with
+implementing FP arithmetic include inefficiencies in having different
+instructions that take significantly different times to execute (e.g.,
+division versus addition).  Also, FP operations require much more
+hardware than integer operations.
+
+<P ALIGN=JUSTIFY>Thus, in the spirit of RISC design philosophy, we
+note that (a) a particular datum is not likely to change its datatype
+within a program, and (b) some types of programs do not require FP
+computation.  Thus, in 1990, the MIPS designers decided to separate
+the FP computations from the remainder of the ALU operations, and use
+a separate chip for FP (called the <I>coprocessor</I>).  A MIPS
+coprocessor contains 32 32-bit registers designated as
+<CODE>$f0</CODE>, <CODE>$f1</CODE>, ..., etc. Most of these registers
+are specified in the <CODE>.s</CODE> and <CODE>.d</CODE> instructions.
+Double precision operands are stored in <I>register pairs</I> (e.g.,
+<CODE>$f0,$f1</CODE> up to <CODE>$f30,$f31</CODE>).  
+
+<P ALIGN=JUSTIFY>The CPU thus handles all the regular computation,
+while the coprocessor handles the floating point operations.  Special
+instructions are required to move data between the coprocessor(s) and
+CPU (e.g., <CODE>mfc0</CODE>, <CODE>mtc0</CODE>, <CODE>mfc0</CODE>,
+<CODE>mtc0</CODE>, etc.), where c<I>n</I> refers to coprocessor
+#<I>n</I>.  Similarly, special I/O operations are required to load and
+store data between the coprocessor and memory (e.g.,
+<CODE>lwc0</CODE>, <CODE>swc0</CODE>, <CODE>lwc1</CODE>,
+<CODE>swc1</CODE>, etc.)
+
+<P ALIGN=JUSTIFY>FP coprocessors require very complex hardware, as shown
+in Figure 3.23, which portrays only the hardware required for addition.
+
+<P ALIGN=CENTER><IMG
+SRC="Figure3.23-MIPS-FP-aluADD.gif"><BR><BR><B>Figure 3.23.</B> MIPS
+ALU supporting floating point addition, adapted
+from [Maf01].</P>
+
+<P ALIGN=JUSTIFY>The use of floating point operations in MIPS assembly
+code is described in the following simple example, which implements a
+C program designed to convert Fahrenheit temperatures to Celsius.
+
+<P ALIGN=CENTER><IMG SRC="MIPS-FP-ALU-Ex1.gif"></P>
+
+<P ALIGN=JUSTIFY>Here, we assume that there is a coprocessor c1
+connected to the CPU.  The values 5.0 and 9.0 are respectively loaded
+into registers <CODE>$f16</CODE> and <CODE>$f18</CODE> using the
+<CODE>lwc1</CODE> instruction with the global pointer as base address
+and the variables <CODE>const5</CODE> and <CODE>const9</CODE> as
+offsets.  The single precision division operation puts the quotient of
+5.0/9.0 into <CODE>$f16</CODE>, and the remainder of the computation
+is straightforward.  As in all MIPS procedure calls, the
+<CODE>jr</CODE> instruction returns control to the address stored in
+the <CODE>$ra</CODE> register.
+
+<P ALIGN=JUSTIFY>
+
+</BLOCKQUOTE>
+
+<P><HR><P>
+<BLOCKQUOTE>
+<H3>References</H3>
+
+<P ALIGN=JUSTIFY>[Maf01] Mafla, E. <I>Course Notes, CDA3101</I>, at URL <CODE>http://www.cise.ufl.edu/~emafla/</CODE> (as-of 11 Apr 2001).
+
+<P ALIGN=JUSTIFY>[Pat98] Patterson, D.A. and
+J.L. Hennesey. <I>Computer Organization and Design: The
+Hardware/Software Interface</I>, Second Edition, San Francisco, CA:
+Morgan Kaufman (1998).
+
+
+</BLOCKQUOTE>
+
+<P><HR>
+
+</body>
+

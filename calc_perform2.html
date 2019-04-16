@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="en-us" http-equiv="Content-Language" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<title>Performance Calculation for M</title> <script type="text/javascript" src="Script/jquery.js"></script> 
+
+<link rel="stylesheet" type="text/css" href="Styles/shadowbox.css">
+<script type="text/javascript" src="Script/shadowbox.js"></script>
+<link rel="stylesheet" type="text/css" href="Styles/styles.css">
+<script type="text/javascript" src="Script/custom_script.js"></script> 
+
+<script type="text/javascript">
+		
+Shadowbox.init();
+	
+</script>
+
+</head>
+
+<body>
+
+<div id="menu">	
+	<ul>
+		<li><a rel="shadowbox" href="PDFs/Conceptual_Background.pdf"><b>Conceptual Background</b></a></li>
+		<li><a rel="shadowbox" href="PDFs/Historical_Background.pdf">Historical Background</a></li>		
+		<li><a rel="shadowbox" href="PDFs/Economic_Background.pdf">Economic Background</a></li>
+		<li><a rel="shadowbox" href="OLDhtml/video.mp4">Predecessor Concepts</a></li>		
+		<li><a rel="shadowbox" href="OLDhtml/audio.mp3">Coding Examples</a> (if applicable)</li>		
+		<li><a rel="shadowbox" href="PDFs/Math_Example.pdf">Math Examples</a> (if applicable)</li>	
+	</ul>
+</div>
+
+
+<form name="performance_calc1">
+
+<div style="float: left; text-align: center; margin-top: 50px;">
+<strong>M<sub>1</sub></strong><br />
+<img alt="Machine 1" height="144" src="Images/machine1.png"  /><table style="width: 200px">
+					<tr>
+				<td id="ic_1" style="width: 275px">IC = - instr</td>
+				</tr>
+				<tr>
+			<td id="cpi_1" style="width: 275px">CPI = - cyc/instr</td>
+				</tr>
+				<tr>
+			<td id="clock_1" style="width: 275px">Clock = - GHz</td>
+					</tr>
+				</table>
+
+</div>
+
+<div style="float: left; margin-top: 100px;">
+
+<table style="width: 70px">
+	<tr>
+		<td colspan="7" style="height: 34px"><strong>
+		Performance Calculation for M<sub>1</sub></strong></td>
+	</tr>
+	<tr>
+		<td style="width: 16px">Time</td>
+		<td style="width: 16px">=</td>
+		<td>IC</td>
+		<td>x</td>
+		<td>CPI</td>
+		<td>x</td>
+		<td style="width: 192px">Clock Period</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>=</td>
+		<td><input type="text" name="input_IC_1" value="2487" /></td>
+		<td> </td>
+		<td><input type="text" name="input_CPI_1" value="2.6" /></td>
+		<td> </td>
+		<td><input type="text" name="input_t_clock_1" value="4.6" /></td>
+	
+		
+	</tr>
+	<tr>
+		<td style="width: 16px">&nbsp;</td>
+		<td style="width: 16px">=</td>
+		<td colspan="5">
+		<input type="text" name="output_t_exe1"  style="width: 245px" /></td>
+	</tr>
+	<tr>
+		<td colspan="7"><button type="button" onclick="calcPerformance1(input_IC_1.value, input_CPI_1.value, input_t_clock_1.value, this.form)">Calculate</button></td>
+	</tr>
+	<tr>
+		<td colspan="7">&nbsp;</td>
+	</tr>
+</table>
+
+</div>
+
+<div style="clear: left; padding-top: 15px;"><hr /></div>
+
+<div style="float: left; clear: left; text-align: center; margin-top: 25px;">
+<strong>M<sub>2</sub></strong><br />
+<img alt="Machine 2" height="144" src="Images/machine2.png"  /><table style="width: 200px">
+					<tr>
+				<td id="ic_2">IC = - instr</td>
+				</tr>
+				<tr>
+			<td id="cpi_2">CPI = - cyc/instr</td>
+				</tr>
+				<tr>
+			<td id="clock_2">Clock = - GHz</td>
+
+					</tr>
+				</table>
+
+</div>
+
+<div style=" float: left;  margin-top: 100px;">
+
+<table style="width: 70px">
+	<tr>
+		<td colspan="7" style="height: 34px"><strong>
+		Performance Calculation for M<sub>2</sub></strong></td>
+	</tr>
+	<tr>
+		<td style="width: 16px">Time</td>
+		<td style="width: 16px">=</td>
+		<td>IC</td>
+		<td>x</td>
+		<td>CPI</td>
+		<td>x</td>
+		<td style="width: 192px">Clock Period</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td>=</td>
+		<td><input type="text" name="input_IC2" value="2487" /></td>
+		<td> </td>
+		<td><input type="text" name="input_CPI2" value="3.8" /></td>
+		<td> </td>
+		<td><input type="text" name="input_t_clock2" value="2.3" /></td>
+	</tr>
+	<tr>
+		<td style="width: 16px">&nbsp;</td>
+		<td style="width: 16px">=</td>
+		<td colspan="5">
+		<input type="text" name="output_t_exe2" style="width: 245px" /></td>
+	</tr>
+	<tr>
+		<td colspan="7"><button type="button" onclick="calcPerformance2(input_IC2.value, input_CPI2.value, input_t_clock2.value, this.form)">Calculate</button></td>
+	</tr>
+	<tr>
+		<td colspan="7">&nbsp;</td>
+	</tr>
+	
+	</table>
+</div>
+
+<div style="clear: left; padding-top: 15px;"><hr /></div>
+
+<div style="clear: left; padding-top: 20px; text-align: center; width: 800px;">
+<strong>Comparison for M<sub>1</sub> vs. M<sub>2</sub></strong><br />
+			
+		<input type="text" name="compare_t_exe" style="width: 245px" /><br />
+
+<button type="button" onclick="calcCompare(this.form)">Compare!</button>
+
+</div>
+</form>
+
+
+
+
+
+
+</body>
+
+</html>

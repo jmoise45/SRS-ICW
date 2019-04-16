@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="myxml_test02.xsl"?>
+<doc>
+  <figure>
+    <photo image="IMG01.jpg"/>
+    <caption>C'ieng Tamlung of C'ieng Mai</caption>
+  </figure>
+</doc>
+

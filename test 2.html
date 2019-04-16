@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Testing</title>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+  <div style="width:50%;min-height:100px;color:lightblue;background-color:green;text-align:center;">
+    <form id="addbtn" style="display:none;margin-right:10px;margin-top:10px;float:right;"><input onclick="addText()" type="button" name="Add" value="Add"></form>
+    <form id="editbtn" style="margin-right:10px;margin-top:10px;float:right;"><input onclick="editText()" type="button" name="Edit" value="Edit"></form>
+    <form id="canbtn" style="display:none;margin-right:10px;margin-top:10px;float:right;"><input onclick="cancelText()" type="button" name="Cancel" value="Cancel"></form>
+    <div style="margin-left:20px;clear:both;" id="canvas"><p>This is the canvas!</p></div>
+    <form id="canvas-form" style="display:none; margin-top:10px;">
+      <textarea name="name" id="text" rows="16" cols="40" style="margin-bottom:10px;"></textarea>
+    </form>
+  </div>
+  <script>
+    function addText() {
+      let addbtn = document.getElementById("addbtn");
+      let editbtn = document.getElementById("editbtn");
+      let text = document.getElementById("text");
+      let form = document.getElementById("canvas-form");
+      let canbtn = document.getElementById("canbtn");
+      alert(text.value);
+      let canvas = document.getElementById("canvas");
+      let analyze = text.value.split(" ");
+      canvas.innerHTML = text.value;
+      addbtn.style.display = "none";
+      canbtn.style.display = "none";
+      editbtn.style.display = "inline-block";
+      form.style.display = "none";
+    }
+    function editText() {
+      let addbtn = document.getElementById("addbtn");
+      let editbtn = document.getElementById("editbtn");
+      let form = document.getElementById("canvas-form");
+      let canvas = document.getElementById("canvas");
+      let text = document.getElementById("text");
+      let canbtn = document.getElementById("canbtn");
+      addbtn.style.display = "inline-block";
+      canbtn.style.display = "inline-block";
+      editbtn.style.display = "none";
+      form.style.display = "inline-block";
+      text.innerText = canvas.innerHTML;
+    }
+    function cancelText() {
+      let addbtn = document.getElementById("addbtn");
+      let editbtn = document.getElementById("editbtn");
+      let canbtn = document.getElementById("canbtn");
+      let form = document.getElementById("canvas-form");
+      addbtn.style.display = "none";
+      editbtn.style.display = "inline-block";
+      form.style.display = "none";
+      canbtn.style.display = "none";
+    }
+    function WriteToFile(passForm) {
+
+    let fso = CreateObject("Scripting.FileSystemObject");
+    let s   = fso.CreateTextFile("<your Path>/filename.txt", True);
+
+    var firstName = document.getElementById('text');
+
+    s.writeline("First Name :" + FirstName);
+
+    s.writeline("-----------------------------");
+    s.Close();
+ }
+  </script>
+</body>
+</html>

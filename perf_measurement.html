@@ -1,0 +1,403 @@
+<A NAME=Sec1.5></A>
+<H3>1.5. Computer Performance Assessment</H3>
+
+<P><A HREF="PatHen-Readings.html#ExSec1.5"><B>Reading Assignments and Exercises</B></A> 
+
+<P ALIGN=JUSTIFY>When we talk about <I>computer performance</I>, we
+need to consider the following issues:
+
+<P><OL><LI><P ALIGN=JUSTIFY><I>Method of Performance Evaluation</I> -
+            By what measures will the performance be assessed?  Will
+            the assessment be local to a specific part of the computer
+            hardware, or global (i.e., across all hardware and
+            software modules)?  What will the mix of instructions be?
+
+<P>     <LI><P ALIGN=JUSTIFY><I>Limitations of Evaluation</I> - What
+            are the shortcomings of each method or measure of
+            performance assessment?  From whence do these limitations
+            arise, and why?  What can be done to improve these
+            limitations?
+
+<P>     <LI><P ALIGN=JUSTIFY><I>Metrics</I> - What formal measures are
+	    to be used for performance evaluation?  Speed?  Time used
+	    in a computation? Memory space required?
+
+<P>     <LI><P ALIGN=JUSTIFY><I>Processor Performance Equation</I> - How
+	    will the processor's performance be described mathematically?
+	    Does the equation portray actual parameters of practical
+	    interest, or does the computational model described by the
+	    equation not match the processing architecture under test?
+
+<P> <LI><P ALIGN=JUSTIFY><I>Performance Evaluation Reports</I> - What
+	    methods of analysis and presentation are used to evaluate
+	    data?  Is the data normalized to a particular benchmark
+	    result or parameter?  Is the normalization performed in a
+	    physically meaningful way?
+
+<P>     <LI><P ALIGN=JUSTIFY><I>Ahmdahl's Law</I> - Whatever measurements
+	    are made, as one continues to enhance processor performance,
+	    the overall improvement achieves diminishing returns.
+</OL>
+
+<P ALIGN=JUSTIFY>We examine each of thise issues, as follows.
+
+<H4>1.5.1. Performance Evaluation</H4>
+
+<P ALIGN=JUSTIFY>Computer performance evaluation is primarily based on
+<I>throughput</I> and <I>response time</I>.  Throughput is how many
+bits of data are processed, or how many operations are performed, in a
+given interval of time.  For example, we say that a processor has a
+<I>throughput</I> of N MB/s (megabytes per second).  With respect to
+execution time of a program on a processor X, we say that
+
+<P ALIGN=CENTER>Performance<SUB>X</SUB> = 1 / Execution Time<SUB>X</SUB>
+</P>
+
+<P>and, for two processors X and Y, 
+
+<P ALIGN=CENTER>Relative Performance = Performance<SUB>X</SUB> / Performance<SUB>Y</SUB>
+</P>
+
+<P ALIGN=JUSTIFY>For example, in the preceding equation, if processor
+X is faster than processor Y, then Execution Time<SUB>X</SUB> &lt
+Execution Time<SUB>Y</SUB> (all other things being equal), so Relative
+Performance &lt 1. This also implies <I>increased throughput</I> of
+X with respect to Y.
+
+<P ALIGN=JUSTIFY><B>Key Concept.</B> As a result, we want to
+<I>improve performance</I> by <I>increasing performance</I>, which
+means <I>decreasing execution time</I>.  In practice, this can be
+done by (a) decreasing response time, or (b) adding more processors
+to a system (provided I/O is managed efficiently).
+
+<H4>1.5.2. Measuring Performance</H4>
+
+<P ALIGN=JUSTIFY>A program that is executing, or has been executed, has
+the following components:
+
+<P><OL><LI><P ALIGN=JUSTIFY><I>Wall-Clock Time</I> - how long it takes
+           (typically, time in seconds) for your program to execute,
+	   from the time it is invoked to the time it completes.  This
+	   time is measured with respect to a global time standard,
+	   so we name it according to a common object such as a
+	   wall clock.  This is also called <I>elapsed time</I>.
+
+       <LI><P ALIGN=JUSTIFY><I>CPU Time</I> - comprised of <I>user CPU
+           time</I> (time spent computing the program), and <I>system
+           CPU time</I> (the time the operating system spends
+           supporting the program).
+
+       <LI><P ALIGN=JUSTIFY><I>I/O Time</I> - time spend reading and
+           writing data from/to memory.
+
+       <LI><P ALIGN=JUSTIFY><I>Other Time</I> - time spend running
+           other programs, waiting for the operating system to be
+	   scheduled, etc.
+</OL>
+
+<P ALIGN=JUSTIFY>We can measure a program's execution time using the
+UNIX <CODE>time</CODE> command.  For example, let's enter the UNIX
+command <CODE>time du</CODE> at one's root directory (which can be
+reached via the command <CODE>cd</CODE>.  When I tried this on my
+(large) directory tree, I got the following result:
+
+<P ALIGN=CENTER><CODE>0.21u 1.54s 0:24.49 7.1%</CODE>
+</P>
+
+<P ALIGN=JUSTIFY>These four numbers have the following meaning:
+
+<P><UL><LI><P ALIGN=JUSTIFY><I>User CPU Time</I> = 0.21 seconds,
+           the first number (<CODE>0.21u</CODE>).
+
+       <LI><P ALIGN=JUSTIFY><I>System CPU Time</I> = 1.54 seconds,
+           the second number (<CODE>1.54s</CODE>).
+
+       <LI><P ALIGN=JUSTIFY><I>Elapsed Time</I> = 24.49 seconds,
+           the third number (<CODE>0:24.49</CODE>).
+
+       <LI><P ALIGN=JUSTIFY><I>CPU Activity as Percent of Elapsed
+            Time</I> = 7.1 percent, the fourth number
+            (<CODE>7.1%</CODE>).
+</UL>
+
+<P ALIGN=JUSTIFY>Observe that <I>percent CPU activity</I> is computed
+as follows:
+
+<P><UL><B>Step 1.</B>  Add the User and System CPU Times to get Total
+       CPU Time (e.g., 1.75 sec = 0.21 sec + 1.54 sec).
+
+<P>    <B>Step 2.</B>  Divide the Total CPU Time by Elapsed Time (e.g.,
+       0.071 = 1.75 sec / 24.49 sec).
+
+<P>    <B>Step 3.</B> Multiply by 100 to get percent (e.g., 7.1% = 0.071
+       x 100 percent).
+</UL>
+
+<P ALIGN=JUSTIFY><I>Other Time</I> is computed as follows:
+
+<P><UL><B>Step 1.</B>  Add the User and System CPU Times to get Total
+       CPU Time (e.g., 1.75 sec = 0.21 sec + 1.54 sec).
+
+<P>    <B>Step 2.</B>  Subtract the Total CPU Time from Elapsed Time (e.g.,
+       Other Time = 22.74 sec = 24.49 sec - 1.75 sec).
+</UL>
+
+<P ALIGN=JUSTIFY>Given a method of measuring time, and computation of
+different times (e.g., CPU, Other) from these measures of time, we can
+now discuss a simple model of computation for measuring CPU
+performance.
+
+<H4>1.5.3. CPU Performance Equation</H4>
+
+<P ALIGN=JUSTIFY>In order to measure CPU performance in a physically
+realistic way, we need a <I>model of computation</I>.  In the simplest
+case, we start with the number of CPU cycles, defined as follows:
+
+<P ALIGN=CENTER> N<SUB>cyc</SUB> = IC &#183 CPI ,
+</P>
+
+<P ALIGN=JUSTIFY>where IC denotes the <I>instruction count</I> (number of
+instructions per program), and CPI denotes the <I>average cycles per
+instruction</I>.  
+
+<P ALIGN=JUSTIFY>Given the CPU cycle time t<SUB>cyc</SUB> or the
+clock rate BW<SUB>clk</SUB>, we can express the CPU time as:
+
+<P ALIGN=CENTER>t<SUB>cpu</SUB> = N<SUB>cyc</SUB> &#183 t<SUB>cyc</SUB> 
+</P>
+
+<P>or
+
+<P ALIGN=CENTER>t<SUB>cpu</SUB> = N<SUB>cyc</SUB> &#183 BW<SUB>clk</SUB> .
+</P>
+
+<P ALIGN=JUSTIFY>Patterson and Hennesey [Pat98] express this as
+
+<P ALIGN=CENTER><IMG SRC="Images/CPU-PerfEq1.gif">
+</P>
+
+<P>with units indicated for each variable.
+
+<P ALIGN=JUSTIFY>If there are different types or <I>classes</I> of
+instructions in a given program, then the preceding equation for
+N<SUB>cyc</SUB> is not an accurate estimate, because CPI can be
+affected by the instruction mix (nimber of each of type of instruction
+that occurs in the program).  Thus, we use the following equation to
+more accurately determine the number of cycles incurred when a program
+is executed:
+
+<P ALIGN=CENTER>N<SUB>cyc</SUB> = <IMG ALIGN=MIDDLE SRC="Syms/Sum-i1-to-n.gif">
+   CPI<SUB>i</SUB> &#183 IC<SUB>i</SUB> ,
+</P>
+
+<P ALIGN=JUSTIFY>where we assume that there are n classes of
+instructions.  The frequency distribution of instructions, which is
+comprised of (IC<SUB>1</SUB>, IC<SUB>2</SUB>, ..., IC<SUB>n</SUB>),
+is obtained by a technique called <I>execution profiling</I>, which
+is supported by a variety of commercial software tools.  The number
+of cycles per instruction type is determined from analysis of a
+specific processor design, validated by performance measurement.
+
+<P ALIGN=JUSTIFY><B>Example 1.</B> To illustrate the practical utility of these
+measurements, let us assume that a program runs in 10 seconds on a processor with a 400 MHz clock rate.  We want to build a new computer that can
+run the program in 6 seconds by increasing the clock frequency
+to <I>X</I> MHz.  An unfortunate consequence is that the average
+CPI will be 1.2 times higher in the new processor.  Here's how we set
+the problem up to determine the new clock rate <I>X</I>:
+
+<P ALIGN=CENTER><IMG SRC="Images/CPU-PerfExample1.gif">
+</P>
+
+<P ALIGN=JUSTIFY>Solving the equation yields <I>X</I> = 800 MHz.  Thus,
+we see that doubling the clock rate does not necessarily double the
+processor speed, because there are other variables (e.g., CPI or
+the instruction mix) that can be affected, as shown below.
+
+<P ALIGN=JUSTIFY><B>Example 2.</B> Now we will consider the effect of
+instruction mix.  Assume that the following data are correct:
+
+<P ALIGN=CENTER><IMG SRC="Images/CPU-PerfExample2.gif">
+</P>
+
+<P ALIGN=JUSTIFY><B>Q:</B> Which code sequence will be faster - #1 or #2?  
+
+<P ALIGN=JUSTIFY><B>A:</B> The sequence that incurs the least number
+of cycles is faster.  Using the preceding equation for N<SUB>cyc</SUB>
+we see that the number of cycles for code sequences 1 and 2 are given
+by:
+
+<P ALIGN=CENTER>N<SUB>cyc</SUB>(Seq.1) = (2 &#183 1) + (1 &#183 2) + (2 &#183 3) 
+                                   = 10 cycles <BR>
+
+N<SUB>cyc</SUB>(Seq.2) = (4 &#183 1) + (1 &#183 2) + (1 &#183 3) 
+                                   = 9 cycles .
+</P>
+
+<P ALIGN=JUSTIFY>Thus, code sequence #2 is faster, because it requires
+9 cycles, versus 10 cycles for code sequence #1.
+
+<H4>1.5.4. Performance Evaluation</H4>
+
+<P ALIGN=JUSTIFY>In an ideal situation, one has a suite of programs
+whose instruction mix is known exactly.  By running each program on
+a processor to be analyzed, it is possible to determine CPI for each
+type of instruction.  However, life is rarely ideal.  Thus, we have
+the following types of <I>benchmarking</I> programs to measure and
+bound processor performance:
+
+<P><UL><LI><P ALIGN=JUSTIFY><I>Synthetic Benchmarks</I> are used to 
+           exactly measure specific characteristics of a processor
+	   (e.g., memory I/O performance, register-to-register I/O,
+	   speed of arithmetic functions, etc.)  Because the benchmarking
+	   program is synthetic, one can put any combination of instructions
+	   into it, and the benchmark is not necessarily realistic.
+
+<P>    <LI><P ALIGN=JUSTIFY><I>Toy Benchmarks</I> are simple but somewhat
+           realistic programs that help the designer get a preliminary
+           idea of a how a processor will behave under pseudo-realistic
+	   constraints.  These might include tasks such as solving a
+	   simple matrix equation, performing a near-trivial image
+	   processing operation, etc.
+
+<P>    <LI><P ALIGN=JUSTIFY><I>Kernels</I> are more involved programs that
+           capture the functionality of a larger program.  For example,
+	   one can use an operating system kernal to get an idea of the
+	   operating system performance on a given processor, provided
+	   that the kernal is executed significantly more in practice
+	   than the other programs in the operating system.
+
+<P> <LI><P ALIGN=JUSTIFY><I>Real programs</I> are used (a) to measure
+           performance at many stages of processor design, (b) to estimate
+           the processor's performance under realistic computing
+           constraints and (c) in assessment of fielded systems.
+</UL>
+
+<P ALIGN=JUSTIFY>In practice, realistic benchmarks include engineering
+or scientific applications, software development tools, transaction
+processing, and office applications such as large spreadsheets or
+formatting of word processing documents.
+
+<H4>1.5.5. Performance Reporting</H4>
+
+<P ALIGN=JUSTIFY>After one has measured the performance of a given
+processor, then one formulates a test report. In order to 
+make our report accurate and meaningful to a hardware designer,
+we must have at least three elements in the report:
+
+<P><OL><LI><P ALIGN=JUSTIFY><I>Hardware/Software Configuration</I>
+           tells the designer what benchmarking programs were run on
+           the processor under test, and how the processor was set up
+           (e.g., how much memory, what clock rate, compiler version,
+           etc.)
+
+<P>    <LI><P ALIGN=JUSTIFY><I>Evaluation Process Conditions</I>
+           provide information about special constraints on the
+	   instruction mix that can influence the <I>reproducibility</I>
+	   of the performance measurement.
+
+<P>    <LI><P ALIGN=JUSTIFY><I>Performance Summary</I>
+           is typically expressed in terms of <I>average</I> rates.
+	   How these averages are computed is of practical interest.
+</OL>
+
+<P ALIGN=JUSTIFY>For example, consider the following types of means:
+
+<P ALIGN=CENTER><IMG SRC="Images/CPU-PerfMeans1.gif">
+</P>
+
+<P ALIGN=JUSTIFY>Normalized results are not easily understood or
+accurately compared with the arithmetic mean, because the mean of
+ratios between two series of measurements is not the same as the ratio
+of the series means.  Instead, normalized results should be combined
+with the geometric mean, which is independent of the data series used
+for normalization.  This is because the ratio of two series' geometric
+means is the same as the mean of the ratios between the series.  
+
+<P ALIGN=JUSTIFY>That is, given two data series {A<SUB>i</SUB>} and
+{B<SUB>i</SUB>}, where i = 1..n, if the arithmetic mean is used, then
+
+<P ALIGN=CENTER> AM({A<SUB>i</SUB>}) / AM({B<SUB>i</SUB>}) <IMG
+                 ALIGN=TOP SRC="Syms/not-equals.gif">
+                 AM({A<SUB>i</SUB> / B<SUB>i</SUB>})
+</P>
+
+<P>whereas, with the geometric mean:
+
+<P ALIGN=CENTER> GM({A<SUB>i</SUB>}) / GM({B<SUB>i</SUB>}) =
+GM({A<SUB>i</SUB> / B<SUB>i</SUB>}) .
+</P>
+
+<P ALIGN=JUSTIFY>Here, the construct {A<SUB>i</SUB> / B<SUB>i</SUB>}
+means <I>divide the i-th element of A by the i-th element of B</I>.
+For example, if {A<SUB>i</SUB>} = {2,4,6} and {B<SUB>i</SUB>} =
+{2,2,3}, then {A<SUB>i</SUB> / B<SUB>i</SUB>} = {2/2, 4/2, 6/3} =
+{1,2,2}.
+
+<P ALIGN=JUSTIFY><B>Example.</B> The practical implications of this problem are
+illustrated in the following table:
+
+<P ALIGN=CENTER><IMG SRC="Images/CPU-PerfMeans2.gif">
+
+<P ALIGN=JUSTIFY>Here, "Normalized to A" means that the data for
+processors A, B, and C are divided by the data for A.  In the first
+set, programs P1 and P2 are both normalized to A, hence, the
+arithmetic and geometric means for A are both 1.0 (the mean of 1.0 and
+1.0 is 1.0).  However, the arithmetic mean for B is 5.05 = (10.0 + 0.1)/2,
+while the geometric mean for B is 1.0, due to the previously-mentioned
+normalization property.  Total execution time is likewise normalized
+in the first set, to the value for A, which is 1001 = 1000 + 1.  Thus,
+the total time for B = 0.10989 = (100 + 10) / 1001, which is approximately
+0.11.
+
+<BLOCKQUOTE>
+<P ALIGN=JUSTIFY><FONT COLOR=BLUE><B>Self-Exercise.</B> (1) Derive all
+the entries in the preceding table.  Be able to explain how each one
+was calculated. (A problem like this will likely be an exam question.)
+</FONT>
+</BLOCKQUOTE>
+
+<H4>1.5.6 Implications of Amdahl's Law</H4>
+
+<P ALIGN=JUSTIFY>In the 1960s, Gene Amdahl derived an equation that
+expresses the diminishing returns that one obtains when trying to 
+optimize a computer program.  His equation has been adapted by
+Patterson and Hennesey, as follows:
+
+<P ALIGN=CENTER><IMG SRC="Images/CPU-Ahmdal1.gif"><BR><IMG SRC="CPU-Ahmdal2.gif">
+</P>
+
+<P ALIGN=JUSTIFY>This means that, the more you enhance the performance
+of a fraction <I>f</I> of a program or processor, the remaining
+(unenhanced) part (1 - <I>f</I>) gets progressively smaller.  In order
+to keep the speedup S constant for each enhancement, you have to
+enhance performance of the remaining (1 - <I>f</I>) part to have a much
+greater speedup than S.
+
+<P ALIGN=JUSTIFY><B>Example.</B> Suppose a program takes 10 seconds to
+execute on processor P.  After P's floating point (FP) unit is enhanced
+to be 5 times faster, then reinstalled in P, the effective speedup
+is graphed in Figure 1.31a. Here, the speedup is on the ordinate
+(vertical axis) and the fraction of the execution affected by the FP
+is on the abscissa.  What is obvious is that in order to obtain a
+speedup of 2.0, the new FP has to be used approximately 0.65 (65
+percent) of the time.  In all but the most highly parallelized image
+or signal processing code, this is quite unlikely.
+
+<P ALIGN=CENTER><IMG SRC="Images/CPU-Ahmdal3.gif"><BR>(a)<BR><IMG SRC="Images/CPU-Ahmdal4.gif"><BR>(b)<BR><BR>
+<B>Figure 1.31.</B> Amdahl's Law applied to processor performance enhancement, 
+adapted from [Maf01].
+</P>
+
+<P ALIGN=JUSTIFY>The situation worsens in Figure 1.31b.  Here, we see
+that if the new FP unit affects only 1/2 of the program execution,
+then we will approach a speedup of 2.0 asymptotically, regardless of
+how much the FP unit's performance is improved.  As in Figure 1.31a,
+the speedup is graphed on the ordinate, with the enhancement factor of
+the FP unit on the abscissa.  
+
+<P ALIGN=JUSTIFY>Amdahl's Law has important implications for practical
+computer design.  Namely, if a portion of the CPU does not affect
+program execution very much, then there is little point in drastically
+enhancing its performance.  As a result, we try to enhance the most
+frequent deficiencies first.  This is called <I>enhancing the common
+case</I> and it works, for the reasons shown in the preceding example.
