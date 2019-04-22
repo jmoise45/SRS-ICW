@@ -7,12 +7,12 @@
 <body>
   <div style="width:100%;min-height:100%;color:black;background-color:transparent;text-align:center;">
     <h1>Canvas</h1>
-    <form id="addbtn" style="display:none;margin-right:10px;margin-top:10px;float:right;"><input onclick="addText()" type="button" name="Add" value="Add"></form>
-    <form id="editbtn" style="margin-right:10px;margin-top:10px;float:right;"><input onclick="editText()" type="button" name="Edit" value="Edit"></form>
-    <form id="canbtn" style="display:none;margin-right:10px;margin-top:10px;float:right;"><input onclick="cancelText()" type="button" name="Cancel" value="Cancel"></form>
+    <form id="addbtn" style="display:none;margin-right:10px;margin-top:10px;float:right;"><input style="background-color:#000080; color:white; border-color:#000080; font-size:16px; cursor:pointer;" onclick="addText()" type="button" name="Add" value="Add"></form>
+    <form id="editbtn" style="margin-right:10px;margin-top:10px;float:right;"><input style="background-color:#000080; color:white; border-color:#000080; font-size:16px; cursor:pointer;" onclick="editText()" type="button" name="Edit" value="Edit"></form>
+    <form id="canbtn" style="display:none;margin-right:10px;margin-top:10px;float:right;"><input style="background-color:red; color:white; border-color:red; font-size:16px; cursor:pointer;" onclick="cancelText()" type="button" name="Cancel" value="Cancel"></form>
     <div style="margin-left:20px;clear:both;" id="canvas"><p>This is the canvas!</p></div>
     <form id="canvas-form" style="display:none; margin-top:10px;">
-      <textarea name="name" id="text" rows="16" cols="80" style="margin-bottom:10px;"></textarea>
+      <textarea name="name" id="text" rows="30" cols="100" style="margin-bottom:10px;"></textarea>
     </form>
   </div>
   <script>
@@ -28,7 +28,7 @@
       let text = document.getElementById("text");
       let form = document.getElementById("canvas-form");
       let canbtn = document.getElementById("canbtn");
-      alert(text.value);
+      //alert(text.value);
       let canvas = document.getElementById("canvas");
       let analyze = text.value.split(" ");
       canvas.innerHTML = text.value;
